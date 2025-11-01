@@ -20,6 +20,10 @@
   }
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
@@ -183,13 +187,21 @@ body {
   opacity: 0;
 }
 
-.shadow-sticker {
-  box-shadow: 
-    0 4px 6px rgba(0, 0, 0, 0.1),
-    0 8px 16px rgba(0, 0, 0, 0.1),
-    0 0 0 2px rgba(255, 255, 255, 0.1) inset;
+.nut-illustration {
+  filter: none;
 }
 
-.nut-illustration {
-  filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.1));
+/* Circular Text Rotation Animation */
+@keyframes rotate-circle {
+  to {
+    transform: rotate(1turn);
+  }
+}
+
+.rotate-circle {
+  animation: rotate-circle 10s linear infinite;
+}
+
+.rotate-circle-reverse {
+  animation: rotate-circle 5s linear infinite reverse;
 }
