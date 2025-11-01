@@ -21,8 +21,8 @@ export default function Hero() {
             <br />
             <span className="inline-block animate-slide-up-delay">NOVEMBER</span>
           </h1>
-          <p className="text-xl sm:text-2xl md:text-3xl text-gray-800 mb-8 animate-slide-up-delay uppercase" style={{ fontFamily: "var(--font-sans)" }}>
-            A month-long hackathon for Cashu builders who just can&apos;t hold their nuts.
+          <p className="text-xl sm:text-2xl md:text-3xl text-gray-500 mb-8 animate-slide-up-delay uppercase" style={{ fontFamily: "var(--font-sans)" }}>
+            A month-long hackathon for Cashu builders.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-slide-up-delay" style={{ animationDelay: "0.4s" }}>
             <a 
@@ -41,7 +41,7 @@ export default function Hero() {
         </div>
         
         {/* Circular Text Animation - Top Right Edge, Overlapping */}
-        <div className="absolute -top-6 -right-6 sm:-top-8 sm:-right-8 md:-top-10 md:-right-10 z-30">
+        <div className="absolute -top-24 -right-4 sm:-top-8 sm:-right-8 md:-top-10 md:-right-10 z-30">
           <div className="bg-black rounded-full border-4 border-[#B7CF4F] p-1">
             <CircularText />
           </div>

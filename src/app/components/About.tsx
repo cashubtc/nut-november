@@ -21,9 +21,6 @@ export default function About() {
             <p>
               We&apos;re going shell-first into privacy. This isn&apos;t your typical hackathon — it&apos;s a celebration of open-source, privacy-preserving money that runs on Bitcoin. Whether you&apos;re shipping wallets, building mints, or crafting the perfect nut meme, there&apos;s a place for you here.
             </p>
-            <p className="text-xl sm:text-2xl font-bold text-[#B7CF4F] font-mono">
-              The only No-Nut November we don&apos;t believe in.
-            </p>
           </div>
         </div>
       </div>

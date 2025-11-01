@@ -27,7 +27,7 @@ export default function CircularText() {
         <text width="400">
           <textPath
             xlinkHref="#circle"
-            className="text-sm sm:text-base md:text-lg font-bold fill-white uppercase tracking-wider"
+            className="text-lg sm:text-base md:text-lg font-bold fill-white uppercase tracking-wider"
             style={{ fontFamily: "var(--font-mono)", letterSpacing: "2px" }}
             startOffset="0%"
           >

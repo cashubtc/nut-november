@@ -8,7 +8,7 @@ export default function FAQ() {
   const faqs = [
     {
       question: "Do I need to be a developer?",
-      answer: "Nope, memes count too. Designers, writers, and community builders are all welcome. If you can contribute to Cashu in any way, you're in."
+      answer: "Nope, designers count too. Designers, writers, and community builders are all welcome. If you can contribute to Cashu in any way, you're in."
     },
     {
       question: "What if my nut isn't finished?",
@@ -16,7 +16,7 @@ export default function FAQ() {
     },
     {
       question: "Is this serious or a joke?",
-      answer: "Yes. It's a real hackathon with real prizes, but we're not taking ourselves too seriously. That's the whole point."
+      answer: "Yes. It's a real hackathon with real prizes, but we're not taking ourselves too seriously."
     },
     {
       question: "Are there actual prizes?",
@@ -69,7 +69,7 @@ export default function FAQ() {
                   onClick={() => toggleFAQ(index)}
                   className="w-full py-6 px-4 flex items-center justify-between hover:bg-[#B7CF4F] transition-colors group text-left"
                 >
-                  <h3 className="text-xl sm:text-2xl font-bold text-black font-mono group-hover:text-white transition-colors uppercase">
+                  <h3 className="text-xl sm:text-2xl font-normal text-black font-mono group-hover:text-white transition-colors uppercase">
                     {faq.question}
                   </h3>
                   <span className={`text-2xl font-mono text-black group-hover:text-white transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] ml-4 flex-shrink-0 ${

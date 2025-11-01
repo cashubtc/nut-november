@@ -52,11 +52,6 @@ export default function HowToParticipate() {
               </div>
             ))}
           </div>
-          <div className="mt-12">
-            <p className="text-xl text-gray-700 italic">
-              &quot;There&apos;s no wrong way to nut — as long as it involves ecash.&quot;
-            </p>
-          </div>
         </div>
       </div>
     </section>

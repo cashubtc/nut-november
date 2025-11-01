@@ -19,7 +19,7 @@ export default function NutParticles({ heroSectionRef }: NutParticlesProps) {
   const rightWallRef = useRef<Matter.Body | null>(null);
 
   // Array of different nut emojis
-  const nutEmojis = ["🌰", "🥜", "🥥", "🫘"];
+  const nutEmojis = ["🌰", "🥜", "🥥", "🔩"];
 
   useEffect(() => {
     if (hasStartedRef.current || !heroSectionRef.current) return;

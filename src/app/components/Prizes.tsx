@@ -1,27 +1,29 @@
+import Image from "next/image";
+
 export default function Prizes() {
   const prizes = [
     {
-      emoji: "🥇",
+      image: "/goldennut.jpg",
       name: "The Golden Nut",
       description: "Best overall project. The nut that shines brightest. Grand prize for the most impressive build that pushes Cashu forward."
     },
     {
-      emoji: "🥈",
+      image: "/hardestnut.jpg",
       name: "Hardest Nut to Crack",
       description: "Toughest technical breakthrough. For the ones who refuse to give up. Rewards the most challenging technical innovation or bug fix."
     },
     {
-      emoji: "🥉",
+      image: "/nuttiestidea.jpg",
       name: "The Nuttiest Idea",
       description: "Wildest experimental concept. Unhinged. Unhinged. Actually brilliant. Celebrates the most creative, out-of-the-box thinking."
     },
     {
-      emoji: "💡",
+      image: "/uxnut.jpg",
       name: "Best UX Nut",
       description: "Design-focused improvement. Making ecash actually usable. For projects that make Cashu more accessible and delightful."
     },
     {
-      emoji: "🌰",
+      image: "/freshnut.jpg",
       name: "Freshly Minted Nut",
       description: "Best first-time contributor. Welcome to the shell game. Recognizes newcomers who made their first meaningful contribution."
     }
@@ -48,7 +50,15 @@ export default function Prizes() {
                 key={index}
                 className="bg-white border-4 border-[#B7CF4F] p-10 flex flex-col"
               >
-                <div className="text-8xl mb-6 text-center">{prize.emoji}</div>
+                <div className="mb-6 flex justify-center">
+                  <Image
+                    src={prize.image}
+                    alt={prize.name}
+                    width={200}
+                    height={200}
+                    className="w-full max-w-[200px] h-auto aspect-square object-cover"
+                  />
+                </div>
                 <h3 className="text-3xl sm:text-4xl font-bold text-[#B7CF4F] mb-6 text-center font-mono">
                   {prize.name}
                 </h3>
