@@ -48,23 +48,25 @@ export default function Prizes() {
             {prizes.map((prize, index) => (
               <div 
                 key={index}
-                className="bg-white border-4 border-[#B7CF4F] p-10 flex flex-col"
+                className="bg-white border-4 border-[#B7CF4F] flex flex-col overflow-hidden"
               >
-                <div className="mb-6 flex justify-center">
+                <div className="w-full">
                   <Image
                     src={prize.image}
                     alt={prize.name}
                     width={200}
                     height={200}
-                    className="w-full max-w-[200px] h-auto aspect-square object-cover"
+                    className="w-full h-auto aspect-square object-cover"
                   />
                 </div>
-                <h3 className="text-3xl sm:text-4xl font-bold text-[#B7CF4F] mb-6 text-center font-mono">
-                  {prize.name}
-                </h3>
-                <p className="text-lg text-gray-700 leading-relaxed text-center flex-grow">
-                  {prize.description}
-                </p>
+                <div className="p-10 flex flex-col flex-grow">
+                  <h3 className="text-3xl sm:text-4xl font-bold text-[#B7CF4F] mb-6 text-center font-mono">
+                    {prize.name}
+                  </h3>
+                  <p className="text-lg text-gray-700 leading-relaxed text-center flex-grow">
+                    {prize.description}
+                  </p>
+                </div>
               </div>
             ))}
           </div>
