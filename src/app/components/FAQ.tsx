@@ -90,7 +90,7 @@ export default function FAQ() {
                   <div className={`px-4 pb-6 pt-2 transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] ${
                     openIndex === index ? "translate-y-0" : "-translate-y-4"
                   }`}>
-                    <p className="text-lg text-gray-800">{faq.answer}</p>
+                    <p className="text-xl sm:text-2xl text-gray-800 leading-relaxed">{faq.answer}</p>
                   </div>
                 </div>
               </div>

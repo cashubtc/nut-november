@@ -14,12 +14,12 @@ export default function About() {
         </div>
         {/* Main Content */}
         <div className="flex-1 md:pl-12 lg:pl-16">
-          <div className="space-y-6 text-lg sm:text-xl text-gray-800">
+          <div className="space-y-6 text-xl sm:text-2xl text-gray-800 leading-relaxed">
             <p>
               Nut November is a community-driven month of Cashu development where builders, designers, and community builders come together to crack open new ideas in the Cashu ecosystem.
             </p>
             <p>
-              We&apos;re going shell-first into ecash. This isn&apos;t your typical hackathon — it&apos;s a celebration of open-source, privacy-preserving money that runs on Bitcoin. Whether you&apos;re shipping wallets, building mints, or creating helpful guides and resources, there&apos;s a place for you here.
+              We&apos;re celebrating open-source, privacy-preserving ecash on Bitcoin. Whether you&apos;re shipping wallets, building mint software, or creating helpful guides and resources, there&apos;s a place for you here.
             </p>
           </div>
         </div>

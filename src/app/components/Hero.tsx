@@ -47,7 +47,7 @@ export default function Hero() {
               rel="noopener noreferrer"
               className="inline-block px-10 py-5 bg-[#8B4513] text-white font-bold border-4 border-[#8B4513] hover:bg-[#704214] text-lg font-mono"
             >
-              Spread the word
+              Spread The Word
             </a>
           </div>
         </div>

@@ -17,9 +17,9 @@ export default function NutworkEffect() {
         </div>
         {/* Main Content */}
         <div className="flex-1 md:pl-12 lg:pl-16">
-          <div className="max-w-3xl">
+          <div>
             <p className="text-xl sm:text-2xl text-gray-800 leading-relaxed mb-8">
-              Boost the hackathon. Share <a href="https://x.com/search?q=%23NutNovember&src=typed_query" target="_blank" rel="noopener noreferrer" className="text-[#B7CF4F] hover:underline font-semibold">#NutNovember</a>. The more nuts, the stronger the network.
+              Boost the hackathon. Share <a href="https://x.com/search?q=%23NutNovember&src=typed_query" target="_blank" rel="noopener noreferrer" className="text-[#B7CF4F] hover:underline font-semibold whitespace-nowrap">#NutNovember</a>. The more nuts, the stronger the network.
             </p>
             <div className="text-left">
               <a 
@@ -28,7 +28,7 @@ export default function NutworkEffect() {
                 rel="noopener noreferrer"
                 className="inline-block px-10 py-5 bg-white text-[#B7CF4F] font-bold border-4 border-[#B7CF4F] hover:bg-[#f5f5f5] text-lg font-mono"
               >
-                Tweet about #NutNovember
+                Tweet About #NutNovember
               </a>
             </div>
           </div>
