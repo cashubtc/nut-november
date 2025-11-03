@@ -11,6 +11,7 @@ export default function Footer() {
   const engineRef = useRef<Matter.Engine | null>(null);
   const nutsRef = useRef<Matter.Body[]>([]);
   const hasStartedRef = useRef(false);
+  const hasSpawnedOnceRef = useRef(false);
   const runnerRef = useRef<Matter.Runner | null>(null);
   const spawnIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const impulseIntervalRef = useRef<NodeJS.Timeout | null>(null);
@@ -151,8 +152,9 @@ export default function Footer() {
 
     // Function to start spawning nuts
     const startSpawning = () => {
-      // Don't start if already spawning
-      if (spawnIntervalRef.current) return;
+      // Don't start if already spawned once
+      if (hasSpawnedOnceRef.current) return;
+      hasSpawnedOnceRef.current = true;
 
       // Spawn nuts continuously from top left
       const spawnNuts = () => {
@@ -218,13 +220,12 @@ export default function Footer() {
     };
 
     // Intersection Observer to detect when footer is visible
+    // Only spawn once when footer first becomes visible
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting) {
+          if (entry.isIntersecting && !hasSpawnedOnceRef.current) {
             startSpawning();
-          } else {
-            stopSpawning();
           }
         });
       },
