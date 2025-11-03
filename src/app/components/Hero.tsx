@@ -21,8 +21,11 @@ export default function Hero() {
             <br />
             <span className="inline-block animate-slide-up-delay">NOVEMBER</span>
           </h1>
-          <p className="text-xl sm:text-2xl md:text-3xl text-gray-500 mb-8 animate-slide-up-delay uppercase" style={{ fontFamily: "var(--font-sans)" }}>
+          <p className="text-xl sm:text-2xl md:text-3xl text-gray-500 mb-4 animate-slide-up-delay uppercase" style={{ fontFamily: "var(--font-sans)" }}>
             A month-long hackathon for Cashu builders.
+          </p>
+          <p className="text-xl sm:text-2xl md:text-3xl text-[#8B4513] mb-8 animate-slide-up-delay font-semibold" style={{ fontFamily: "var(--font-poppins)" }}>
+            ₿200,000 Total Prize Pool!
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-slide-up-delay" style={{ animationDelay: "0.4s" }}>
             <a 
