@@ -40,6 +40,16 @@ export default function Hero() {
               View Prizes
             </a>
           </div>
+          <div className="text-center mt-6 animate-slide-up-delay" style={{ animationDelay: "0.5s" }}>
+            <a 
+              href={`https://twitter.com/intent/tweet?text=${encodeURIComponent("Cashu builders are going nuts again this month. https://nutnovember.org/ #NutNovember")}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block px-10 py-5 bg-[#8B4513] text-white font-bold border-4 border-[#8B4513] hover:bg-[#704214] text-lg font-mono"
+            >
+              Spread the word
+            </a>
+          </div>
         </div>
         
         {/* Circular Text Animation - Top Right Edge, Overlapping */}
