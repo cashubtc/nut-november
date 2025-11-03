@@ -289,7 +289,7 @@ export default function Footer() {
         <div className="flex flex-col gap-8">
           <div>
             <h4 
-              className="font-bold text-white mb-6 text-2xl md:text-3xl uppercase tracking-wider"
+              className="font-bold text-white mb-6 text-3xl md:text-4xl uppercase tracking-wider"
               style={{ 
                 fontFamily: "var(--font-sauce-tm)",
                 textShadow: "2px 2px 0px rgba(0,0,0,0.2)",
@@ -304,7 +304,7 @@ export default function Footer() {
                   href="https://cashu.space/" 
                   target="_blank" 
                   rel="noopener noreferrer" 
-                  className="hover:text-black transition-all duration-300 text-xl md:text-2xl uppercase tracking-wide font-bold"
+                  className="hover:text-black transition-all duration-300 text-2xl md:text-3xl uppercase tracking-wide font-bold"
                   style={{ 
                     fontFamily: "var(--font-sauce-tm)",
                     textShadow: "1px 1px 0px rgba(0,0,0,0.15)",
@@ -319,7 +319,7 @@ export default function Footer() {
                   href="https://docs.cashu.space/" 
                   target="_blank" 
                   rel="noopener noreferrer" 
-                  className="hover:text-black transition-all duration-300 text-xl md:text-2xl uppercase tracking-wide font-bold"
+                  className="hover:text-black transition-all duration-300 text-2xl md:text-3xl uppercase tracking-wide font-bold"
                   style={{ 
                     fontFamily: "var(--font-sauce-tm)",
                     textShadow: "1px 1px 0px rgba(0,0,0,0.15)",
@@ -334,7 +334,7 @@ export default function Footer() {
                   href="https://opencash.dev/" 
                   target="_blank" 
                   rel="noopener noreferrer" 
-                  className="hover:text-black transition-all duration-300 text-xl md:text-2xl uppercase tracking-wide font-bold"
+                  className="hover:text-black transition-all duration-300 text-2xl md:text-3xl uppercase tracking-wide font-bold"
                   style={{ 
                     fontFamily: "var(--font-sauce-tm)",
                     textShadow: "1px 1px 0px rgba(0,0,0,0.15)",
@@ -349,7 +349,7 @@ export default function Footer() {
                   href="https://github.com/cashubtc" 
                   target="_blank" 
                   rel="noopener noreferrer" 
-                  className="hover:text-black transition-all duration-300 text-xl md:text-2xl uppercase tracking-wide font-bold"
+                  className="hover:text-black transition-all duration-300 text-2xl md:text-3xl uppercase tracking-wide font-bold"
                   style={{ 
                     fontFamily: "var(--font-sauce-tm)",
                     textShadow: "1px 1px 0px rgba(0,0,0,0.15)",
@@ -371,8 +371,8 @@ export default function Footer() {
             aria-label="X (Twitter)"
           >
             <svg 
-              width="32" 
-              height="32" 
+              width="40" 
+              height="40" 
               viewBox="0 0 24 24" 
               fill="currentColor" 
               className="text-white"
@@ -388,8 +388,8 @@ export default function Footer() {
             aria-label="Telegram"
           >
             <svg 
-              width="32" 
-              height="32" 
+              width="40" 
+              height="40" 
               viewBox="0 0 24 24" 
               fill="currentColor" 
               className="text-white"

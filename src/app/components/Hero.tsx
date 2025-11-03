@@ -26,7 +26,9 @@ export default function Hero() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-slide-up-delay" style={{ animationDelay: "0.4s" }}>
             <a 
-              href="#participate" 
+              href="https://cryptpad.fr/form/#/2/form/view/EGD8VJwj+BtsYzBNDKg5ZWvd5kOmP0POMTZkcJgEwwo/" 
+              target="_blank"
+              rel="noopener noreferrer"
               className="inline-block px-10 py-5 bg-[#B7CF4F] text-white font-bold border-4 border-[#B7CF4F] hover:bg-[#9fb63e] text-lg font-mono"
             >
               Submit Project
