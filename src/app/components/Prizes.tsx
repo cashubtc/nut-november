@@ -19,7 +19,7 @@ export default function Prizes() {
     },
     {
       image: "/uxnut.jpg",
-      name: "Best UX Nut",
+      name: "Best Design Nut",
       description: "Design-focused improvement. Making ecash actually usable. For projects that make Cashu more accessible and delightful."
     },
     {
@@ -75,7 +75,7 @@ export default function Prizes() {
               href="#participate" 
               className="inline-block px-10 py-5 bg-white text-[#B7CF4F] font-bold border-4 border-[#B7CF4F] hover:bg-[#f5f5f5] text-lg font-mono"
             >
-              Submit Your Nut →
+              Submit Your Project
             </a>
           </div>
         </div>

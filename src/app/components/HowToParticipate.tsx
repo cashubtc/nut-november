@@ -18,7 +18,7 @@ export default function HowToParticipate() {
     {
       number: "4",
       title: "Submit by Nov 30",
-      description: "Deadline's November 30th. There's no wrong way to nut — as long as it involves ecash."
+      description: "Deadline's November 30th."
     }
   ];
 

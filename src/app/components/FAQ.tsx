@@ -8,7 +8,7 @@ export default function FAQ() {
   const faqs = [
     {
       question: "Do I need to be a developer?",
-      answer: "Nope, designers count too. Designers, writers, and community builders are all welcome. If you can contribute to Cashu in any way, you're in."
+      answer: "Nope. Designers, writers, and community builders are all welcome. If you can contribute to Cashu in any way, you're in."
     },
     {
       question: "What if my nut isn't finished?",
@@ -20,15 +20,19 @@ export default function FAQ() {
     },
     {
       question: "Are there actual prizes?",
-      answer: "Yes, sats and glory. Winners get Bitcoin prizes and eternal bragging rights in the Cashu community."
+      answer: "Yes,glory. Winners will get this project shwon on the website;s showcase section and eternal bragging rights in the Cashu community."
     },
     {
       question: "Why nuts?",
-      answer: "Because Cashu. Also, 'No Nut November' exists, so we're flipping it. We're going nuts for privacy-preserving money."
+      answer: "Because Cashu. Also, 'No Nut November' exists, so we're flipping it. We're going nuts for ecash."
     },
     {
       question: "What's Cashu?",
-      answer: "Cashu is a Chaumian ecash protocol for Bitcoin. It's private, offline-capable, and runs on Bitcoin. Think digital cash, but actually private."
+      answer: (
+        <>
+          <a href="https://cashu.space/" target="_blank" rel="noopener noreferrer" className="hover:underline font-semibold">Cashu</a> is a Chaumian ecash protocol for Bitcoin. It&apos;s private, offline-capable, and runs on Bitcoin. Think digital cash, but actually private.
+        </>
+      )
     },
     {
       question: "Can I submit multiple projects?",
@@ -36,7 +40,11 @@ export default function FAQ() {
     },
     {
       question: "What if I've never used Cashu before?",
-      answer: "Perfect time to start. Check out the docs, join the community, and dive in. Freshly minted nuts are especially welcome."
+      answer: (
+        <>
+          Perfect time to start. Check out the <a href="https://docs.cashu.space/" target="_blank" rel="noopener noreferrer" className="hover:underline font-semibold">docs</a>, join the community, and dive in. Freshly minted nuts are especially welcome.
+        </>
+      )
     }
   ];
 
