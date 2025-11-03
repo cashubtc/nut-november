@@ -19,10 +19,6 @@ export default function FAQ() {
       answer: "Yes. It's a real hackathon with real prizes, but we're not taking ourselves too seriously."
     },
     {
-      question: "Are there actual prizes?",
-      answer: "Yes,glory. Winners will get this project shwon on the website;s showcase section and eternal bragging rights in the Cashu community."
-    },
-    {
       question: "Why nuts?",
       answer: "Because Cashu. Also, 'No Nut November' exists, so we're flipping it. We're going nuts for ecash."
     },

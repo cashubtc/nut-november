@@ -26,6 +26,11 @@ export default function Prizes() {
       image: "/freshnut.jpg",
       name: "Freshly Minted Nut",
       description: "Best first-time contributor. Welcome to the shell game. Recognizes newcomers who made their first meaningful contribution."
+    },
+    {
+      image: "/crowdfavorite.jpg",
+      name: "Crowd Favorite",
+      description: "This is the prize for the entry that receives the most votes from the Cashu community."
     }
   ];
 
@@ -54,9 +59,9 @@ export default function Prizes() {
                   <Image
                     src={prize.image}
                     alt={prize.name}
-                    width={200}
-                    height={200}
-                    className="w-full h-auto aspect-square object-cover"
+                    width={1080}
+                    height={1080}
+                    className="w-full h-auto aspect-square object-cover object-center"
                   />
                 </div>
                 <div className="p-10 flex flex-col flex-grow">
