@@ -7,6 +7,7 @@ import {
 } from "nostr-tools";
 
 import { SimplePool } from "nostr-tools";
+import { nutnovemberPubkey } from "@/pubkey";
 
 const pool = new SimplePool();
 
@@ -20,19 +21,17 @@ export async function publishForm(
   formData: FormData
 ): Promise<FormState> {
   try {
-    const targetPubkey =
-      "ddf03aca85ade039e6742d5bef3df352df199d0d31e22b9858e7eda85cb3bbbe";
     const sk = generateSecretKey();
 
     const formObject = Object.fromEntries(formData);
     const content = "Nutnovember: \n" + JSON.stringify(formObject);
 
-    const encrypted = nip04.encrypt(sk, targetPubkey, content);
+    const encrypted = nip04.encrypt(sk, nutnovemberPubkey, content);
     const template: EventTemplate = {
       kind: 4,
       content: encrypted,
       created_at: Math.floor(Date.now() / 1000),
-      tags: [["p", targetPubkey]],
+      tags: [["p", nutnovemberPubkey]],
     };
 
     const signed = finalizeEvent(template, sk);
