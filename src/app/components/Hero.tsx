@@ -8,7 +8,7 @@ export default function Hero() {
   const heroRef = useRef<HTMLElement>(null);
   
   return (
-    <section ref={heroRef} className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#B7CF4F] p-6 sm:p-8 md:p-12 lg:p-16">
+    <section ref={heroRef} className="relative flex min-h-screen items-center justify-center overflow-hidden hero-texture-combined p-6 sm:p-8 md:p-12 lg:p-16">
       {/* Central Content Box */}
       <div className="relative z-20 bg-[#FAFAFA] border-4 border-[#B7CF4F] p-8 sm:p-12 md:p-16 lg:p-20 max-w-6xl w-full">
         {/* NUT NOVEMBER Text */}

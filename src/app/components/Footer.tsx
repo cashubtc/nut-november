@@ -284,7 +284,7 @@ export default function Footer() {
   }, []);
 
   return (
-    <footer ref={footerRef} className="bg-[#B7CF4F] pt-12 md:pt-16 pb-24 md:pb-32 px-6 border-t border-black relative overflow-hidden min-h-[400px]">
+    <footer ref={footerRef} className="hero-texture-combined pt-12 md:pt-16 pb-24 md:pb-32 px-6 border-t border-black relative overflow-hidden min-h-[400px]">
       <div className="max-w-6xl mx-auto relative z-10 flex flex-col h-full">
         <div className="flex flex-col gap-8">
           <div>
