@@ -11,8 +11,10 @@
   "dependencies": {
     "matter-js": "^0.20.0",
     "next": "16.0.1",
+    "nostr-tools": "^2.17.2",
     "react": "19.2.0",
-    "react-dom": "19.2.0"
+    "react-dom": "19.2.0",
+    "react-qr-code": "^2.0.18"
   },
   "devDependencies": {
     "@flydotio/dockerfile": "^0.7.10",

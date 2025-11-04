@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Prizes() {
   const prizes = [
@@ -87,14 +88,12 @@ export default function Prizes() {
             ))}
           </div>
           <div className="text-center">
-            <a 
-              href="https://cryptpad.fr/form/#/2/form/view/EGD8VJwj+BtsYzBNDKg5ZWvd5kOmP0POMTZkcJgEwwo/" 
-              target="_blank"
-              rel="noopener noreferrer"
+            <Link 
+              href="/form"
               className="inline-block px-10 py-5 bg-white text-[#B7CF4F] font-bold border-4 border-[#B7CF4F] hover:bg-[#f5f5f5] text-lg font-mono"
             >
               Submit Your Project
-            </a>
+            </Link>
           </div>
         </div>
       </div>
