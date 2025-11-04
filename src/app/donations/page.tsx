@@ -5,6 +5,8 @@ import BackToHome from "../components/BackToHome";
 import { nutnovemberPubkey } from "@/pubkey";
 import { SimplePool } from "nostr-tools";
 
+const preZapDontations = [42171, 5000, 5000, 5000, 1, 8, 10, 3, 21, 100];
+
 export default function Page() {
   const [donations, setDonations] = useState<number[]>([]);
 
@@ -53,8 +55,12 @@ export default function Page() {
     };
   }, []);
 
-  const total = donations.reduce((sum, amount) => sum + amount, 0);
-  const sortedDonations = [...donations].sort((a, b) => b - a);
+  // Combine preZapDonations (assumed to be in sats) with subscription donations
+  // Convert preZapDonations from sats to match the format (divide by 1000 if they're in millisats, or keep as is if in sats)
+  // Assuming preZapDonations are already in sats to match the subscription format
+  const allDonations = [...preZapDontations, ...donations];
+  const total = allDonations.reduce((sum, amount) => sum + amount, 0);
+  const sortedDonations = [...allDonations].sort((a, b) => b - a);
 
   return (
     <section className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#B7CF4F] p-6 sm:p-8 md:p-12 lg:p-16">
@@ -105,9 +111,9 @@ export default function Page() {
               className="text-xl sm:text-2xl font-bold text-[#B7CF4F] mb-4 font-mono"
               style={{ fontFamily: "var(--font-sauce-tm)" }}
             >
-              Donations ({donations.length})
+              Donations ({allDonations.length})
             </h2>
-            {donations.length === 0 ? (
+            {allDonations.length === 0 ? (
               <p className="text-gray-500 text-center py-8">
                 No donations yet. Be the first to contribute!
               </p>
