@@ -25,7 +25,7 @@ export default function Hero() {
             A month-long hackathon for Cashu builders.
           </p>
           <p className="text-xl sm:text-2xl md:text-3xl text-[#8B4513] mb-8 animate-slide-up-delay font-semibold" style={{ fontFamily: "var(--font-poppins)" }}>
-            ₿200,000 Total Prize Pool!
+            ₿400,000 Total Prize Pool!
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-slide-up-delay" style={{ animationDelay: "0.4s" }}>
             <a 

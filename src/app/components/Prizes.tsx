@@ -6,37 +6,37 @@ export default function Prizes() {
       image: "/goldennut.jpg",
       name: "The Golden Nut",
       description: "Best overall project. The nut that shines brightest. Grand prize for the most impressive build that pushes Cashu forward.",
-      amount: "75 000"
+      amount: "150 000"
     },
     {
       image: "/hardestnut.jpg",
       name: "Hardest Nut to Crack",
       description: "Toughest technical breakthrough. For the ones who refuse to give up. Rewards the most challenging technical innovation or bug fix.",
-      amount: "40 000"
+      amount: "80 000"
     },
     {
       image: "/nuttiestidea.jpg",
       name: "The Nuttiest Idea",
       description: "Wildest experimental concept. Unhinged. Unhinged. Actually brilliant. Celebrates the most creative, out-of-the-box thinking.",
-      amount: "30 000"
+      amount: "60 000"
     },
     {
       image: "/uxnut.jpg",
       name: "Best Design Nut",
       description: "Design-focused improvement. Making ecash actually usable. For projects that make Cashu more accessible and delightful.",
-      amount: "25 000"
+      amount: "50 000"
     },
     {
       image: "/freshnut.jpg",
       name: "Freshly Minted Nut",
       description: "Best first-time contributor. Welcome to the shell game. Recognizes newcomers who made their first meaningful contribution.",
-      amount: "20 000"
+      amount: "40 000"
     },
     {
       image: "/crowdfavorite.jpg",
       name: "Crowd Favorite",
       description: "This is the prize for the entry that receives the most votes from the Cashu community.",
-      amount: "10 000"
+      amount: "20 000"
     }
   ];
 
@@ -101,4 +101,3 @@ export default function Prizes() {
     </section>
   );
 }
-
