@@ -35,7 +35,14 @@ export async function publishForm(
     };
 
     const signed = finalizeEvent(template, sk);
-    const pub = pool.publish(["wss://relay.damus.io"], signed);
+    const pub = pool.publish(
+      [
+        "wss://relay.damus.io",
+        "wss://relay.snort.social",
+        "wss://relay.primal.net",
+      ],
+      signed
+    );
     await Promise.all(pub);
     console.log("Event published");
 
