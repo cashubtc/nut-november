@@ -1,12 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { useRef } from "react";
+import { RefObject, useRef } from "react";
 import CircularText from "./CircularText";
 import NutParticles from "./NutParticles";
+import { useDonations } from "../context/DonationsContext";
 
 export default function Hero() {
   const heroRef = useRef<HTMLElement>(null);
+  const { total } = useDonations();
 
   return (
     <section
@@ -40,7 +42,12 @@ export default function Hero() {
             className="text-xl sm:text-2xl md:text-3xl text-[#8B4513] mb-8 animate-slide-up-delay font-semibold"
             style={{ fontFamily: "var(--font-poppins)" }}
           >
-            ₿400,000 Total Prize Pool!
+            ₿
+            {(total + 400000).toLocaleString("en-US", {
+              minimumFractionDigits: 0,
+              maximumFractionDigits: 0,
+            })}{" "}
+            Total Prize Pool!
           </p>
           <div
             className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-slide-up-delay"
@@ -85,7 +92,7 @@ export default function Hero() {
       </div>
 
       {/* Nut Particles Effect */}
-      <NutParticles heroSectionRef={heroRef} />
+      <NutParticles heroSectionRef={heroRef as RefObject<HTMLElement>} />
     </section>
   );
 }
