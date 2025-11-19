@@ -1,66 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import BackToHome from "../components/BackToHome";
-import { nutnovemberPubkey } from "@/pubkey";
-import { SimplePool } from "nostr-tools";
-
-const preZapDontations = [42171, 5000, 5000, 5000, 1, 8, 10, 3, 21, 100];
+import { useDonations } from "../context/DonationsContext";
 
 export default function Page() {
-  const [donations, setDonations] = useState<number[]>([]);
-
-  useEffect(() => {
-    let isMounted = true;
-    const pool = new SimplePool();
-    const relays = [
-      "wss://relay.damus.io",
-      "wss://relay.snort.social",
-      "wss://relay.primal.net",
-    ];
-
-    const sub = pool.subscribeMany(
-      relays,
-      {
-        "#p": [nutnovemberPubkey],
-        kinds: [9735],
-      },
-      {
-        onevent: (event) => {
-          if (!isMounted) return;
-
-          const receiptTag = event.tags.find((tag) => tag[0] === "description");
-          if (receiptTag) {
-            try {
-              const receipt = receiptTag[1];
-              const parsed = JSON.parse(receipt);
-              const amountTag = parsed.tags.find(
-                (tag: string[]) => tag[0] === "amount"
-              );
-              if (amountTag) {
-                const amount = Number(amountTag[1]) / 1000;
-                setDonations((prev) => [...prev, amount]);
-              }
-            } catch (error) {
-              console.error("Error parsing receipt:", error);
-            }
-          }
-        },
-      }
-    );
-
-    return () => {
-      isMounted = false;
-      sub.close();
-    };
-  }, []);
-
-  // Combine preZapDonations (assumed to be in sats) with subscription donations
-  // Convert preZapDonations from sats to match the format (divide by 1000 if they're in millisats, or keep as is if in sats)
-  // Assuming preZapDonations are already in sats to match the subscription format
-  const allDonations = [...preZapDontations, ...donations];
-  const total = allDonations.reduce((sum, amount) => sum + amount, 0);
-  const sortedDonations = [...allDonations].sort((a, b) => b - a);
+  const { allDonations, total, sortedDonations, isLoading } = useDonations();
 
   return (
     <section className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#B7CF4F] p-6 sm:p-8 md:p-12 lg:p-16">
@@ -102,6 +46,9 @@ export default function Page() {
                 minimumFractionDigits: 0,
                 maximumFractionDigits: 0,
               })}
+              {isLoading && (
+                <span className="ml-2 text-xl animate-pulse">...</span>
+              )}
             </p>
           </div>
 
@@ -115,7 +62,9 @@ export default function Page() {
             </h2>
             {allDonations.length === 0 ? (
               <p className="text-gray-500 text-center py-8">
-                No donations yet. Be the first to contribute!
+                {isLoading
+                  ? "Loading donations..."
+                  : "No donations yet. Be the first to contribute!"}
               </p>
             ) : (
               <div className="space-y-2">
