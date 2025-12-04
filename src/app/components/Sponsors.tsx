@@ -47,17 +47,7 @@ export default function Sponsors() {
 
             {/* Donation Section */}
             <div className="mb-8">
-              <p className="text-xl sm:text-2xl text-gray-800 leading-relaxed mb-6">
-                Help increase the prize pool by donating ecash or bitcoin.
-              </p>
-
               <div className="mt-8 flex flex-col sm:flex-row gap-4">
-                <Link
-                  href="/donate"
-                  className="inline-block px-10 py-5 bg-[#B7CF4F] text-white font-bold border-4 border-[#B7CF4F] hover:bg-[#9fb63e] text-lg font-mono transition-colors text-center"
-                >
-                  Donate to the Prize Pool
-                </Link>
                 <Link
                   href="/donations"
                   className="inline-block px-10 py-5 bg-white text-[#B7CF4F] font-bold border-4 border-[#B7CF4F] hover:bg-[#f5f5f5] text-lg font-mono transition-colors text-center"
