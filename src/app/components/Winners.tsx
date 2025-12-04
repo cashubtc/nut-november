@@ -45,13 +45,6 @@ export default function Winners() {
       firstContribution: true,
     },
     {
-      name: "V0T",
-      description: "A privacy-focused system for auditable, transparent, sub-second operations using sats as the basic unit.",
-      github: "https://github.com/DT7QR/V0T-privacy-ops",
-      demo: "https://defintrual.me/",
-      firstContribution: true,
-    },
-    {
       name: "Bitpoints.me",
       description: "A Bitcoin-based rewards system where customers earn sats through a simple points-style interface, built on a fork of cashu.me.",
       github: "https://github.com/bitpoints-cashu/bitpoints.me",
@@ -133,6 +126,7 @@ export default function Winners() {
       accentColor: "#FFD700", // Gold
       bgGradient: "from-amber-50 to-yellow-50",
       image: "/winners/goldennutwinner.jpg",
+      icon: "/small-nut-icons/goldennut.png",
       github: "https://github.com/MonkeyDGigi/The_Nutty_Pill",
       demo: "https://thenuttypill.netlify.app/",
     },
@@ -147,6 +141,7 @@ export default function Winners() {
       accentColor: "#8B4513", // Brown
       bgGradient: "from-orange-50 to-amber-50",
       image: "/winners/p2bk-proof.svg",
+      icon: "/small-nut-icons/hardestnut.png",
       github: "https://github.com/cashubtc/cashu-ts/pull/377",
       demo: "http://nostrly.com/cashu-nutlock",
     },
@@ -161,6 +156,7 @@ export default function Winners() {
       accentColor: "#9333EA", // Purple
       bgGradient: "from-purple-50 to-fuchsia-50",
       image: "/winners/nuttiestideawinner.jpg",
+      icon: "/small-nut-icons/nuttiestidea.png",
       github: "https://github.com/OnChainDiscGolf/app",
       demo: "https://on-chains-disc-golf-982604035840.us-west1.run.app/",
     },
@@ -175,6 +171,7 @@ export default function Winners() {
       accentColor: "#B7CF4F", // Green (site primary)
       bgGradient: "from-lime-50 to-green-50",
       video: "/winners/bestdesignwinner.mp4",
+      icon: "/small-nut-icons/designnut.png",
       github: "https://github.com/Unit-Matrix/nostrpay/tree/cashu-impl",
       demo: "https://x.com/Anipy1/status/1994051972157112509",
     },
@@ -189,6 +186,7 @@ export default function Winners() {
       accentColor: "#06B6D4", // Cyan
       bgGradient: "from-cyan-50 to-teal-50",
       image: "/winners/freshleymintednutwinner.jpg",
+      icon: "/small-nut-icons/newlymintednut.png",
       github: "https://github.com/Solife-me/Taskify_Release",
       demo: "https://taskify.solife.me/",
     },
@@ -203,6 +201,7 @@ export default function Winners() {
       accentColor: "#EC4899", // Pink
       bgGradient: "from-pink-50 to-rose-50",
       image: "/winners/crowdfavoritewinner.jpg",
+      icon: "/small-nut-icons/crowdfavorite.png",
       github: "https://github.com/bTCpy/monopoly/",
       demo: "https://cashu-monopoly.onrender.com/",
     },
@@ -234,7 +233,7 @@ export default function Winners() {
             <h3 className="text-4xl sm:text-5xl md:text-6xl font-bold text-[#B7CF4F] mt-4 mb-4 font-mono tracking-tight">
               Congratulations!
             </h3>
-            <p className="text-xl sm:text-2xl text-gray-600 max-w-2xl mx-auto">
+            <p className="text-xl sm:text-2xl text-gray-600 max-w-2xl mx-auto md:whitespace-nowrap">
               Meet the incredible builders who cracked it open this November
             </p>
           </div>
@@ -252,16 +251,40 @@ export default function Winners() {
                   style={{ backgroundColor: winner.accentColor }}
                 >
                   <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-                    <div>
-                      <h4 className="text-2xl sm:text-3xl font-bold text-white font-mono drop-shadow-md">
-                        {winner.prize}
-                      </h4>
-                      <p className="text-white/90 text-sm sm:text-base font-medium">
-                        {winner.prizeSubtitle}
-                      </p>
+                    <div className="flex items-center gap-3">
+                      {"icon" in winner && winner.icon && (
+                        <Image
+                          src={winner.icon}
+                          alt=""
+                          width={48}
+                          height={48}
+                          className="flex-shrink-0"
+                          unoptimized
+                        />
+                      )}
+                      <div>
+                        <h4
+                          className={`text-2xl sm:text-3xl font-bold font-mono drop-shadow-md ${
+                            winner.prize === "The Golden Nut"
+                              ? "text-black"
+                              : "text-white"
+                          }`}
+                        >
+                          {winner.prize}
+                        </h4>
+                        <p
+                          className={`text-sm sm:text-base font-medium ${
+                            winner.prize === "The Golden Nut"
+                              ? "text-black/80"
+                              : "text-white/90"
+                          }`}
+                        >
+                          {winner.prizeSubtitle}
+                        </p>
+                      </div>
                     </div>
                     <div
-                      className={`flex items-center gap-2 px-4 py-2 rounded-full ${
+                      className={`w-fit flex items-center gap-2 px-4 py-2 rounded-full ${
                         winner.prize === "The Golden Nut"
                           ? "bg-black/20"
                           : "bg-white/20"
@@ -327,26 +350,15 @@ export default function Winners() {
                     </div>
 
                     {/* Winner Details */}
-                    <div className="flex-1 flex flex-col justify-center">
+                    <div className="flex-1 flex flex-col justify-start">
                       <div className="space-y-4">
                         <div>
-                          <p className="text-sm text-gray-500 font-mono uppercase tracking-wider mb-1">
-                            Winner
-                          </p>
-                          <h5 className="text-2xl sm:text-3xl font-bold text-gray-900">
-                            {winner.winner}
-                          </h5>
-                        </div>
-                        <div>
-                          <p className="text-sm text-gray-500 font-mono uppercase tracking-wider mb-1">
-                            Project
-                          </p>
-                          <h6
-                            className="text-xl sm:text-2xl font-semibold"
+                          <h5
+                            className="text-2xl sm:text-3xl font-bold"
                             style={{ color: winner.accentColor }}
                           >
-                            {winner.project}
-                          </h6>
+                            {winner.winner}
+                          </h5>
                         </div>
                         <p className="text-gray-700 text-lg leading-relaxed">
                           {winner.description}
