@@ -54,7 +54,6 @@ export default function Winners() {
     {
       name: "Cashu Website Redesign",
       description: "A full redesign of the Cashu website focused on clarity, accessibility, and ease of onboarding with updated visuals.",
-      github: "https://github.com/justdesignanyway",
       demo: "https://www.figma.com/proto/NXBJxSs7X5cr8nwN44MOR3/project-draft?node-id=824-6768",
       firstContribution: true,
     },
@@ -101,13 +100,13 @@ export default function Winners() {
     {
       name: "Cashu Website Revamp",
       description: "A fresh redesign exploring new layouts and updated visuals for a clearer, more modern Cashu website experience.",
-      github: "https://github.com/mideajayi",
       demo: "https://www.figma.com/proto/9ptFVKv2A7vuU6rpG17zgh/Sonata-app?page-id=400%3A1035&node-id=432-20501",
       firstContribution: true,
     },
     {
       name: "Bitcoin Skills",
       description: "A workflow for building Bitcoin, Lightning, and Cashu wallets through prompts and images, with a Claude Skills library.",
+      gitlab: "https://gitlab.com/lemonknowsall/bitcoin-skills/",
       demo: "https://primal.net/e/nevent1qqs0su3kp66m5nswxw09yfux20r8de0shtehx2f7a9wq0jjwnglzgcqefva0y",
       firstContribution: true,
     },
@@ -412,19 +411,19 @@ export default function Winners() {
                 >
                   <button
                     onClick={() => setOpenSubmission(openSubmission === index ? null : index)}
-                    className="w-full px-4 py-3 flex items-center justify-between hover:bg-gray-50 transition-colors"
+                    className="w-full px-4 py-3 flex items-start justify-between hover:bg-gray-50 transition-colors gap-3"
                   >
-                    <div className="flex items-center gap-3">
-                      <span className="font-mono font-semibold text-gray-800">
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 flex-1 min-w-0">
+                      <span className="font-mono font-semibold text-gray-800 text-left">
                         {submission.name}
                       </span>
                       {submission.firstContribution && (
-                        <span className="text-xs bg-[#B7CF4F] text-white px-2 py-0.5 rounded-full font-mono">
+                        <span className="text-xs bg-[#B7CF4F] text-white px-2 py-0.5 rounded-full font-mono w-fit">
                           First Contribution
                         </span>
                       )}
                     </div>
-                    <span className="text-gray-400 text-xl">
+                    <span className="text-gray-400 text-xl flex-shrink-0">
                       {openSubmission === index ? "−" : "+"}
                     </span>
                   </button>
@@ -452,6 +451,16 @@ export default function Winners() {
                             className="px-3 py-1 bg-white border border-gray-300 text-gray-700 font-mono text-xs hover:bg-gray-50 transition-colors"
                           >
                             GitHub
+                          </a>
+                        )}
+                        {submission.gitlab && (
+                          <a
+                            href={submission.gitlab}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="px-3 py-1 bg-white border border-gray-300 text-gray-700 font-mono text-xs hover:bg-gray-50 transition-colors"
+                          >
+                            GitLab
                           </a>
                         )}
                       </div>
