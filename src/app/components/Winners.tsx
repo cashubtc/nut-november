@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useDonations } from "../context/DonationsContext";
 
 export default function Winners() {
@@ -17,6 +18,9 @@ export default function Winners() {
       amount: prizes.golden,
       accentColor: "#FFD700", // Gold
       bgGradient: "from-amber-50 to-yellow-50",
+      image: "/winners/goldennutwinner.jpg",
+      github: "https://github.com/MonkeyDGigi/The_Nutty_Pill",
+      demo: "https://thenuttypill.netlify.app/",
     },
     {
       prize: "Hardest Nut to Crack",
@@ -28,6 +32,9 @@ export default function Winners() {
       amount: prizes.hardest,
       accentColor: "#8B4513", // Brown
       bgGradient: "from-orange-50 to-amber-50",
+      image: "/winners/p2bk-proof.svg",
+      github: "https://github.com/cashubtc/cashu-ts/pull/377",
+      demo: "http://nostrly.com/cashu-nutlock",
     },
     {
       prize: "The Nuttiest Idea",
@@ -39,6 +46,9 @@ export default function Winners() {
       amount: prizes.nuttiest,
       accentColor: "#9333EA", // Purple
       bgGradient: "from-purple-50 to-fuchsia-50",
+      image: "/winners/nuttiestideawinner.jpg",
+      github: "https://github.com/OnChainDiscGolf/app",
+      demo: "https://on-chains-disc-golf-982604035840.us-west1.run.app/",
     },
     {
       prize: "Best Design Nut",
@@ -50,6 +60,9 @@ export default function Winners() {
       amount: prizes.design,
       accentColor: "#B7CF4F", // Green (site primary)
       bgGradient: "from-lime-50 to-green-50",
+      video: "/winners/bestdesignwinner.mp4",
+      github: "https://github.com/Unit-Matrix/nostrpay/tree/cashu-impl",
+      demo: "https://x.com/Anipy1/status/1994051972157112509",
     },
     {
       prize: "Freshly Minted Nut",
@@ -61,6 +74,9 @@ export default function Winners() {
       amount: prizes.fresh,
       accentColor: "#06B6D4", // Cyan
       bgGradient: "from-cyan-50 to-teal-50",
+      image: "/winners/freshleymintednutwinner.jpg",
+      github: "https://github.com/Solife-me/Taskify_Release",
+      demo: "https://taskify.solife.me/",
     },
     {
       prize: "Crowd Favorite",
@@ -72,6 +88,9 @@ export default function Winners() {
       amount: prizes.crowd,
       accentColor: "#EC4899", // Pink
       bgGradient: "from-pink-50 to-rose-50",
+      image: "/winners/crowdfavoritewinner.jpg",
+      github: "https://github.com/bTCpy/monopoly/",
+      demo: "https://cashu-monopoly.onrender.com/",
     },
   ];
 
@@ -144,30 +163,52 @@ export default function Winners() {
                 {/* Winner Content */}
                 <div className="p-6 sm:p-8">
                   <div className="flex flex-col lg:flex-row gap-6 lg:gap-10">
-                    {/* Project Image Placeholder */}
+                    {/* Project Image/Video */}
                     <div className="w-full lg:w-2/5 flex-shrink-0">
                       <div className="aspect-video lg:aspect-square bg-gray-200 border-4 border-black flex items-center justify-center relative overflow-hidden group">
-                        {/* Placeholder pattern */}
-                        <div className="absolute inset-0 opacity-30">
-                          <div
-                            className="w-full h-full"
-                            style={{
-                              backgroundImage: `repeating-linear-gradient(
-                                45deg,
-                                #d1d5db,
-                                #d1d5db 10px,
-                                #e5e7eb 10px,
-                                #e5e7eb 20px
-                              )`,
-                            }}
+                        {"video" in winner && winner.video ? (
+                          <video
+                            src={winner.video}
+                            autoPlay
+                            loop
+                            muted
+                            playsInline
+                            className="w-full h-full object-cover"
                           />
-                        </div>
-                        <div className="relative z-10 text-center p-4">
-                          <div className="text-4xl mb-2">📸</div>
-                          <p className="text-gray-500 font-mono text-sm">
-                            Project Image
-                          </p>
-                        </div>
+                        ) : "image" in winner && winner.image ? (
+                          <Image
+                            src={winner.image}
+                            alt={winner.project}
+                            fill
+                            className="object-cover"
+                            unoptimized
+                            priority={winner.image.includes("goldennut")}
+                          />
+                        ) : (
+                          <>
+                            {/* Placeholder pattern */}
+                            <div className="absolute inset-0 opacity-30">
+                              <div
+                                className="w-full h-full"
+                                style={{
+                                  backgroundImage: `repeating-linear-gradient(
+                                    45deg,
+                                    #d1d5db,
+                                    #d1d5db 10px,
+                                    #e5e7eb 10px,
+                                    #e5e7eb 20px
+                                  )`,
+                                }}
+                              />
+                            </div>
+                            <div className="relative z-10 text-center p-4">
+                              <div className="text-4xl mb-2">📸</div>
+                              <p className="text-gray-500 font-mono text-sm">
+                                Project Image
+                              </p>
+                            </div>
+                          </>
+                        )}
                       </div>
                     </div>
 
@@ -196,15 +237,31 @@ export default function Winners() {
                         <p className="text-gray-700 text-lg leading-relaxed">
                           {winner.description}
                         </p>
-                        {/* Action buttons placeholder */}
-                        <div className="flex flex-wrap gap-3 pt-2">
-                          <button className="px-4 py-2 bg-gray-800 text-white font-mono text-sm hover:bg-gray-700 transition-colors">
-                            View Project →
-                          </button>
-                          <button className="px-4 py-2 bg-white border-2 border-black text-gray-700 font-mono text-sm hover:bg-gray-50 transition-colors">
-                            GitHub
-                          </button>
-                        </div>
+                        {/* Action buttons */}
+                        {("demo" in winner || "github" in winner) && (
+                          <div className="flex flex-wrap gap-3 pt-2">
+                            {"demo" in winner && winner.demo && (
+                              <a
+                                href={winner.demo}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="px-4 py-2 bg-gray-800 text-white font-mono text-sm hover:bg-gray-700 transition-colors"
+                              >
+                                View Project →
+                              </a>
+                            )}
+                            {"github" in winner && winner.github && (
+                              <a
+                                href={winner.github}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="px-4 py-2 bg-white border-2 border-black text-gray-700 font-mono text-sm hover:bg-gray-50 transition-colors"
+                              >
+                                GitHub
+                              </a>
+                            )}
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>

@@ -1,0 +1,56 @@
+<svg width="1080" height="1080" viewBox="0 0 1080 1080" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Green Background -->
+  <rect width="1080" height="1080" fill="#B7CF4F"/>
+  
+  <!-- Terminal Window -->
+  <g transform="translate(60, 80)">
+    <!-- Terminal Shadow -->
+    <rect x="8" y="8" width="944" height="920" rx="12" fill="rgba(0,0,0,0.2)"/>
+    
+    <!-- Terminal Body -->
+    <rect width="944" height="920" rx="12" fill="#1a1a1a"/>
+    
+    <!-- Terminal Header -->
+    <rect width="944" height="44" rx="12" fill="#2d2d2d"/>
+    <rect y="32" width="944" height="12" fill="#2d2d2d"/>
+    
+    <!-- Traffic Light Buttons -->
+    <circle cx="28" cy="22" r="8" fill="#ff5f57"/>
+    <circle cx="52" cy="22" r="8" fill="#febc2e"/>
+    <circle cx="76" cy="22" r="8" fill="#28c840"/>
+    
+    <!-- Terminal Title -->
+    <text x="472" y="28" font-family="SF Mono, Monaco, Consolas, monospace" font-size="14" fill="#888" text-anchor="middle">p2bk-proof.json</text>
+    
+    <!-- Terminal Content - JSON -->
+    <g transform="translate(40, 80)">
+      <text y="0" font-family="SF Mono, Monaco, Consolas, monospace" font-size="22" fill="#e5e5e5">{</text>
+      
+      <text y="50" font-family="SF Mono, Monaco, Consolas, monospace" font-size="22" fill="#e5e5e5">  "<tspan fill="#06B6D4">amount</tspan>": <tspan fill="#f59e0b">64</tspan>,</text>
+      
+      <text y="100" font-family="SF Mono, Monaco, Consolas, monospace" font-size="22" fill="#e5e5e5">  "<tspan fill="#06B6D4">C</tspan>": "<tspan fill="#22c55e">0381855ddcc434a9a90b3564f29ef78e72</tspan></text>
+      <text y="140" font-family="SF Mono, Monaco, Consolas, monospace" font-size="22" fill="#22c55e">       71f8544d0056763b418b00e88525c0ff</text>
+      <text y="180" font-family="SF Mono, Monaco, Consolas, monospace" font-size="22" fill="#e5e5e5">  ",</text>
+      
+      <text y="230" font-family="SF Mono, Monaco, Consolas, monospace" font-size="22" fill="#e5e5e5">  "<tspan fill="#06B6D4">id</tspan>": "<tspan fill="#22c55e">009a1f293253e41e</tspan>",</text>
+      
+      <text y="280" font-family="SF Mono, Monaco, Consolas, monospace" font-size="22" fill="#e5e5e5">  "<tspan fill="#06B6D4">secret</tspan>": "<tspan fill="#ef4444">[\"P2PK\",{...}]</tspan>",</text>
+      
+      <text y="330" font-family="SF Mono, Monaco, Consolas, monospace" font-size="22" fill="#e5e5e5">  "<tspan fill="#06B6D4">dleq</tspan>": {</text>
+      
+      <text y="380" font-family="SF Mono, Monaco, Consolas, monospace" font-size="22" fill="#e5e5e5">    "<tspan fill="#06B6D4">s</tspan>": "<tspan fill="#22c55e">6178978456c42eee8eefb50830fc31...</tspan>",</text>
+      
+      <text y="430" font-family="SF Mono, Monaco, Consolas, monospace" font-size="22" fill="#e5e5e5">    "<tspan fill="#06B6D4">e</tspan>": "<tspan fill="#22c55e">23f2190b18bfd043d3a526103e15f4...</tspan>",</text>
+      
+      <text y="480" font-family="SF Mono, Monaco, Consolas, monospace" font-size="22" fill="#e5e5e5">    "<tspan fill="#06B6D4">r</tspan>": "<tspan fill="#22c55e">d26a55aa39ca50957fdaf54036b010...</tspan>"</text>
+      
+      <text y="530" font-family="SF Mono, Monaco, Consolas, monospace" font-size="22" fill="#e5e5e5">  },</text>
+      
+      <text y="580" font-family="SF Mono, Monaco, Consolas, monospace" font-size="22" fill="#e5e5e5">  "<tspan fill="#06B6D4">p2pk_e</tspan>": "<tspan fill="#ef4444">02a8cda4cf448bfce9a9e46e588c06</tspan></text>
+      <text y="620" font-family="SF Mono, Monaco, Consolas, monospace" font-size="22" fill="#ef4444">            ea1780fcb94e3bbdf3277f42995d403a8b0c</text>
+      <text y="660" font-family="SF Mono, Monaco, Consolas, monospace" font-size="22" fill="#e5e5e5">  "</text>
+      
+      <text y="710" font-family="SF Mono, Monaco, Consolas, monospace" font-size="22" fill="#e5e5e5">}</text>
+    </g>
+  </g>
+</svg>
