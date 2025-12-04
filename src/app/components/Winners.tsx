@@ -1,10 +1,124 @@
 "use client";
 
 import Image from "next/image";
+import { useState } from "react";
 import { useDonations } from "../context/DonationsContext";
 
 export default function Winners() {
   const { prizes } = useDonations();
+  const [openSubmission, setOpenSubmission] = useState<number | null>(null);
+
+  // All other submissions (non-winners)
+  const submissions = [
+    {
+      name: "PurrWallet",
+      description: "A cross-platform Cashu ecash wallet built with Rust and Flutter, featuring a terminal-inspired UI for privacy-focused Bitcoiners.",
+      github: "https://github.com/heathermm55/purrwallet",
+      demo: "https://zapstore.dev/apps/naddr1qvzqqqr7pvpzqqxlkgyptfc7y3tj8980m7lhwtjk55reyxuzsusp4wynwjtwarndqqfxxmmd9ec82unjwaskcmr9wshxzursqntc4u",
+      firstContribution: true,
+    },
+    {
+      name: "Cashu-402",
+      description: "HTTP 402 Payment Required implementation in Go, enabling websites and APIs to require Cashu micropayments for access.",
+      github: "https://github.com/ngmisl/deez-cashus",
+      demo: "https://deez-cashus.fly.dev/",
+      firstContribution: true,
+    },
+    {
+      name: "Cashu Casino",
+      description: "A no-KYC gaming platform built on Cashu ecash and Nostr with instant deposits/withdrawals via NIP-04 encrypted DMs.",
+      github: "https://github.com/babdbtc/cashucasino",
+      demo: "https://cashucasino.cc",
+      firstContribution: true,
+    },
+    {
+      name: "CypherTap",
+      description: "A Svelte component providing authentication and payments for Nostr apps, with built-in NIP-60 Cashu wallet support.",
+      github: "https://github.com/cypherflow/cyphertap",
+      demo: "https://cypherflow.github.io/cyphertap/",
+      firstContribution: false,
+    },
+    {
+      name: "Nutshell PR #840",
+      description: "Fixed outdated Poetry setup instructions in CONTRIBUTING.md that caused errors for new contributors.",
+      github: "https://github.com/cashubtc/nutshell/pull/840",
+      firstContribution: true,
+    },
+    {
+      name: "V0T",
+      description: "A privacy-focused system for auditable, transparent, sub-second operations using sats as the basic unit.",
+      github: "https://github.com/DT7QR/V0T-privacy-ops",
+      demo: "https://defintrual.me/",
+      firstContribution: true,
+    },
+    {
+      name: "Bitpoints.me",
+      description: "A Bitcoin-based rewards system where customers earn sats through a simple points-style interface, built on a fork of cashu.me.",
+      github: "https://github.com/bitpoints-cashu/bitpoints.me",
+      demo: "https://bitpoints.me/",
+      firstContribution: false,
+    },
+    {
+      name: "Cashu Website Redesign",
+      description: "A full redesign of the Cashu website focused on clarity, accessibility, and ease of onboarding with updated visuals.",
+      github: "https://github.com/justdesignanyway",
+      demo: "https://www.figma.com/proto/NXBJxSs7X5cr8nwN44MOR3/project-draft?node-id=824-6768",
+      firstContribution: true,
+    },
+    {
+      name: "Deterministic Nostr Cashu Wallets",
+      description: "Extends NUT-13 deterministic wallet standard for Nostr, enabling full wallet recovery with 12 seed words via NIP-60.",
+      github: "https://github.com/rodant/ndk-wallet",
+      demo: "https://github.com/rodant/satshoot/tree/cashu-mnemonic-restore",
+      firstContribution: false,
+    },
+    {
+      name: "LNUTS",
+      description: "Express middleware that turns any Node.js app into an LNURL pay server, forwarding Lightning payments to NIP-60 wallets.",
+      github: "https://gitworkshop.dev/npub1dfedhrhn7wu7uhkdsz8dd5rrr50ymkjutkklq7y8zpxn89t7hfyqfzlc7u/relay.ngit.dev/lnuts",
+      demo: "https://alpha.nuts.cash/home",
+      firstContribution: false,
+    },
+    {
+      name: "EchoCash",
+      description: "A P2P communication and payment platform using WebRTC and WebSockets for decentralized value transfer via Fedimint and Cashu.",
+      github: "https://github.com/Harshdev098/EchoCash",
+      firstContribution: true,
+    },
+    {
+      name: "Cashu Point of Sale",
+      description: "A self-hostable POS app built with Expo for accepting Cashu payments via NFC tap-to-pay and Lightning invoices.",
+      github: "https://github.com/babdbtc/cashu-pos",
+      firstContribution: false,
+    },
+    {
+      name: "Classu.Cash",
+      description: "An educational platform for learning Cashu with tutorials, interactive tools, and real-world examples for minting and redeeming ecash.",
+      github: "https://github.com/inscrib3/classu.cash",
+      demo: "https://classu.cash",
+      firstContribution: true,
+    },
+    {
+      name: "Nostr.blue",
+      description: "A full-featured Nostr social client with a built-in NIP-60 Cashu wallet, compiled to WebAssembly using CDK.",
+      github: "https://github.com/patrickulrich/nostr.blue",
+      demo: "https://nostr.blue/cashuwallet",
+      firstContribution: true,
+    },
+    {
+      name: "Cashu Website Revamp",
+      description: "A fresh redesign exploring new layouts and updated visuals for a clearer, more modern Cashu website experience.",
+      github: "https://github.com/mideajayi",
+      demo: "https://www.figma.com/proto/9ptFVKv2A7vuU6rpG17zgh/Sonata-app?page-id=400%3A1035&node-id=432-20501",
+      firstContribution: true,
+    },
+    {
+      name: "Bitcoin Skills",
+      description: "A workflow for building Bitcoin, Lightning, and Cashu wallets through prompts and images, with a Claude Skills library.",
+      demo: "https://primal.net/e/nevent1qqs0su3kp66m5nswxw09yfux20r8de0shtehx2f7a9wq0jjwnglzgcqefva0y",
+      firstContribution: true,
+    },
+  ];
 
   // 2025 Nut November Winners
   const winners = [
@@ -268,6 +382,72 @@ export default function Winners() {
                 </div>
               </div>
             ))}
+          </div>
+
+          {/* All Submissions Accordion */}
+          <div className="mt-16">
+            <h4 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-6 font-mono">
+              All Submissions
+            </h4>
+            <p className="text-gray-600 mb-8">
+              Thank you to everyone who participated! Here are all the projects submitted to Nut November 2025.
+            </p>
+            <div className="space-y-2">
+              {submissions.map((submission, index) => (
+                <div
+                  key={index}
+                  className="border-2 border-gray-300 bg-white overflow-hidden"
+                >
+                  <button
+                    onClick={() => setOpenSubmission(openSubmission === index ? null : index)}
+                    className="w-full px-4 py-3 flex items-center justify-between hover:bg-gray-50 transition-colors"
+                  >
+                    <div className="flex items-center gap-3">
+                      <span className="font-mono font-semibold text-gray-800">
+                        {submission.name}
+                      </span>
+                      {submission.firstContribution && (
+                        <span className="text-xs bg-[#B7CF4F] text-white px-2 py-0.5 rounded-full font-mono">
+                          First Contribution
+                        </span>
+                      )}
+                    </div>
+                    <span className="text-gray-400 text-xl">
+                      {openSubmission === index ? "−" : "+"}
+                    </span>
+                  </button>
+                  {openSubmission === index && (
+                    <div className="px-4 pb-4 border-t border-gray-200">
+                      <p className="text-gray-600 text-sm mt-3 mb-3">
+                        {submission.description}
+                      </p>
+                      <div className="flex flex-wrap gap-2">
+                        {submission.demo && (
+                          <a
+                            href={submission.demo}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="px-3 py-1 bg-gray-800 text-white font-mono text-xs hover:bg-gray-700 transition-colors"
+                          >
+                            Demo →
+                          </a>
+                        )}
+                        {submission.github && (
+                          <a
+                            href={submission.github}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="px-3 py-1 bg-white border border-gray-300 text-gray-700 font-mono text-xs hover:bg-gray-50 transition-colors"
+                          >
+                            GitHub
+                          </a>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
           </div>
 
           {/* Bottom celebration message */}
