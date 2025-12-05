@@ -1,14 +1,11 @@
 "use client";
 
-import Link from "next/link";
 import { RefObject, useRef } from "react";
 import CircularText from "./CircularText";
 import NutParticles from "./NutParticles";
-import { useDonations } from "../context/DonationsContext";
 
 export default function Hero() {
   const heroRef = useRef<HTMLElement>(null);
-  const { total } = useDonations();
 
   return (
     <section
@@ -36,49 +33,23 @@ export default function Hero() {
             className="text-xl sm:text-2xl md:text-3xl text-gray-500 mb-4 animate-slide-up-delay uppercase"
             style={{ fontFamily: "var(--font-sans)" }}
           >
-            A month-long hackathon for Cashu builders.
+            Celebrating Nut November 2025
           </p>
           <p
             className="text-xl sm:text-2xl md:text-3xl text-[#8B4513] mb-8 animate-slide-up-delay font-semibold"
             style={{ fontFamily: "var(--font-poppins)" }}
           >
-            ₿
-            {(total + 400000).toLocaleString("en-US", {
-              minimumFractionDigits: 0,
-              maximumFractionDigits: 0,
-            })}{" "}
-            Total Prize Pool!
+            We awarded ₿1,914,287 total
           </p>
           <div
-            className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-slide-up-delay"
+            className="flex justify-center items-center animate-slide-up-delay"
             style={{ animationDelay: "0.4s" }}
           >
-            <Link
-              href="/form"
+            <a
+              href="#winners"
               className="inline-block px-10 py-5 bg-[#B7CF4F] text-white font-bold border-4 border-[#B7CF4F] hover:bg-[#9fb63e] text-lg font-mono"
             >
-              Submit Project
-            </Link>
-            <a
-              href="#prizes"
-              className="inline-block px-10 py-5 bg-white text-[#B7CF4F] font-bold border-4 border-[#B7CF4F] hover:bg-[#f5f5f5] text-lg font-mono"
-            >
-              View Prizes
-            </a>
-          </div>
-          <div
-            className="text-center mt-6 animate-slide-up-delay"
-            style={{ animationDelay: "0.5s" }}
-          >
-            <a
-              href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(
-                "Cashu builders are going nuts again this month. https://nutnovember.org/ #NutNovember"
-              )}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-block px-10 py-5 bg-[#8B4513] text-white font-bold border-4 border-[#8B4513] hover:bg-[#704214] text-lg font-mono"
-            >
-              Spread The Word
+              View Winners
             </a>
           </div>
         </div>
