@@ -9,8 +9,6 @@ export interface PrizeCardData {
   track: string;
   number: string;
   art: string;
-  /** Set once judging is done. */
-  winner?: string;
   palette: { base: string; c1: string; c2: string; c3: string };
 }
 

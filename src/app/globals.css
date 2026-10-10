@@ -400,7 +400,13 @@ body {
   filter: saturate(1.2);
 }
 
+.prize-stamp-ring {
+  color: var(--cream-deep);
+  animation: rotate-circle 18s linear infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
+  .prize-stamp-ring,
   .prize-art *,
   .prize-art {
     animation: none !important;

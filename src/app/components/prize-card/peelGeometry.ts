@@ -68,7 +68,7 @@ export function peelAt(w: number, h: number, p: Point): Peel | null {
     -2 * n.x * n.y
   }, ${1 - 2 * n.y * n.y}, ${2 * k * n.x}, ${2 * k * n.y})`;
 
-  // Shade along -n (from the fold towards the original corner). CSS gradients
+  // The back of the packet is kraft paper. Shade along -n (from the fold towards the original corner). CSS gradients
   // run along a line through the box centre, so work out where the fold sits
   // on that line to place the stops in pixels.
   const dir = { x: -n.x, y: -n.y };
@@ -78,8 +78,8 @@ export function peelAt(w: number, h: number, p: Point): Peel | null {
   const fold = (m.x - start.x) * dir.x + (m.y - start.y) * dir.y;
   const px = (d: number) => `${(fold + d).toFixed(1)}px`;
   const shading = `linear-gradient(${((angle * 180) / Math.PI).toFixed(2)}deg,
-    #2b2826 ${px(-1)}, #9a948d ${px(0)}, #7a746e ${px(7)},
-    #57524e ${px(48)}, #3a3734 ${px(180)}, #2b2826 ${px(420)})`;
+    #8d6a44 ${px(-1)}, #f3dcb6 ${px(0)}, #dcbb8c ${px(8)},
+    #c49d6b ${px(50)}, #a7804f ${px(190)}, #8d6a44 ${px(420)})`;
 
   return { kept, lifted, mirror, shading };
 }

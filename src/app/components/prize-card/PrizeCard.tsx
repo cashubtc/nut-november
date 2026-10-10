@@ -6,6 +6,7 @@ import {
   PointerEvent as ReactPointerEvent,
   useCallback,
   useEffect,
+  useId,
   useRef,
   useState,
 } from "react";
@@ -13,10 +14,14 @@ import { peelAt, Point, toClipPath } from "./peelGeometry";
 import { playSnap, PeelVoice, startPeel } from "./peelSound";
 import type { PrizeCardData } from "./prizes";
 
-// Lanyard-pass silhouette: rounded corners, a slot for the clip and two
-// notches marking the tear-off stub. Drawn on a 500×800 box, which matches the
-// card's 5:8 aspect ratio so the mask never distorts.
-const SHAPE = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 800" preserveAspectRatio="none"><path fill="#fff" fill-rule="evenodd" d="M28 0H472A28 28 0 0 1 500 28V582A18 18 0 0 0 500 618V772A28 28 0 0 1 472 800H28A28 28 0 0 1 0 772V618A18 18 0 0 0 0 582V28A28 28 0 0 1 28 0ZM211 30H289A11 11 0 0 1 289 52H211A11 11 0 0 1 211 30Z"/></svg>`;
+// Seed-packet silhouette: a pinked (zig-zag) top edge where the packet was
+// cut, and rounded bottom corners. Drawn on a 500×630 box, which matches the
+// card's 50:63 aspect ratio so the mask never distorts.
+const TEETH = 25;
+const PINKED_EDGE = Array.from({ length: TEETH * 2 + 1 }, (_, i) =>
+  `L${(i * 500) / (TEETH * 2)} ${i % 2 ? 0 : 9}`
+).join("");
+const SHAPE = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 630" preserveAspectRatio="none"><path fill="#fff" d="M0 9${PINKED_EDGE}V604A26 26 0 0 1 474 630H26A26 26 0 0 1 0 604Z"/></svg>`;
 const SHAPE_URL = `url("data:image/svg+xml,${encodeURIComponent(SHAPE)}")`;
 const shapeMask: CSSProperties = {
   maskImage: SHAPE_URL,
@@ -217,7 +222,7 @@ export default function PrizeCard({
   return (
     <div
       ref={sceneRef}
-      className="prize-card-scene relative w-full aspect-[5/8] [perspective:1100px] select-none"
+      className="prize-card-scene relative w-full aspect-[50/63] [perspective:1100px] select-none"
       onPointerMove={onSceneMove}
       onPointerLeave={() => setTilt({ x: 0, y: 0, active: false })}
       style={
@@ -256,7 +261,7 @@ export default function PrizeCard({
             <span className="prize-art-blob prize-art-blob-1" />
             <span className="prize-art-blob prize-art-blob-2" />
             <span className="prize-art-blob prize-art-blob-3" />
-            <div className="prize-art-nut absolute left-[10%] top-[30%] w-[80%] aspect-square">
+            <div className="prize-art-nut absolute left-[10%] top-[26%] w-[80%] aspect-square">
               <Image
                 src={prize.art}
                 alt=""
@@ -268,14 +273,14 @@ export default function PrizeCard({
             </div>
           </div>
 
-          {/* 2. The sticker: black with white type, multiplied over the art so
-                 the art only shows through the lettering. */}
+          {/* 2. The sticker: near-black with white type, multiplied over the art
+                 so the art only shows through the lettering. */}
           <div
-            className="absolute inset-0 bg-black mix-blend-multiply"
+            className="absolute inset-0 bg-[#170c06] mix-blend-multiply"
             style={{ clipPath: keptClip }}
           >
             <p
-              className="absolute inset-x-0 top-[13.5%] text-center text-white leading-none whitespace-nowrap"
+              className="absolute inset-x-0 top-[15.5%] text-center text-white leading-none whitespace-nowrap"
               style={{
                 fontFamily: "var(--font-sauce-tm)",
                 fontSize: `${Math.min(35, 86 / (prize.word.length * 0.42))}cqw`,
@@ -287,48 +292,35 @@ export default function PrizeCard({
 
           {/* 3. The print: sits on the sticker (and peels with it) but isn't blended */}
           <div
-            className="absolute inset-0 text-white"
+            className="absolute inset-0 text-cream-deep"
             style={{ clipPath: keptClip }}
             aria-hidden
           >
             <TreeRings />
-            <div className="absolute left-[7%] right-[7%] top-[9.5%] flex justify-between font-mono font-bold uppercase tracking-[0.18em] text-[2.6cqw]">
-              <span>Nut November</span>
-              <span>Nov 1–30 · 2026</span>
+            <div className="absolute left-[7%] right-[7%] top-[7%] flex justify-between border-b border-cream-deep/20 pb-[2cqw] font-mono font-bold uppercase tracking-[0.18em] text-[2.6cqw]">
+              <span>Nut November Seed Co.</span>
+              <span className="mr-[8cqw] text-pumpkin">No. {prize.number}</span>
             </div>
 
-            <div className="absolute left-[7%] right-[7%] top-[47%] flex items-center justify-between gap-[3cqw]">
+            <div className="absolute left-[7%] right-[7%] top-[49%] flex items-center justify-between gap-[3cqw]">
               <div className="min-w-0">
                 <p
-                  className="font-bold leading-tight text-[7.4cqw] truncate"
+                  className="font-bold leading-tight text-[7cqw]"
                   style={{ fontFamily: "var(--font-poppins)" }}
                 >
-                  {prize.winner ?? "Could be you"}
+                  {prize.title}
                 </p>
-                <p className="mt-[1.5cqw] flex items-center gap-[2cqw] text-[3cqw] text-white/70">
-                  <span className="rounded-full bg-white px-[2.2cqw] py-[0.4cqw] font-mono font-bold uppercase tracking-wider text-black text-[2.4cqw]">
-                    Winner
-                  </span>
-                  <span className="truncate">{prize.title}</span>
+                <p className="mt-[1.5cqw] text-[3.4cqw] leading-snug text-cream-deep/70">
+                  {prize.blurb}
                 </p>
               </div>
-              <FoilSeal />
+              <NuttyStamp />
             </div>
 
-            <div className="absolute left-[7%] right-[7%] top-[62%] grid grid-cols-[1.25fr_1fr_1fr] gap-[2cqw]">
-              <Field label="Amount" value={amountLabel} />
-              <Field label="Deadline" value="Nov 30" />
-              <Field label="Track" value={prize.track} />
-            </div>
-
-            <div className="absolute left-[5%] right-[5%] top-[75%] border-t-2 border-dashed border-white/25" />
-
-            <div className="absolute left-[7%] right-[7%] top-[79%] bottom-[5%] flex flex-col justify-between">
-              <p className="text-[3.3cqw] leading-snug text-white/80">{prize.blurb}</p>
-              <div className="flex justify-between font-mono font-bold uppercase tracking-[0.18em] text-[2.6cqw]">
-                <span>No. {prize.number}</span>
-                <span>One winner</span>
-              </div>
+            <div className="absolute left-[7%] right-[7%] bottom-[6%] grid grid-cols-[1.3fr_1fr_1fr] gap-[2cqw] border-t border-cream-deep/20 pt-[3cqw]">
+              <Field label="Net wt" value={amountLabel} />
+              <Field label="Sow by" value="Nov 30" />
+              <Field label="Variety" value={prize.track} />
             </div>
           </div>
 
@@ -377,7 +369,7 @@ export default function PrizeCard({
 function Field({ label, value }: { label: string; value: string }) {
   return (
     <div className="min-w-0">
-      <p className="font-mono uppercase tracking-[0.16em] text-white/55 text-[2.3cqw]">
+      <p className="font-mono uppercase tracking-[0.16em] text-pumpkin text-[2.3cqw]">
         {label}
       </p>
       <p
@@ -390,41 +382,39 @@ function Field({ label, value }: { label: string; value: string }) {
   );
 }
 
-/** Holographic seal whose colours shift as the card tilts. */
-function FoilSeal() {
-  const points = 18;
-  const outer = 50;
-  const inner = 44;
-  const d =
-    Array.from({ length: points * 2 }, (_, i) => {
-      const r = i % 2 ? inner : outer;
-      const a = (Math.PI * i) / points;
-      return `${i ? "L" : "M"}${(50 + r * Math.sin(a)).toFixed(2)} ${(50 - r * Math.cos(a)).toFixed(2)}`;
-    }).join("") + "Z";
-  const seal = `url("data:image/svg+xml,${encodeURIComponent(
-    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="${d}" fill="#fff"/></svg>`
-  )}")`;
+/** The site's "100% nutty" stamp, with a foil centre that shifts as the card tilts. */
+function NuttyStamp() {
+  const ringId = useId();
   return (
-    <div className="relative w-[19cqw] shrink-0 aspect-square">
-      <div
-        className="prize-card-foil absolute inset-0"
-        style={{ maskImage: seal, WebkitMaskImage: seal, maskSize: "100%", WebkitMaskSize: "100%" }}
-      />
-      <span className="absolute inset-0 flex items-center justify-center text-[8cqw] drop-shadow">
+    <div className="relative w-[24cqw] shrink-0 aspect-square">
+      <div className="prize-card-foil absolute inset-[24%] rounded-full" />
+      <span className="absolute inset-0 flex items-center justify-center text-[7cqw] drop-shadow">
         🌰
       </span>
+      <svg viewBox="0 0 100 100" className="prize-stamp-ring absolute inset-0">
+        <defs>
+          <path id={ringId} d="M50 50m-38 0a38 38 0 1 0 76 0a38 38 0 1 0-76 0" />
+        </defs>
+        <circle cx="50" cy="50" r="47" fill="none" stroke="currentColor" strokeOpacity="0.35" />
+        <text
+          fill="currentColor"
+          style={{ fontFamily: "var(--font-geist-mono)", fontSize: "9.6px", fontWeight: 700, letterSpacing: "1.4px" }}
+        >
+          <textPath href={`#${ringId}`}>100% NUTTY • CERTIFIED ORGANIC •</textPath>
+        </text>
+      </svg>
     </div>
   );
 }
 
-/** Tree-ring line art standing in for the original's wireframe globe. */
+/** Tree-ring line art, like a cross-section of the nut tree. */
 function TreeRings() {
   return (
     <svg
       viewBox="0 0 400 400"
-      className="absolute -right-[38%] top-[18%] w-[118%] opacity-30"
+      className="absolute -right-[42%] top-[24%] w-[118%] opacity-40"
       fill="none"
-      stroke="white"
+      stroke="var(--pumpkin)"
       strokeWidth="1"
     >
       {Array.from({ length: 11 }, (_, i) => {
