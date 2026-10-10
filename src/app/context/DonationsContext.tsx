@@ -18,8 +18,9 @@ const basePrizes = {
   nuttiest: 60000,
   design: 50000,
   fresh: 40000,
-  crowd: 20000,
 };
+
+const basePool = Object.values(basePrizes).reduce((sum, v) => sum + v, 0);
 
 interface DonationsContextType {
   donations: number[];
@@ -27,6 +28,7 @@ interface DonationsContextType {
   total: number;
   sortedDonations: number[];
   isLoading: boolean;
+  basePool: number;
   prizes: Record<keyof typeof basePrizes, number>;
 }
 
@@ -95,7 +97,7 @@ export function DonationsProvider({ children }: { children: ReactNode }) {
   const allDonations = [...preZapDonations, ...donations];
   const total = allDonations.reduce((sum, amount) => sum + amount, 0);
   const sortedDonations = [...allDonations].sort((a, b) => b - a);
-  const prizeShare = Math.floor(total / 6);
+  const prizeShare = Math.floor(total / Object.keys(basePrizes).length);
 
   const prizes: Record<keyof typeof basePrizes, number> = {
     golden: 0,
@@ -103,7 +105,6 @@ export function DonationsProvider({ children }: { children: ReactNode }) {
     nuttiest: 0,
     design: 0,
     fresh: 0,
-    crowd: 0,
   };
   Object.entries(basePrizes).forEach(([key, value]) => {
     prizes[key as keyof typeof basePrizes] = value + prizeShare;
@@ -117,6 +118,7 @@ export function DonationsProvider({ children }: { children: ReactNode }) {
         total,
         sortedDonations,
         isLoading,
+        basePool,
         prizes,
       }}
     >

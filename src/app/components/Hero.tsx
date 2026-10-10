@@ -8,7 +8,7 @@ import { useDonations } from "../context/DonationsContext";
 
 export default function Hero() {
   const heroRef = useRef<HTMLElement>(null);
-  const { total } = useDonations();
+  const { total, basePool } = useDonations();
 
   return (
     <section
@@ -46,7 +46,7 @@ export default function Hero() {
             style={{ fontFamily: "var(--font-poppins)" }}
           >
             ₿
-            {(total + 400000).toLocaleString("en-US", {
+            {(total + basePool).toLocaleString("en-US", {
               minimumFractionDigits: 0,
               maximumFractionDigits: 0,
             })}{" "}

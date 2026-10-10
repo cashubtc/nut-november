@@ -41,13 +41,6 @@ export default function Prizes() {
         "Best first-time contributor. Welcome to the shell game. Recognizes newcomers who made their first meaningful contribution.",
       amount: allPrizes.fresh,
     },
-    {
-      image: "/crowdfavorite.jpg",
-      name: "Crowd Favorite",
-      description:
-        "This is the prize for the entry that receives the most votes from the Cashu community.",
-      amount: allPrizes.crowd,
-    },
   ];
 
   return (
