@@ -317,3 +317,92 @@ body {
     transition: none;
   }
 }
+
+/* Prize cards — the art behind the knockout sticker */
+.prize-art {
+  overflow: hidden;
+}
+
+.prize-art-blob {
+  position: absolute;
+  width: 90%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  will-change: transform;
+}
+
+.prize-art-blob-1 {
+  left: -25%;
+  top: -10%;
+  background: radial-gradient(circle, var(--c1) 0%, transparent 65%);
+  animation: prize-drift-a 9s ease-in-out infinite alternate;
+}
+
+.prize-art-blob-2 {
+  right: -30%;
+  top: 15%;
+  background: radial-gradient(circle, var(--c2) 0%, transparent 65%);
+  animation: prize-drift-b 11s ease-in-out infinite alternate;
+}
+
+.prize-art-blob-3 {
+  left: 5%;
+  bottom: -25%;
+  background: radial-gradient(circle, var(--c3) 0%, transparent 65%);
+  animation: prize-drift-c 13s ease-in-out infinite alternate;
+}
+
+.prize-art-nut {
+  animation: prize-bob 6s ease-in-out infinite alternate;
+  filter: drop-shadow(0 12px 18px rgba(0, 0, 0, 0.25));
+}
+
+.prize-art[data-paused] *,
+.prize-art[data-paused] {
+  animation-play-state: paused;
+}
+
+@keyframes prize-drift-a {
+  to { transform: translate(45%, 35%) scale(1.25); }
+}
+
+@keyframes prize-drift-b {
+  to { transform: translate(-50%, 25%) scale(0.85); }
+}
+
+@keyframes prize-drift-c {
+  to { transform: translate(30%, -60%) scale(1.15); }
+}
+
+@keyframes prize-bob {
+  from { transform: translateY(-3%) rotate(-6deg) scale(1); }
+  to { transform: translateY(4%) rotate(7deg) scale(1.06); }
+}
+
+.prize-card {
+  filter: drop-shadow(0 22px 22px rgba(67, 32, 12, 0.35));
+}
+
+.prize-card-sheen {
+  background: radial-gradient(
+    circle at var(--mx, 50%) var(--my, 50%),
+    rgba(255, 255, 255, 0.1) 0%,
+    transparent 50%
+  );
+  mix-blend-mode: screen;
+}
+
+.prize-card-foil {
+  background: conic-gradient(
+    from var(--hue, 0deg),
+    #ff9a3c, #ffe066, #7dffb0, #6cc8ff, #b48cff, #ff7ab8, #ff9a3c
+  );
+  filter: saturate(1.2);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .prize-art *,
+  .prize-art {
+    animation: none !important;
+  }
+}

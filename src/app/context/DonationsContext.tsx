@@ -22,6 +22,8 @@ const basePrizes = {
 
 const basePool = Object.values(basePrizes).reduce((sum, v) => sum + v, 0);
 
+export type PrizeKey = keyof typeof basePrizes;
+
 interface DonationsContextType {
   donations: number[];
   allDonations: number[];
