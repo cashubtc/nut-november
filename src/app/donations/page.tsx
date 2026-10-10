@@ -7,13 +7,13 @@ export default function Page() {
   const { allDonations, total, sortedDonations, isLoading } = useDonations();
 
   return (
-    <section className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#B7CF4F] p-6 sm:p-8 md:p-12 lg:p-16">
+    <section className="relative flex min-h-screen items-center justify-center overflow-hidden bg-pumpkin p-6 sm:p-8 md:p-12 lg:p-16">
       <div className="relative z-20 max-w-6xl w-full flex flex-col items-center">
         <BackToHome />
-        <div className="bg-[#FAFAFA] border-4 border-[#B7CF4F] p-8 sm:p-12 md:p-16 lg:p-20 w-full">
+        <div className="bg-cream border-4 border-bark card-sticker p-8 sm:p-12 md:p-16 lg:p-20 w-full">
           <div className="text-center mb-8">
             <h1
-              className="text-[40px] sm:text-[60px] md:text-[80px] lg:text-[100px] font-bold leading-[0.85] tracking-wider text-[#B7CF4F] mb-4"
+              className="text-[40px] sm:text-[60px] md:text-[80px] lg:text-[100px] font-bold leading-[0.85] tracking-wider text-pumpkin mb-4"
               style={{
                 fontFamily: "var(--font-sauce-tm)",
                 letterSpacing: "0.05em",
@@ -30,7 +30,7 @@ export default function Page() {
           </div>
 
           {/* Total Sum */}
-          <div className="bg-[#B7CF4F] border-4 border-[#B7CF4F] p-6 mb-8 text-center">
+          <div className="bg-pumpkin border-4 border-pumpkin p-6 mb-8 text-center">
             <p
               className="text-lg sm:text-xl text-gray-600 mb-2 uppercase"
               style={{ fontFamily: "var(--font-sans)" }}
@@ -55,7 +55,7 @@ export default function Page() {
           {/* Donations List */}
           <div>
             <h2
-              className="text-xl sm:text-2xl font-bold text-[#B7CF4F] mb-4 font-mono"
+              className="text-xl sm:text-2xl font-bold text-pumpkin mb-4 font-mono"
               style={{ fontFamily: "var(--font-sauce-tm)" }}
             >
               Donations ({allDonations.length})
@@ -71,7 +71,7 @@ export default function Page() {
                 {sortedDonations.map((amount, index) => (
                   <div
                     key={index}
-                    className="bg-white border-4 border-[#B7CF4F] p-4 flex justify-between items-center"
+                    className="bg-white border-4 border-pumpkin p-4 flex justify-between items-center"
                   >
                     <span className="text-gray-700 font-mono">
                       #{index + 1}

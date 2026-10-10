@@ -3,6 +3,15 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+
+  /* Nut November 2026 — fall palette */
+  --pumpkin: #C8551A;
+  --pumpkin-dark: #A3421A;
+  --pumpkin-wash: #FDEBDD;
+  --bark: #5C2E12;
+  --bark-dark: #43200C;
+  --cream: #FFF8EF;
+  --cream-deep: #FCE9D2;
 }
 
 @theme inline {
@@ -11,6 +20,14 @@
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
   --font-sauce-tm: var(--font-sauce-tm);
+
+  --color-pumpkin: var(--pumpkin);
+  --color-pumpkin-dark: var(--pumpkin-dark);
+  --color-pumpkin-wash: var(--pumpkin-wash);
+  --color-bark: var(--bark);
+  --color-bark-dark: var(--bark-dark);
+  --color-cream: var(--cream);
+  --color-cream-deep: var(--cream-deep);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -210,7 +227,7 @@ body {
 
 /* Hero Background Textures */
 .hero-texture-combined {
-  background-color: #B7CF4F;
+  background-color: var(--pumpkin);
   background-image: 
     radial-gradient(circle at 2px 2px, rgba(0,0,0,0.12) 1px, transparent 0);
   background-size: 28px 28px;
@@ -231,7 +248,7 @@ body {
 }
 
 .hero-texture-dots {
-  background-color: #B7CF4F;
+  background-color: var(--pumpkin);
   background-image: 
     radial-gradient(circle at 2px 2px, rgba(0,0,0,0.12) 1px, transparent 0);
   background-size: 28px 28px;
@@ -249,7 +266,7 @@ body {
     radial-gradient(at 100% 0%, rgba(0,0,0,0.08) 0px, transparent 60%),
     radial-gradient(at 100% 100%, rgba(0,0,0,0.1) 0px, transparent 60%),
     radial-gradient(at 0% 100%, rgba(255,255,255,0.12) 0px, transparent 60%);
-  background-color: #B7CF4F;
+  background-color: var(--pumpkin);
 }
 
 .hero-texture-lines {
@@ -261,4 +278,42 @@ body {
       rgba(0,0,0,0.02) 10px,
       rgba(0,0,0,0.02) 11px
     );
+}
+
+/* 2026 refresh — hard "sticker" shadows and a warmer hero */
+.card-sticker {
+  box-shadow: 8px 8px 0 var(--bark);
+}
+
+.btn-sticker {
+  box-shadow: 5px 5px 0 var(--bark);
+  transition: transform 0.12s ease, box-shadow 0.12s ease, background-color 0.15s ease;
+}
+
+.btn-sticker:hover {
+  transform: translate(2px, 2px);
+  box-shadow: 3px 3px 0 var(--bark);
+}
+
+.btn-sticker:active {
+  transform: translate(5px, 5px);
+  box-shadow: 0 0 0 var(--bark);
+}
+
+.hero-autumn {
+  background-color: var(--pumpkin);
+  background-image:
+    radial-gradient(circle at 2px 2px, rgba(67, 32, 12, 0.18) 1px, transparent 0),
+    radial-gradient(ellipse at 15% 10%, rgba(255, 196, 120, 0.45) 0%, transparent 55%),
+    radial-gradient(ellipse at 90% 95%, rgba(92, 46, 18, 0.55) 0%, transparent 60%);
+  background-size: 28px 28px, 100% 100%, 100% 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn-sticker,
+  .btn-sticker:hover,
+  .btn-sticker:active {
+    transform: none;
+    transition: none;
+  }
 }

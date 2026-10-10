@@ -6,7 +6,7 @@ export default function SuccessMessage({ onReset }: SuccessMessageProps) {
   return (
     <div className="flex flex-col items-center gap-8">
       {/* Checkmark */}
-      <div className="w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 bg-[#B7CF4F] rounded-full flex items-center justify-center">
+      <div className="w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 bg-pumpkin rounded-full flex items-center justify-center">
         <svg
           className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 text-white"
           fill="none"
@@ -25,7 +25,7 @@ export default function SuccessMessage({ onReset }: SuccessMessageProps) {
       {/* Success Message */}
       <div className="text-center space-y-4">
         <h2
-          className="text-[32px] sm:text-[48px] md:text-[64px] font-bold text-[#B7CF4F]"
+          className="text-[32px] sm:text-[48px] md:text-[64px] font-bold text-pumpkin"
           style={{
             fontFamily: "var(--font-sauce-tm)",
             letterSpacing: "0.05em",
@@ -50,7 +50,7 @@ export default function SuccessMessage({ onReset }: SuccessMessageProps) {
       {/* Action Button */}
       <button
         onClick={onReset}
-        className="inline-block px-10 py-5 bg-[#B7CF4F] text-white font-bold border-4 border-[#B7CF4F] hover:bg-[#9fb63e] text-lg font-mono transition-all"
+        className="inline-block px-10 py-5 btn-sticker bg-pumpkin text-white font-bold border-4 border-pumpkin hover:bg-pumpkin-dark text-lg font-mono transition-all"
       >
         Donate Again
       </button>

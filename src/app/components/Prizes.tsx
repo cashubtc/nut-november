@@ -53,16 +53,16 @@ export default function Prizes() {
   return (
     <section
       id="prizes"
-      className="py-20 px-6 bg-[#FAFAFA] border-t border-black"
+      className="py-20 px-6 bg-cream border-t border-bark"
     >
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row">
         {/* Mobile Title - shows on top for mobile only */}
-        <h2 className="text-base font-normal text-gray-500 font-mono mb-6 md:hidden">
+        <h2 className="text-base font-semibold text-bark/70 font-mono tracking-[0.2em] mb-6 md:hidden">
           PRIZES
         </h2>
         {/* Vertical Label - hidden on mobile, shown on desktop */}
         <div className="hidden md:flex flex-shrink-0 w-16 sm:w-20 md:w-24 items-center justify-center">
-          <h2 className="text-sm sm:text-base md:text-lg font-normal text-gray-500 font-mono whitespace-nowrap transform -rotate-90 origin-center">
+          <h2 className="text-sm sm:text-base md:text-lg font-semibold text-bark/70 font-mono tracking-[0.2em] whitespace-nowrap transform -rotate-90 origin-center">
             PRIZES
           </h2>
         </div>
@@ -72,7 +72,7 @@ export default function Prizes() {
             {prizes.map((prize, index) => (
               <div
                 key={index}
-                className="bg-white border-4 border-[#B7CF4F] flex flex-col overflow-hidden"
+                className="bg-white border-4 border-pumpkin card-sticker flex flex-col overflow-hidden"
               >
                 <div className="w-full">
                   <Image
@@ -84,7 +84,7 @@ export default function Prizes() {
                   />
                 </div>
                 <div className="p-10 flex flex-col flex-grow">
-                  <h3 className="text-3xl sm:text-4xl font-bold text-[#B7CF4F] mb-6 text-center font-mono">
+                  <h3 className="text-3xl sm:text-4xl font-bold text-pumpkin mb-6 text-center font-mono">
                     {prize.name}
                   </h3>
                   <p className="text-lg text-gray-700 leading-relaxed text-center mb-4 flex-grow">
@@ -92,7 +92,7 @@ export default function Prizes() {
                   </p>
                   <div className="text-center mt-auto">
                     <p
-                      className="text-2xl sm:text-3xl font-bold text-[#8B4513] font-mono"
+                      className="text-2xl sm:text-3xl font-bold text-bark font-mono"
                       style={{ fontFamily: "var(--font-geist-mono)" }}
                     >
                       <span style={{ fontFamily: "var(--font-geist-mono)" }}>
@@ -108,7 +108,7 @@ export default function Prizes() {
           <div className="text-center">
             <Link
               href="/form"
-              className="inline-block px-10 py-5 bg-white text-[#B7CF4F] font-bold border-4 border-[#B7CF4F] hover:bg-[#f5f5f5] text-lg font-mono"
+              className="inline-block px-10 py-5 btn-sticker bg-white text-pumpkin font-bold border-4 border-pumpkin hover:bg-pumpkin-wash text-lg font-mono"
             >
               Submit Your Project
             </Link>

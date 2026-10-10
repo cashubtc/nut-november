@@ -23,15 +23,15 @@ export default function HowToParticipate() {
   ];
 
   return (
-    <section id="participate" className="py-20 px-6 bg-[#FAFAFA] border-t border-black">
+    <section id="participate" className="py-20 px-6 bg-cream border-t border-bark">
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row">
         {/* Mobile Title - shows on top for mobile only */}
-        <h2 className="text-base font-normal text-gray-500 font-mono mb-6 md:hidden">
+        <h2 className="text-base font-semibold text-bark/70 font-mono tracking-[0.2em] mb-6 md:hidden">
           PARTICIPATE
         </h2>
         {/* Vertical Label - hidden on mobile, shown on desktop */}
         <div className="hidden md:flex flex-shrink-0 w-16 sm:w-20 md:w-24 items-center justify-center">
-          <h2 className="text-sm sm:text-base md:text-lg font-normal text-gray-500 font-mono whitespace-nowrap transform -rotate-90 origin-center">
+          <h2 className="text-sm sm:text-base md:text-lg font-semibold text-bark/70 font-mono tracking-[0.2em] whitespace-nowrap transform -rotate-90 origin-center">
             PARTICIPATE
           </h2>
         </div>
@@ -40,11 +40,11 @@ export default function HowToParticipate() {
           <div className="space-y-8">
             {steps.map((step, index) => (
               <div key={index} className="flex gap-6 items-start">
-                <div className="flex-shrink-0 w-16 h-16 bg-[#B7CF4F] text-[#EFE8D4] border-4 border-[#B7CF4F] flex items-center justify-center text-2xl font-bold font-mono">
+                <div className="flex-shrink-0 w-16 h-16 bg-pumpkin text-cream-deep border-4 border-pumpkin flex items-center justify-center text-2xl font-bold font-mono">
                   {step.number}
                 </div>
                 <div className="flex-1">
-                  <h3 className="text-2xl font-bold text-[#B7CF4F] mb-2 font-mono">
+                  <h3 className="text-2xl font-bold text-pumpkin mb-2 font-mono">
                     {step.title}
                   </h3>
                   <p className="text-xl sm:text-2xl text-gray-800 leading-relaxed">{step.description}</p>
