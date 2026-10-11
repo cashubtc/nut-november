@@ -379,25 +379,36 @@ body {
   to { transform: translateY(4%) rotate(7deg) scale(1.06); }
 }
 
+/* The site's hard "sticker" shadow, following the packet silhouette */
 .prize-card {
-  filter: drop-shadow(0 22px 22px rgba(67, 32, 12, 0.35));
+  filter: drop-shadow(8px 8px 0 var(--bark));
+}
+
+/* Packet paper with the hero's dot texture. It has to be white for screen to
+   hide the art completely; .prize-paper-tint warms it to cream afterwards. */
+.prize-sticker {
+  background-color: #fff;
+  background-image: radial-gradient(circle at 2px 2px, #e7d9c8 1.3px, transparent 0);
+  background-size: 4.4cqw 4.4cqw;
+}
+
+.prize-paper-tint {
+  background: var(--cream-deep);
+  mix-blend-mode: multiply;
+}
+
+.prize-word-outline {
+  color: transparent;
+  -webkit-text-stroke: 0.7cqw var(--bark);
 }
 
 .prize-card-sheen {
   background: radial-gradient(
     circle at var(--mx, 50%) var(--my, 50%),
-    rgba(255, 255, 255, 0.1) 0%,
-    transparent 50%
+    rgba(255, 255, 255, 0.35) 0%,
+    transparent 55%
   );
-  mix-blend-mode: screen;
-}
-
-.prize-card-foil {
-  background: conic-gradient(
-    from var(--hue, 0deg),
-    #ff9a3c, #ffe066, #7dffb0, #6cc8ff, #b48cff, #ff7ab8, #ff9a3c
-  );
-  filter: saturate(1.2);
+  mix-blend-mode: soft-light;
 }
 
 .prize-stamp-ring {
