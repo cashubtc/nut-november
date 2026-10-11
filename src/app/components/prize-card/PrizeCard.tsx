@@ -15,14 +15,14 @@ import { playSnap, PeelVoice, startPeel } from "./peelSound";
 import type { PrizeCardData } from "./prizes";
 
 // Seed-packet silhouette: a pinked (zig-zag) top edge where the packet was
-// cut, and rounded bottom corners. Drawn on a 500×630 box, which matches the
-// card's 50:63 aspect ratio so the mask never distorts.
+// cut, and rounded bottom corners. Drawn on a 500×580 box, which matches the
+// card's 50:58 aspect ratio so the mask never distorts.
 const TEETH = 25;
 const PINKED_EDGE = Array.from({ length: TEETH * 2 + 1 }, (_, i) =>
   `L${(i * 500) / (TEETH * 2)} ${i % 2 ? 0 : 9}`
 ).join("");
-const SHAPE_PATH = `M0 9${PINKED_EDGE}V604A26 26 0 0 1 474 630H26A26 26 0 0 1 0 604Z`;
-const SHAPE = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 630" preserveAspectRatio="none"><path fill="#fff" d="${SHAPE_PATH}"/></svg>`;
+const SHAPE_PATH = `M0 9${PINKED_EDGE}V554A26 26 0 0 1 474 580H26A26 26 0 0 1 0 554Z`;
+const SHAPE = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 580" preserveAspectRatio="none"><path fill="#fff" d="${SHAPE_PATH}"/></svg>`;
 const SHAPE_URL = `url("data:image/svg+xml,${encodeURIComponent(SHAPE)}")`;
 const shapeMask: CSSProperties = {
   maskImage: SHAPE_URL,
@@ -223,13 +223,15 @@ export default function PrizeCard({
   return (
     <div
       ref={sceneRef}
-      className="prize-card-scene relative w-full aspect-[50/63] [perspective:1100px] select-none"
+      className="prize-card-scene relative w-full aspect-[50/58] [perspective:1100px] select-none"
       onPointerMove={onSceneMove}
       onPointerLeave={() => setTilt({ x: 0, y: 0, active: false })}
       style={
         {
           "--mx": `${50 + tilt.y * 3}%`,
           "--my": `${50 - tilt.x * 3}%`,
+          "--hx": `${tilt.y * 1.5}%`,
+          "--hy": `${-tilt.x * 1.5}%`,
           containerType: "inline-size",
         } as CSSProperties
       }
@@ -245,9 +247,10 @@ export default function PrizeCard({
       >
         {/* Everything that lives inside the card silhouette */}
         <div className="absolute inset-0 overflow-hidden" style={shapeMask}>
-          {/* 1. The art: drifting colour blobs and the prize nut */}
+          {/* 1. The art: holographic foil tinted per prize. It shows through the
+                 lettering and fills the card when the sticker is peeled. */}
           <div
-            className="prize-art absolute inset-0"
+            className="prize-holo absolute inset-0"
             data-paused={visible ? undefined : ""}
             style={
               {
@@ -258,19 +261,21 @@ export default function PrizeCard({
               } as CSSProperties
             }
           >
-            <span className="prize-art-blob prize-art-blob-1" />
-            <span className="prize-art-blob prize-art-blob-2" />
-            <span className="prize-art-blob prize-art-blob-3" />
-            <div className="prize-art-nut absolute left-[10%] top-[26%] w-[80%] aspect-square">
-              <Image
-                src={prize.art}
-                alt=""
-                fill
-                sizes="(min-width: 1024px) 320px, 80vw"
-                className="object-contain"
-                draggable={false}
-              />
-            </div>
+            <span className="prize-holo-bands" />
+            <span className="prize-holo-foil" />
+            <span className="prize-holo-glare" />
+            {prize.art && (
+              <div className="absolute left-[10%] top-[26%] w-[80%] aspect-square">
+                <Image
+                  src={prize.art}
+                  alt=""
+                  fill
+                  sizes="(min-width: 1024px) 320px, 80vw"
+                  className="object-contain"
+                  draggable={false}
+                />
+              </div>
+            )}
           </div>
 
           {/* 2. The sticker: cream paper with black type, screen-blended over the
@@ -281,23 +286,18 @@ export default function PrizeCard({
             className="prize-sticker absolute inset-0 mix-blend-screen"
             style={{ clipPath: keptClip }}
           >
-            <p
-              className="absolute inset-x-0 top-[15.5%] text-center text-black leading-none whitespace-nowrap"
-              style={{
-                fontFamily: "var(--font-sauce-tm)",
-                fontSize: `${Math.min(35, 86 / (prize.word.length * 0.42))}cqw`,
-              }}
-            >
-              {prize.word}
-            </p>
+            <Word text={prize.word} className="text-black" />
           </div>
 
-          {/* Warms the white paper to cream (and the art in the letters with it).
+          {/* Warms the white paper to cream. The word is white here (multiply by
+                 white changes nothing) so the foil in the letters stays bright.
                  Its own layer: the print's clip-path would isolate the blend. */}
           <div
             className="prize-paper-tint absolute inset-0"
             style={{ clipPath: keptClip }}
-          />
+          >
+            <Word text={prize.word} className="text-white" />
+          </div>
 
           {/* 3. The print: sits on the sticker (and peels with it) but isn't blended */}
           <div
@@ -306,24 +306,9 @@ export default function PrizeCard({
             aria-hidden
           >
             {/* Chunky outline around the knockout word, like the hero type */}
-            <p
-              className="prize-word-outline absolute inset-x-0 top-[15.5%] text-center leading-none whitespace-nowrap"
-              style={{
-                fontFamily: "var(--font-sauce-tm)",
-                fontSize: `${Math.min(35, 86 / (prize.word.length * 0.42))}cqw`,
-              }}
-            >
-              {prize.word}
-            </p>
+            <Word text={prize.word} className="prize-word-outline" />
 
-            <div className="absolute left-[7%] right-[7%] top-[7.5%] flex items-center justify-between font-mono font-bold uppercase tracking-[0.18em] text-[2.6cqw]">
-              <span>Nut November Seed Co.</span>
-              <span className="mr-[9cqw] -rotate-3 bg-bark px-[2cqw] py-[0.8cqw] text-cream-deep">
-                No. {prize.number}
-              </span>
-            </div>
-
-            <div className="absolute left-[7%] right-[7%] top-[50%] flex items-center justify-between gap-[3cqw]">
+            <div className="absolute left-[7%] right-[7%] top-[47%] flex items-center justify-between gap-[3cqw]">
               <div className="min-w-0">
                 <p
                   className="font-bold leading-tight text-[7cqw]"
@@ -346,7 +331,7 @@ export default function PrizeCard({
 
             {/* Thick packet outline; half the stroke falls outside the mask */}
             <svg
-              viewBox="0 0 500 630"
+              viewBox="0 0 500 580"
               preserveAspectRatio="none"
               className="absolute inset-0 h-full w-full"
               fill="none"
@@ -394,6 +379,21 @@ export default function PrizeCard({
         {prize.title}: {amountLabel}. {prize.blurb}
       </p>
     </div>
+  );
+}
+
+/** The big knockout word. Rendered in several layers, always at the same spot. */
+function Word({ text, className }: { text: string; className: string }) {
+  return (
+    <p
+      className={`absolute inset-x-0 top-[12%] text-center leading-none whitespace-nowrap ${className}`}
+      style={{
+        fontFamily: "var(--font-sauce-tm)",
+        fontSize: `${Math.min(35, 86 / (text.length * 0.42))}cqw`,
+      }}
+    >
+      {text}
+    </p>
   );
 }
 

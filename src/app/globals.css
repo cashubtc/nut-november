@@ -318,65 +318,77 @@ body {
   }
 }
 
-/* Prize cards — the art behind the knockout sticker */
-.prize-art {
+/* Prize cards — holographic foil behind the knockout sticker.
+   Rainbow bands (tinted with the prize's colours) slowly rotate and slide with
+   the card's tilt; a fine diagonal grain, glints and a moving glare on top
+   make it read as foil rather than a flat gradient. */
+.prize-holo {
   overflow: hidden;
 }
 
-.prize-art-blob {
+.prize-holo-bands {
   position: absolute;
-  width: 90%;
-  aspect-ratio: 1;
-  border-radius: 50%;
+  inset: -100%;
+  background: repeating-linear-gradient(
+    115deg,
+    var(--c1) 0%,
+    #ff4fc3 3%,
+    #7a5cff 6%,
+    #2fd8ff 9%,
+    var(--c2) 12%,
+    #4dffa1 15%,
+    var(--c3) 18%,
+    #ffe14d 21%,
+    var(--c1) 24%
+  );
+  filter: saturate(1.35);
+  translate: var(--hx, 0) var(--hy, 0);
+  transition: translate 0.3s ease-out;
+  animation: prize-holo-turn 16s linear infinite;
   will-change: transform;
 }
 
-.prize-art-blob-1 {
-  left: -25%;
-  top: -10%;
-  background: radial-gradient(circle, var(--c1) 0%, transparent 65%);
-  animation: prize-drift-a 9s ease-in-out infinite alternate;
+.prize-holo-foil {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 18% 22%, #fff 0 0.6cqw, transparent 1.2cqw),
+    radial-gradient(circle at 72% 14%, #fff 0 0.4cqw, transparent 1cqw),
+    radial-gradient(circle at 84% 58%, #fff 0 0.5cqw, transparent 1.1cqw),
+    radial-gradient(circle at 30% 76%, #fff 0 0.4cqw, transparent 0.9cqw),
+    radial-gradient(circle at 58% 88%, #fff 0 0.6cqw, transparent 1.2cqw),
+    repeating-linear-gradient(
+      -45deg,
+      rgba(255, 255, 255, 0.22) 0 1px,
+      transparent 1px 4px
+    );
+  mix-blend-mode: overlay;
+  animation: prize-holo-glint 3.2s ease-in-out infinite alternate;
 }
 
-.prize-art-blob-2 {
-  right: -30%;
-  top: 15%;
-  background: radial-gradient(circle, var(--c2) 0%, transparent 65%);
-  animation: prize-drift-b 11s ease-in-out infinite alternate;
+.prize-holo-glare {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse at var(--mx, 50%) var(--my, 30%),
+    rgba(255, 255, 255, 0.7) 0%,
+    rgba(255, 255, 255, 0) 45%
+  );
+  mix-blend-mode: soft-light;
 }
 
-.prize-art-blob-3 {
-  left: 5%;
-  bottom: -25%;
-  background: radial-gradient(circle, var(--c3) 0%, transparent 65%);
-  animation: prize-drift-c 13s ease-in-out infinite alternate;
-}
-
-.prize-art-nut {
-  animation: prize-bob 6s ease-in-out infinite alternate;
-  filter: drop-shadow(0 12px 18px rgba(0, 0, 0, 0.25));
-}
-
-.prize-art[data-paused] *,
-.prize-art[data-paused] {
+.prize-holo[data-paused] *,
+.prize-holo[data-paused] {
   animation-play-state: paused;
 }
 
-@keyframes prize-drift-a {
-  to { transform: translate(45%, 35%) scale(1.25); }
+@keyframes prize-holo-turn {
+  to { transform: rotate(360deg); }
 }
 
-@keyframes prize-drift-b {
-  to { transform: translate(-50%, 25%) scale(0.85); }
-}
-
-@keyframes prize-drift-c {
-  to { transform: translate(30%, -60%) scale(1.15); }
-}
-
-@keyframes prize-bob {
-  from { transform: translateY(-3%) rotate(-6deg) scale(1); }
-  to { transform: translateY(4%) rotate(7deg) scale(1.06); }
+@keyframes prize-holo-glint {
+  from { opacity: 0.55; }
+  to { opacity: 1; }
 }
 
 /* The site's hard "sticker" shadow, following the packet silhouette */
@@ -418,8 +430,8 @@ body {
 
 @media (prefers-reduced-motion: reduce) {
   .prize-stamp-ring,
-  .prize-art *,
-  .prize-art {
+  .prize-holo *,
+  .prize-holo {
     animation: none !important;
   }
 }
