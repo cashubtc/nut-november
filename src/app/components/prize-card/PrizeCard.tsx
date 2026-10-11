@@ -15,14 +15,14 @@ import { playSnap, PeelVoice, startPeel } from "./peelSound";
 import type { PrizeCardData } from "./prizes";
 
 // Seed-packet silhouette: a pinked (zig-zag) top edge where the packet was
-// cut, and rounded bottom corners. Drawn on a 500×580 box, which matches the
-// card's 50:58 aspect ratio so the mask never distorts.
+// cut, and rounded bottom corners. Drawn on a 500×640 box, which matches the
+// card's 50:64 aspect ratio so the mask never distorts.
 const TEETH = 25;
 const PINKED_EDGE = Array.from({ length: TEETH * 2 + 1 }, (_, i) =>
   `L${(i * 500) / (TEETH * 2)} ${i % 2 ? 0 : 9}`
 ).join("");
-const SHAPE_PATH = `M0 9${PINKED_EDGE}V554A26 26 0 0 1 474 580H26A26 26 0 0 1 0 554Z`;
-const SHAPE = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 580" preserveAspectRatio="none"><path fill="#fff" d="${SHAPE_PATH}"/></svg>`;
+const SHAPE_PATH = `M0 9${PINKED_EDGE}V614A26 26 0 0 1 474 640H26A26 26 0 0 1 0 614Z`;
+const SHAPE = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 640" preserveAspectRatio="none"><path fill="#fff" d="${SHAPE_PATH}"/></svg>`;
 const SHAPE_URL = `url("data:image/svg+xml,${encodeURIComponent(SHAPE)}")`;
 const shapeMask: CSSProperties = {
   maskImage: SHAPE_URL,
@@ -223,7 +223,7 @@ export default function PrizeCard({
   return (
     <div
       ref={sceneRef}
-      className="prize-card-scene relative w-full aspect-[50/58] [perspective:1100px] select-none"
+      className="prize-card-scene relative w-full aspect-[50/64] [perspective:1100px] select-none"
       onPointerMove={onSceneMove}
       onPointerLeave={() => setTilt({ x: 0, y: 0, active: false })}
       style={
@@ -308,7 +308,17 @@ export default function PrizeCard({
             {/* Chunky outline around the knockout word, like the hero type */}
             <Word text={prize.word} className="prize-word-outline" />
 
-            <div className="absolute left-[7%] right-[7%] top-[47%] flex items-center justify-between gap-[3cqw]">
+            {/* The prize money, as a big price tag like the hero's edition badge */}
+            <div className="absolute inset-x-0 top-[35%] flex justify-center">
+              <p
+                className="-rotate-2 bg-pumpkin px-[4cqw] py-[1.2cqw] font-extrabold leading-none text-cream text-[12.5cqw] shadow-[1.4cqw_1.4cqw_0_var(--bark)] tabular-nums"
+                style={{ fontFamily: "var(--font-poppins)" }}
+              >
+                {amountLabel}
+              </p>
+            </div>
+
+            <div className="absolute left-[7%] right-[7%] top-[56%] flex items-center justify-between gap-[3cqw]">
               <div className="min-w-0">
                 <p
                   className="font-bold leading-tight text-[7cqw]"
@@ -323,15 +333,14 @@ export default function PrizeCard({
               <NuttyStamp />
             </div>
 
-            <div className="absolute left-[7%] right-[7%] bottom-[6%] grid grid-cols-[1.3fr_1fr_1fr] gap-[2cqw] border-t-[0.6cqw] border-bark pt-[3cqw]">
-              <Field label="Net wt" value={amountLabel} />
+            <div className="absolute left-[7%] right-[7%] bottom-[6%] grid grid-cols-2 gap-[2cqw] border-t-[0.6cqw] border-bark pt-[3cqw]">
               <Field label="Sow by" value="Nov 30" />
               <Field label="Variety" value={prize.track} />
             </div>
 
             {/* Thick packet outline; half the stroke falls outside the mask */}
             <svg
-              viewBox="0 0 500 580"
+              viewBox="0 0 500 640"
               preserveAspectRatio="none"
               className="absolute inset-0 h-full w-full"
               fill="none"
@@ -386,7 +395,7 @@ export default function PrizeCard({
 function Word({ text, className }: { text: string; className: string }) {
   return (
     <p
-      className={`absolute inset-x-0 top-[12%] text-center leading-none whitespace-nowrap ${className}`}
+      className={`absolute inset-x-0 top-[9%] text-center leading-none whitespace-nowrap ${className}`}
       style={{
         fontFamily: "var(--font-sauce-tm)",
         fontSize: `${Math.min(35, 86 / (text.length * 0.42))}cqw`,
