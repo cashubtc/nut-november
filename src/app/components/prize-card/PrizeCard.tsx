@@ -318,24 +318,21 @@ export default function PrizeCard({
               </p>
             </div>
 
-            <div className="absolute left-[7%] right-[7%] top-[56%] flex items-center justify-between gap-[3cqw]">
-              <div className="min-w-0">
-                <p
-                  className="font-bold leading-tight text-[7cqw]"
-                  style={{ fontFamily: "var(--font-poppins)" }}
-                >
-                  {prize.title}
-                </p>
-                <p className="mt-[1.5cqw] text-[3.4cqw] leading-snug text-bark/75">
-                  {prize.blurb}
-                </p>
-              </div>
-              <NuttyStamp />
+            <div className="absolute left-[7%] right-[7%] top-[56%]">
+              <p
+                className="font-bold leading-tight text-[7cqw]"
+                style={{ fontFamily: "var(--font-poppins)" }}
+              >
+                {prize.title}
+              </p>
+              <p className="mt-[1.5cqw] text-[3.4cqw] leading-snug text-bark/75">
+                {prize.blurb}
+              </p>
             </div>
 
-            <div className="absolute left-[7%] right-[7%] bottom-[6%] grid grid-cols-2 gap-[2cqw] border-t-[0.6cqw] border-bark pt-[3cqw]">
-              <Field label="Sow by" value="Nov 30" />
+            <div className="absolute left-[7%] right-[7%] bottom-[5%] flex items-end justify-between gap-[3cqw] border-t-[0.6cqw] border-bark pt-[3cqw]">
               <Field label="Variety" value={prize.track} />
+              <NuttyStamp />
             </div>
 
             {/* Thick packet outline; half the stroke falls outside the mask */}
@@ -426,8 +423,8 @@ function Field({ label, value }: { label: string; value: string }) {
 function NuttyStamp() {
   const ringId = useId();
   return (
-    <div className="relative w-[25cqw] shrink-0 aspect-square rotate-6 rounded-full border-[0.9cqw] border-cream-deep bg-bark outline outline-[0.6cqw] outline-bark">
-      <span className="absolute inset-0 flex items-center justify-center text-[7cqw]">
+    <div className="relative w-[17cqw] shrink-0 aspect-square rotate-6 rounded-full border-[0.6cqw] border-cream-deep bg-bark outline outline-[0.4cqw] outline-bark">
+      <span className="absolute inset-0 flex items-center justify-center text-[4.6cqw]">
         🌰
       </span>
       <svg viewBox="0 0 100 100" className="prize-stamp-ring absolute inset-0">
