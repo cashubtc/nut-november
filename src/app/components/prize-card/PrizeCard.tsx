@@ -318,7 +318,7 @@ export default function PrizeCard({
               >
                 {prize.title}
               </p>
-              <p className="mt-[1.5cqw] text-[3.4cqw] leading-snug text-bark/75">
+              <p className="mt-[2cqw] text-[4.6cqw] leading-snug text-bark/85">
                 {prize.blurb}
               </p>
             </div>
