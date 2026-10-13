@@ -247,19 +247,12 @@ export default function PrizeCard({
       >
         {/* Everything that lives inside the card silhouette */}
         <div className="absolute inset-0 overflow-hidden" style={shapeMask}>
-          {/* 1. The art: holographic foil tinted per prize. It shows through the
-                 lettering and fills the card when the sticker is peeled. */}
+          {/* 1. The art: a foil finish unique to each prize (see globals.css). It
+                 shows through the lettering and fills the card when peeled. */}
           <div
             className="prize-holo absolute inset-0"
+            data-finish={prize.finish}
             data-paused={visible ? undefined : ""}
-            style={
-              {
-                background: prize.palette.base,
-                "--c1": prize.palette.c1,
-                "--c2": prize.palette.c2,
-                "--c3": prize.palette.c3,
-              } as CSSProperties
-            }
           >
             <span className="prize-holo-bands" />
             <span className="prize-holo-foil" />
