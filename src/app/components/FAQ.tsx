@@ -49,15 +49,15 @@ export default function FAQ() {
   };
 
   return (
-    <section id="faq" className="py-20 px-6 bg-[#FAFAFA] border-t border-black">
+    <section id="faq" className="py-20 px-6 bg-cream border-t border-bark">
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row">
         {/* Mobile Title - shows on top for mobile only */}
-        <h2 className="text-base font-normal text-gray-500 font-mono mb-6 md:hidden">
+        <h2 className="text-base font-semibold text-bark/70 font-mono tracking-[0.2em] mb-6 md:hidden">
           FAQ
         </h2>
         {/* Vertical Label - hidden on mobile, shown on desktop */}
         <div className="hidden md:flex flex-shrink-0 w-16 sm:w-20 md:w-24 items-center justify-center">
-          <h2 className="text-sm sm:text-base md:text-lg font-normal text-gray-500 font-mono whitespace-nowrap transform -rotate-90 origin-center">
+          <h2 className="text-sm sm:text-base md:text-lg font-semibold text-bark/70 font-mono tracking-[0.2em] whitespace-nowrap transform -rotate-90 origin-center">
             FAQ
           </h2>
         </div>
@@ -67,11 +67,11 @@ export default function FAQ() {
             {faqs.map((faq, index) => (
               <div 
                 key={index}
-                className="border-t border-black"
+                className="border-t border-bark"
               >
                 <button
                   onClick={() => toggleFAQ(index)}
-                  className="w-full py-6 px-4 flex items-center justify-between hover:bg-[#B7CF4F] transition-colors group text-left"
+                  className="w-full py-6 px-4 flex items-center justify-between hover:bg-pumpkin transition-colors group text-left"
                 >
                   <h3 className="text-xl sm:text-2xl font-normal text-black font-mono group-hover:text-white transition-colors uppercase">
                     {faq.question}
@@ -96,7 +96,7 @@ export default function FAQ() {
               </div>
             ))}
             {/* Bottom border for last item */}
-            <div className="border-t border-black"></div>
+            <div className="border-t border-bark"></div>
           </div>
         </div>
       </div>

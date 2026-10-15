@@ -3,6 +3,15 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+
+  /* Nut November 2026 — fall palette */
+  --pumpkin: #C8551A;
+  --pumpkin-dark: #A3421A;
+  --pumpkin-wash: #FDEBDD;
+  --bark: #5C2E12;
+  --bark-dark: #43200C;
+  --cream: #FFF8EF;
+  --cream-deep: #FCE9D2;
 }
 
 @theme inline {
@@ -11,6 +20,14 @@
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
   --font-sauce-tm: var(--font-sauce-tm);
+
+  --color-pumpkin: var(--pumpkin);
+  --color-pumpkin-dark: var(--pumpkin-dark);
+  --color-pumpkin-wash: var(--pumpkin-wash);
+  --color-bark: var(--bark);
+  --color-bark-dark: var(--bark-dark);
+  --color-cream: var(--cream);
+  --color-cream-deep: var(--cream-deep);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -210,7 +227,7 @@ body {
 
 /* Hero Background Textures */
 .hero-texture-combined {
-  background-color: #B7CF4F;
+  background-color: var(--pumpkin);
   background-image: 
     radial-gradient(circle at 2px 2px, rgba(0,0,0,0.12) 1px, transparent 0);
   background-size: 28px 28px;
@@ -231,7 +248,7 @@ body {
 }
 
 .hero-texture-dots {
-  background-color: #B7CF4F;
+  background-color: var(--pumpkin);
   background-image: 
     radial-gradient(circle at 2px 2px, rgba(0,0,0,0.12) 1px, transparent 0);
   background-size: 28px 28px;
@@ -249,7 +266,7 @@ body {
     radial-gradient(at 100% 0%, rgba(0,0,0,0.08) 0px, transparent 60%),
     radial-gradient(at 100% 100%, rgba(0,0,0,0.1) 0px, transparent 60%),
     radial-gradient(at 0% 100%, rgba(255,255,255,0.12) 0px, transparent 60%);
-  background-color: #B7CF4F;
+  background-color: var(--pumpkin);
 }
 
 .hero-texture-lines {
@@ -261,4 +278,249 @@ body {
       rgba(0,0,0,0.02) 10px,
       rgba(0,0,0,0.02) 11px
     );
+}
+
+/* 2026 refresh — hard "sticker" shadows and a warmer hero */
+.card-sticker {
+  box-shadow: 8px 8px 0 var(--bark);
+}
+
+.btn-sticker {
+  box-shadow: 5px 5px 0 var(--bark);
+  transition: transform 0.12s ease, box-shadow 0.12s ease, background-color 0.15s ease;
+}
+
+.btn-sticker:hover {
+  transform: translate(2px, 2px);
+  box-shadow: 3px 3px 0 var(--bark);
+}
+
+.btn-sticker:active {
+  transform: translate(5px, 5px);
+  box-shadow: 0 0 0 var(--bark);
+}
+
+.hero-autumn {
+  background-color: var(--pumpkin);
+  background-image:
+    radial-gradient(circle at 2px 2px, rgba(67, 32, 12, 0.18) 1px, transparent 0),
+    radial-gradient(ellipse at 15% 10%, rgba(255, 196, 120, 0.45) 0%, transparent 55%),
+    radial-gradient(ellipse at 90% 95%, rgba(92, 46, 18, 0.55) 0%, transparent 60%);
+  background-size: 28px 28px, 100% 100%, 100% 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn-sticker,
+  .btn-sticker:hover,
+  .btn-sticker:active {
+    transform: none;
+    transition: none;
+  }
+}
+
+/* Prize cards — a foil finish behind each knockout sticker.
+   Every card stacks three layers: bands (the colour, slid by the card's tilt
+   via --hx/--hy and animated per finish), foil (texture on top) and a glare
+   that follows the pointer. data-finish on .prize-holo picks the look. */
+.prize-holo {
+  overflow: hidden;
+  background: #fff;
+}
+
+.prize-holo-bands {
+  position: absolute;
+  inset: -100%;
+  translate: var(--hx, 0) var(--hy, 0);
+  transition: translate 0.3s ease-out;
+  will-change: transform;
+}
+
+.prize-holo-foil {
+  position: absolute;
+  inset: 0;
+}
+
+.prize-holo-glare {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse at var(--mx, 50%) var(--my, 30%),
+    rgba(255, 255, 255, 0.7) 0%,
+    rgba(255, 255, 255, 0) 45%
+  );
+  mix-blend-mode: soft-light;
+}
+
+/* GOLDEN: gold leaf with glitter */
+.prize-holo[data-finish="gold"] .prize-holo-bands {
+  background: repeating-linear-gradient(
+    115deg,
+    #7a4a00 0%,
+    #c98a12 3%,
+    #f7d36a 5%,
+    #fff6c4 6%,
+    #e8b02a 8%,
+    #a86a00 11%,
+    #7a4a00 13%
+  );
+  animation: prize-holo-sway 7s ease-in-out infinite alternate;
+}
+.prize-holo[data-finish="gold"] .prize-holo-foil {
+  background:
+    radial-gradient(circle, rgba(255, 255, 255, 0.9) 0 0.3cqw, transparent 0.55cqw) 0 0 / 7.3cqw 6.1cqw,
+    radial-gradient(circle, rgba(255, 250, 220, 0.7) 0 0.22cqw, transparent 0.45cqw) 2.9cqw 3.7cqw / 5.3cqw 8.9cqw,
+    radial-gradient(circle, rgba(255, 255, 255, 0.6) 0 0.18cqw, transparent 0.4cqw) 4.1cqw 1.3cqw / 9.7cqw 4.7cqw;
+  mix-blend-mode: overlay;
+  animation: prize-holo-twinkle 1.6s steps(2) infinite;
+}
+
+/* HARDEST: brushed chrome */
+.prize-holo[data-finish="chrome"] .prize-holo-bands {
+  background: repeating-linear-gradient(
+    172deg,
+    #fbfcfd 0%,
+    #b4bfca 3%,
+    #4f5d6b 6%,
+    #9aa7b4 8%,
+    #ffffff 10%,
+    #6f7d8b 13%,
+    #fbfcfd 16%
+  );
+  animation: prize-holo-sway 9s ease-in-out infinite alternate;
+}
+.prize-holo[data-finish="chrome"] .prize-holo-foil {
+  background: repeating-linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.18) 0 1px,
+    rgba(0, 0, 0, 0.05) 1px 2px,
+    transparent 2px 4px
+  );
+  mix-blend-mode: overlay;
+}
+
+/* NUTTY: spinning psychedelic sunburst */
+.prize-holo[data-finish="swirl"] .prize-holo-bands {
+  background: repeating-conic-gradient(
+    from 0deg,
+    #ff3d7f 0deg 12deg,
+    #ffc300 12deg 24deg,
+    #4dffa1 24deg 36deg,
+    #2fd8ff 36deg 48deg,
+    #8f4dff 48deg 60deg
+  );
+  filter: saturate(1.2);
+  animation: prize-holo-turn 10s linear infinite;
+}
+.prize-holo[data-finish="swirl"] .prize-holo-foil {
+  background: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.55), transparent 60%);
+  mix-blend-mode: soft-light;
+}
+
+/* DESIGN: pop-art halftone, like the coconut art */
+.prize-holo[data-finish="halftone"] .prize-holo-bands {
+  background: linear-gradient(115deg, #2f5bff 0%, #ff4fa3 35%, #ffd23f 60%, #00c8ff 85%, #2f5bff 100%);
+  animation: prize-holo-sway 8s ease-in-out infinite alternate;
+}
+.prize-holo[data-finish="halftone"] .prize-holo-foil {
+  background:
+    radial-gradient(circle, #1c2bd9 0 32%, transparent 36%) 0 0 / 2.6cqw 2.6cqw,
+    radial-gradient(circle, #ff1f8f 0 26%, transparent 30%) 1.3cqw 1.3cqw / 2.6cqw 2.6cqw;
+  mix-blend-mode: multiply;
+  opacity: 0.75;
+  animation: prize-holo-dots 6s linear infinite;
+}
+
+/* FRESH: minty aurora with rising bubbles */
+.prize-holo[data-finish="aurora"] .prize-holo-bands {
+  background: repeating-linear-gradient(
+    160deg,
+    #129e8f 0%,
+    #3fe0a0 4%,
+    #d9f76a 8%,
+    #7cf6ff 12%,
+    #129e8f 16%
+  );
+  animation: prize-holo-rise 12s ease-in-out infinite alternate;
+}
+.prize-holo[data-finish="aurora"] .prize-holo-foil {
+  background:
+    radial-gradient(circle, transparent 0 0.9cqw, rgba(255, 255, 255, 0.85) 1cqw 1.25cqw, transparent 1.35cqw) 0 0 / 11cqw 13cqw,
+    radial-gradient(circle, transparent 0 0.5cqw, rgba(255, 255, 255, 0.75) 0.6cqw 0.8cqw, transparent 0.9cqw) 5cqw 6cqw / 9cqw 10cqw;
+  animation: prize-holo-bubbles 5s linear infinite;
+}
+
+.prize-holo[data-paused] *,
+.prize-holo[data-paused] {
+  animation-play-state: paused;
+}
+
+@keyframes prize-holo-turn {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes prize-holo-sway {
+  from { transform: translate(-6%, -4%); }
+  to { transform: translate(6%, 4%); }
+}
+
+@keyframes prize-holo-rise {
+  from { transform: translateY(0); }
+  to { transform: translateY(-16.66%); }
+}
+
+@keyframes prize-holo-twinkle {
+  50% { opacity: 0.45; }
+}
+
+@keyframes prize-holo-dots {
+  to { background-position: 2.6cqw 0, 3.9cqw 1.3cqw; }
+}
+
+@keyframes prize-holo-bubbles {
+  to { background-position: 0 -13cqw, 5cqw -4cqw; }
+}
+
+/* The site's hard "sticker" shadow, following the packet silhouette */
+.prize-card {
+  filter: drop-shadow(8px 8px 0 var(--bark));
+}
+
+/* Packet paper with the hero's dot texture. It has to be white for screen to
+   hide the art completely; .prize-paper-tint warms it to cream afterwards. */
+.prize-sticker {
+  background-color: #fff;
+  background-image: radial-gradient(circle at 2px 2px, #e7d9c8 1.3px, transparent 0);
+  background-size: 4.4cqw 4.4cqw;
+}
+
+.prize-paper-tint {
+  background: var(--cream-deep);
+  mix-blend-mode: multiply;
+}
+
+.prize-word-outline {
+  color: transparent;
+  -webkit-text-stroke: 0.7cqw var(--bark);
+}
+
+.prize-card-sheen {
+  background: radial-gradient(
+    circle at var(--mx, 50%) var(--my, 50%),
+    rgba(255, 255, 255, 0.35) 0%,
+    transparent 55%
+  );
+  mix-blend-mode: soft-light;
+}
+
+.prize-stamp-ring {
+  color: var(--cream-deep);
+  animation: rotate-circle 18s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .prize-stamp-ring,
+  .prize-holo *,
+  .prize-holo {
+    animation: none !important;
+  }
 }

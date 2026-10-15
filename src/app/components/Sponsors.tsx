@@ -7,16 +7,16 @@ export default function Sponsors() {
   return (
     <section
       id="sponsors"
-      className="py-20 px-6 bg-[#FAFAFA] border-t border-black"
+      className="py-20 px-6 bg-cream border-t border-bark"
     >
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row">
         {/* Mobile Title - shows on top for mobile only */}
-        <h2 className="text-base font-normal text-gray-500 font-mono mb-6 md:hidden">
+        <h2 className="text-base font-semibold text-bark/70 font-mono tracking-[0.2em] mb-6 md:hidden">
           SPONSORS
         </h2>
         {/* Vertical Label - hidden on mobile, shown on desktop */}
         <div className="hidden md:flex flex-shrink-0 w-16 sm:w-20 md:w-24 items-center justify-center">
-          <h2 className="text-sm sm:text-base md:text-lg font-normal text-gray-500 font-mono whitespace-nowrap transform -rotate-90 origin-center">
+          <h2 className="text-sm sm:text-base md:text-lg font-semibold text-bark/70 font-mono tracking-[0.2em] whitespace-nowrap transform -rotate-90 origin-center">
             SPONSORS
           </h2>
         </div>
@@ -47,10 +47,20 @@ export default function Sponsors() {
 
             {/* Donation Section */}
             <div className="mb-8">
+              <p className="text-xl sm:text-2xl text-gray-800 leading-relaxed mb-6">
+                Help increase the prize pool by donating ecash or bitcoin.
+              </p>
+
               <div className="mt-8 flex flex-col sm:flex-row gap-4">
                 <Link
+                  href="/donate"
+                  className="inline-block px-10 py-5 btn-sticker bg-pumpkin text-white font-bold border-4 border-pumpkin hover:bg-pumpkin-dark text-lg font-mono transition-colors text-center"
+                >
+                  Donate to the Prize Pool
+                </Link>
+                <Link
                   href="/donations"
-                  className="inline-block px-10 py-5 bg-white text-[#B7CF4F] font-bold border-4 border-[#B7CF4F] hover:bg-[#f5f5f5] text-lg font-mono transition-colors text-center"
+                  className="inline-block px-10 py-5 btn-sticker bg-white text-pumpkin font-bold border-4 border-pumpkin hover:bg-pumpkin-wash text-lg font-mono transition-colors text-center"
                 >
                   View Donations
                 </Link>

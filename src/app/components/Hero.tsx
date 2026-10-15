@@ -1,23 +1,29 @@
 "use client";
 
+import Link from "next/link";
 import { RefObject, useRef } from "react";
 import CircularText from "./CircularText";
 import NutParticles from "./NutParticles";
+import { useDonations } from "../context/DonationsContext";
 
 export default function Hero() {
   const heroRef = useRef<HTMLElement>(null);
+  const { total, basePool } = useDonations();
 
   return (
     <section
       ref={heroRef}
-      className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#B7CF4F] p-6 sm:p-8 md:p-12 lg:p-16"
+      className="relative flex min-h-screen items-center justify-center overflow-hidden hero-autumn p-6 sm:p-8 md:p-12 lg:p-16"
     >
       {/* Central Content Box */}
-      <div className="relative z-20 bg-[#FAFAFA] border-4 border-[#B7CF4F] p-8 sm:p-12 md:p-16 lg:p-20 max-w-6xl w-full">
+      <div className="relative z-20 bg-cream border-4 border-bark card-sticker p-8 sm:p-12 md:p-16 lg:p-20 max-w-6xl w-full">
         {/* NUT NOVEMBER Text */}
         <div className="text-center mb-8">
+          <span className="inline-block mb-6 px-4 py-1 bg-bark text-cream-deep font-mono font-bold text-sm sm:text-base tracking-[0.3em] -rotate-2 animate-slide-up">
+            2026 EDITION
+          </span>
           <h1
-            className="hero-title text-[60px] sm:text-[80px] md:text-[100px] lg:text-[120px] xl:text-[140px] font-bold leading-[0.85] tracking-wider text-[#B7CF4F] mb-4"
+            className="hero-title text-[60px] sm:text-[80px] md:text-[100px] lg:text-[120px] xl:text-[140px] font-bold leading-[0.85] tracking-wider text-pumpkin mb-4"
             style={{
               fontFamily: "var(--font-sauce-tm)",
               letterSpacing: "0.05em",
@@ -30,33 +36,59 @@ export default function Hero() {
             </span>
           </h1>
           <p
-            className="text-xl sm:text-2xl md:text-3xl text-gray-500 mb-4 animate-slide-up-delay uppercase"
+            className="text-xl sm:text-2xl md:text-3xl text-bark/70 mb-4 animate-slide-up-delay uppercase"
             style={{ fontFamily: "var(--font-sans)" }}
           >
-            Celebrating Nut November 2025
+            A month-long hackathon for Cashu builders.
           </p>
           <p
-            className="text-xl sm:text-2xl md:text-3xl text-[#8B4513] mb-8 animate-slide-up-delay font-semibold"
+            className="text-xl sm:text-2xl md:text-3xl text-bark mb-8 animate-slide-up-delay font-semibold"
             style={{ fontFamily: "var(--font-poppins)" }}
           >
-            We awarded ₿1,914,287 total
+            ₿
+            {(total + basePool).toLocaleString("en-US", {
+              minimumFractionDigits: 0,
+              maximumFractionDigits: 0,
+            })}{" "}
+            Total Prize Pool!
           </p>
           <div
-            className="flex justify-center items-center animate-slide-up-delay"
+            className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-slide-up-delay"
             style={{ animationDelay: "0.4s" }}
           >
-            <a
-              href="#winners"
-              className="inline-block px-10 py-5 bg-[#B7CF4F] text-white font-bold border-4 border-[#B7CF4F] hover:bg-[#9fb63e] text-lg font-mono"
+            <Link
+              href="/form"
+              className="inline-block px-10 py-5 btn-sticker bg-pumpkin text-white font-bold border-4 border-pumpkin hover:bg-pumpkin-dark text-lg font-mono"
             >
-              View Winners
+              Submit Project
+            </Link>
+            <a
+              href="#prizes"
+              className="inline-block px-10 py-5 btn-sticker bg-white text-pumpkin font-bold border-4 border-pumpkin hover:bg-pumpkin-wash text-lg font-mono"
+            >
+              View Prizes
+            </a>
+          </div>
+          <div
+            className="text-center mt-6 animate-slide-up-delay"
+            style={{ animationDelay: "0.5s" }}
+          >
+            <a
+              href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(
+                "Cashu builders are going nuts again this month. https://nutnovember.org/ #NutNovember"
+              )}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block px-10 py-5 btn-sticker bg-bark text-white font-bold border-4 border-bark hover:bg-bark-dark text-lg font-mono"
+            >
+              Spread The Word
             </a>
           </div>
         </div>
 
         {/* Circular Text Animation - Top Right Edge, Overlapping */}
         <div className="absolute -top-24 -right-4 sm:-top-8 sm:-right-8 md:-top-10 md:-right-10 z-30">
-          <div className="bg-black rounded-full border-4 border-[#B7CF4F] p-1">
+          <div className="bg-bark rounded-full border-4 border-cream p-1">
             <CircularText />
           </div>
         </div>

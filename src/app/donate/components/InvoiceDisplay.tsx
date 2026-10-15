@@ -44,7 +44,7 @@ export default function InvoiceDisplay({
         Waiting for payment...
       </p>
 
-      <div className="bg-white p-6 border-4 border-[#B7CF4F]">
+      <div className="bg-white p-6 border-4 border-pumpkin">
         <QRCodeSVG
           value={invoice}
           size={256}
@@ -61,14 +61,14 @@ export default function InvoiceDisplay({
           className={`inline-block px-8 py-4 text-white font-bold border-4 text-lg font-mono transition-all ${
             copied
               ? "bg-green-500 border-green-500 hover:bg-green-600"
-              : "bg-[#B7CF4F] border-[#B7CF4F] hover:bg-[#9fb63e]"
+              : "bg-pumpkin border-pumpkin hover:bg-pumpkin-dark"
           }`}
         >
           {copied ? "Copied!" : "Copy Invoice"}
         </button>
         <button
           onClick={onBack}
-          className="inline-block px-8 py-4 bg-gray-500 text-white font-bold border-4 border-gray-500 hover:bg-gray-600 text-lg font-mono"
+          className="inline-block px-8 py-4 btn-sticker bg-gray-500 text-white font-bold border-4 border-gray-500 hover:bg-gray-600 text-lg font-mono"
         >
           Back
         </button>

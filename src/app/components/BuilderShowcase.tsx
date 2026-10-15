@@ -33,15 +33,15 @@ export default function BuilderShowcase() {
   ];
 
   return (
-    <section id="showcase" className="py-20 px-6 bg-[#FAFAFA] border-t border-black">
+    <section id="showcase" className="py-20 px-6 bg-cream border-t border-bark">
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row">
         {/* Mobile Title - shows on top for mobile only */}
-        <h2 className="text-base font-normal text-gray-500 font-mono mb-6 md:hidden">
+        <h2 className="text-base font-semibold text-bark/70 font-mono tracking-[0.2em] mb-6 md:hidden">
           SHOWCASE
         </h2>
         {/* Vertical Label - hidden on mobile, shown on desktop */}
         <div className="hidden md:flex flex-shrink-0 w-16 sm:w-20 md:w-24 items-center justify-center">
-          <h2 className="text-sm sm:text-base md:text-lg font-normal text-gray-500 font-mono whitespace-nowrap transform -rotate-90 origin-center">
+          <h2 className="text-sm sm:text-base md:text-lg font-semibold text-bark/70 font-mono tracking-[0.2em] whitespace-nowrap transform -rotate-90 origin-center">
             SHOWCASE
           </h2>
         </div>
@@ -54,9 +54,9 @@ export default function BuilderShowcase() {
             {projects.map((project, index) => (
               <div 
                 key={index}
-                className="bg-white border-4 border-[#B7CF4F] p-6"
+                className="bg-white border-4 border-pumpkin p-6"
               >
-                <h3 className="text-2xl font-bold text-[#B7CF4F] mb-3 font-mono">
+                <h3 className="text-2xl font-bold text-pumpkin mb-3 font-mono">
                   {project.name}
                 </h3>
                 <p className="text-gray-700 mb-4">{project.description}</p>
@@ -67,7 +67,7 @@ export default function BuilderShowcase() {
           <div className="text-center">
             <a 
               href="#participate" 
-              className="inline-block px-8 py-4 bg-[#B7CF4F] text-[#EFE8D4] font-bold border-2 border-[#B7CF4F] hover:bg-[#9fb63e] font-mono"
+              className="inline-block px-8 py-4 btn-sticker bg-pumpkin text-cream-deep font-bold border-2 border-pumpkin hover:bg-pumpkin-dark font-mono"
             >
               Show Your Nut →
             </a>

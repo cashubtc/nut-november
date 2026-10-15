@@ -81,13 +81,13 @@ function Page() {
   }
 
   return (
-    <section className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#B7CF4F] p-6 sm:p-8 md:p-12 lg:p-16">
+    <section className="relative flex min-h-screen items-center justify-center overflow-hidden bg-pumpkin p-6 sm:p-8 md:p-12 lg:p-16">
       <div className="relative z-20 max-w-6xl w-full flex flex-col items-center">
         <BackToHome />
-        <div className="bg-[#FAFAFA] border-4 border-[#B7CF4F] p-8 sm:p-12 md:p-16 lg:p-20 w-full">
+        <div className="bg-cream border-4 border-bark card-sticker p-8 sm:p-12 md:p-16 lg:p-20 w-full">
           <div className="text-center mb-8">
             <h1
-              className="text-[40px] sm:text-[60px] md:text-[80px] lg:text-[100px] font-bold leading-[0.85] tracking-wider text-[#B7CF4F] mb-4"
+              className="text-[40px] sm:text-[60px] md:text-[80px] lg:text-[100px] font-bold leading-[0.85] tracking-wider text-pumpkin mb-4"
               style={{
                 fontFamily: "var(--font-sauce-tm)",
                 letterSpacing: "0.05em",
@@ -116,7 +116,7 @@ function Page() {
               <div className="flex flex-col gap-2">
                 <label
                   htmlFor="amount"
-                  className="text-lg font-bold text-[#B7CF4F] font-mono"
+                  className="text-lg font-bold text-pumpkin font-mono"
                 >
                   Amount
                 </label>
@@ -125,7 +125,7 @@ function Page() {
                   ref={amountRef}
                   id="amount"
                   name="amount"
-                  className="border-4 border-[#B7CF4F] bg-white p-4 text-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#B7CF4F] focus:ring-offset-2 font-mono"
+                  className="border-4 border-pumpkin bg-white p-4 text-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-pumpkin focus:ring-offset-2 font-mono"
                   required
                 />
               </div>
@@ -134,7 +134,7 @@ function Page() {
                 type="submit"
                 disabled={isSubmitting}
                 onClick={() => handleSubmit()}
-                className="inline-block px-10 py-5 bg-[#B7CF4F] text-white font-bold border-4 border-[#B7CF4F] hover:bg-[#9fb63e] disabled:opacity-50 disabled:cursor-not-allowed text-lg font-mono mt-4 self-center"
+                className="inline-block px-10 py-5 btn-sticker bg-pumpkin text-white font-bold border-4 border-pumpkin hover:bg-pumpkin-dark disabled:opacity-50 disabled:cursor-not-allowed text-lg font-mono mt-4 self-center"
               >
                 {isSubmitting ? "Submitting..." : "Submit"}
               </button>

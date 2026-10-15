@@ -1,0 +1,57 @@
+import type { PrizeKey } from "../../context/DonationsContext";
+
+export interface PrizeCardData {
+  key: PrizeKey;
+  /** Big knockout word on the sticker. */
+  word: string;
+  title: string;
+  blurb: string;
+  track: string;
+  /** Optional illustration drawn over the foil. */
+  art?: string;
+  /** Foil finish behind the knockout word; styled in globals.css. */
+  finish: "gold" | "chrome" | "swirl" | "halftone" | "aurora";
+}
+
+export const prizeCards: PrizeCardData[] = [
+  {
+    key: "golden",
+    word: "GOLDEN",
+    title: "The Golden Nut",
+    blurb: "Best overall project. The build that pushes Cashu furthest forward.",
+    track: "Overall",
+    finish: "gold",
+  },
+  {
+    key: "hardest",
+    word: "HARDEST",
+    title: "Hardest Nut to Crack",
+    blurb: "Toughest technical breakthrough, or the gnarliest bug finally fixed.",
+    track: "Technical",
+    finish: "chrome",
+  },
+  {
+    key: "nuttiest",
+    word: "NUTTY",
+    title: "The Nuttiest Idea",
+    blurb: "Wildest experimental concept. Unhinged. Actually brilliant.",
+    track: "Wildcard",
+    finish: "swirl",
+  },
+  {
+    key: "design",
+    word: "DESIGN",
+    title: "Best Design Nut",
+    blurb: "Making ecash actually usable, accessible and delightful.",
+    track: "Design",
+    finish: "halftone",
+  },
+  {
+    key: "fresh",
+    word: "FRESH",
+    title: "Freshly Minted Nut",
+    blurb: "Best first-time contributor. Welcome to the shell game.",
+    track: "Newcomer",
+    finish: "aurora",
+  },
+];
