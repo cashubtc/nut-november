@@ -146,6 +146,14 @@ a {
   }
 }
 
+/* Seed-packet zigzag top edge (the hero's master packet) */
+.packet-edge {
+  --tooth: 24px;
+  mask:
+    conic-gradient(from 135deg at top, #0000, #000 1deg 89deg, #0000 90deg) top / var(--tooth) calc(var(--tooth) / 2) repeat-x,
+    linear-gradient(#000 0 0) 0 calc(var(--tooth) / 2 - 1px) / 100% 100% no-repeat;
+}
+
 /* Donation band: solid dark pumpkin (cream text stays above 4.5:1 everywhere)
    with the hero's dot texture */
 .harvest {

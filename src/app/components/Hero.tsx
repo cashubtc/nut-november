@@ -1,21 +1,40 @@
 "use client";
 
 import Link from "next/link";
-import { RefObject, useRef } from "react";
+import {
+  CSSProperties,
+  PointerEvent as ReactPointerEvent,
+  RefObject,
+  useId,
+  useRef,
+  useState,
+} from "react";
 import CircularText from "./CircularText";
 import NutParticles from "./NutParticles";
 import { useDonations } from "../context/DonationsContext";
-import { DATES_LABEL, formatSats, usePhase } from "../lib/hackathon";
+import { DATES_LABEL, usePhase } from "../lib/hackathon";
 
-const primaryBtn =
-  "inline-block px-10 py-5 btn-sticker bg-pumpkin text-white font-bold border-4 border-pumpkin hover:bg-pumpkin-dark text-lg font-mono";
-const secondaryBtn =
-  "inline-block px-10 py-5 btn-sticker bg-white text-pumpkin font-bold border-4 border-pumpkin hover:bg-pumpkin-wash text-lg font-mono";
+const display: CSSProperties = { fontFamily: "var(--font-sauce-tm)", letterSpacing: "0.05em" };
+const wordmarkSize =
+  "text-[76px] sm:text-[96px] md:text-[120px] lg:text-[150px] xl:text-[170px] leading-[0.85]";
+
+function Wordmark() {
+  return (
+    <>
+      NUT
+      <br />
+      NOVEMBER
+    </>
+  );
+}
 
 export default function Hero() {
   const heroRef = useRef<HTMLElement>(null);
   const { total, basePool } = useDonations();
   const phase = usePhase();
+  const outlineId = `hero-outline-${useId().replace(/[^\w-]/g, "")}`;
+  // Pointer position drives the foil's shine, like tilting the prize cards
+  const [light, setLight] = useState({ x: 0, y: 0 });
 
   const status =
     phase?.kind === "upcoming"
@@ -25,64 +44,108 @@ export default function Hero() {
         : phase?.kind === "over"
           ? "Submissions are closed"
           : null;
+  const live = phase?.kind === "live";
 
-  // Submitting only leads while the hackathon is running.
-  const submitLeads = phase?.kind === "live";
+  const onPointerMove = (e: ReactPointerEvent<HTMLElement>) => {
+    if (e.pointerType !== "mouse") return;
+    const r = e.currentTarget.getBoundingClientRect();
+    setLight({ x: (e.clientX - r.left) / r.width - 0.5, y: (e.clientY - r.top) / r.height - 0.5 });
+  };
 
   return (
     <section
       ref={heroRef}
-      className="relative flex min-h-[92vh] items-center justify-center overflow-hidden hero-autumn p-6 sm:p-8 md:p-12 lg:p-16"
+      onPointerMove={onPointerMove}
+      className="relative flex min-h-[92vh] items-center justify-center overflow-hidden hero-autumn px-5 pt-20 pb-16 sm:p-12 md:p-16"
+      style={
+        {
+          "--mx": `${50 + light.x * 60}%`,
+          "--my": `${40 + light.y * 60}%`,
+          "--hx": `${light.x * 6}%`,
+          "--hy": `${light.y * 6}%`,
+        } as CSSProperties
+      }
     >
-      <div className="relative z-20 bg-cream border-4 border-bark card-sticker px-6 pt-10 pb-14 sm:p-12 sm:pb-16 md:p-16 md:pb-20 max-w-6xl w-full text-center">
-        <h1
-          className="text-[60px] sm:text-[80px] md:text-[100px] lg:text-[120px] xl:text-[140px] leading-[0.85] text-pumpkin"
-          style={{ fontFamily: "var(--font-sauce-tm)", letterSpacing: "0.05em" }}
-        >
-          <span className="inline-block animate-slide-up">NUT</span>
-          <br />
-          <span className="inline-block animate-slide-up-delay">NOVEMBER</span>
-        </h1>
+      {/* The master seed packet. Its hard shadow follows the zigzag silhouette. */}
+      <div className="relative z-20 w-full max-w-6xl [filter:drop-shadow(10px_10px_0_var(--bark))]">
+        <div className="packet-edge bg-bark p-1">
+          <div className="packet-edge relative bg-cream-deep px-6 pt-14 pb-16 text-center sm:px-12 sm:pt-20 sm:pb-20">
+            {/* Foil wordmark: the letters are cut out of the packet paper
+                (same layering as the prize cards). The isolate group keeps
+                the blends inside the wordmark. */}
+            <div className="relative isolate mx-auto w-fit">
+              <div className="prize-holo absolute inset-0" data-finish="gold" aria-hidden>
+                <span className="prize-holo-bands" />
+                <span className="prize-holo-foil" />
+                <span className="prize-holo-glare" />
+              </div>
+              <h1 className={`relative bg-white text-black mix-blend-screen ${wordmarkSize}`} style={display}>
+                <Wordmark />
+              </h1>
+              <div
+                aria-hidden
+                className={`absolute inset-0 bg-cream-deep text-white mix-blend-multiply ${wordmarkSize}`}
+                style={display}
+              >
+                <Wordmark />
+              </div>
+              {/* One outline around the whole word (see PrizeCard) */}
+              <svg width="0" height="0" className="absolute" aria-hidden>
+                <filter id={outlineId} x="-5%" y="-10%" width="110%" height="120%">
+                  <feMorphology in="SourceAlpha" operator="dilate" radius="3" result="fat" />
+                  <feMorphology in="SourceAlpha" operator="erode" radius="0.6" result="thin" />
+                  <feComposite in="fat" in2="thin" operator="out" result="ring" />
+                  <feFlood floodColor="#5C2E12" />
+                  <feComposite in2="ring" operator="in" />
+                </filter>
+              </svg>
+              <div
+                aria-hidden
+                className={`absolute inset-0 text-bark ${wordmarkSize}`}
+                style={{ ...display, filter: `url(#${outlineId})` }}
+              >
+                <Wordmark />
+              </div>
+            </div>
 
-        <p className="mx-auto mt-6 max-w-[28ch] text-2xl sm:text-3xl font-medium text-bark text-balance">
-          A month-long hackathon for Cashu builders.
-        </p>
+            <p className="mx-auto mt-7 max-w-[30ch] text-xl sm:text-2xl font-medium text-bark text-balance">
+              A month-long hackathon for Cashu builders
+            </p>
 
-        <p className="mt-4 text-lg sm:text-xl text-bark/80">
-          <strong className="font-semibold text-bark-dark tabular-nums">
-            {formatSats(total + basePool)}
-          </strong>{" "}
-          in prizes
-          {status && (
-            <span className="block sm:inline">
-              <span aria-hidden className="mx-2 hidden text-pumpkin sm:inline">
-                ●
-              </span>
-              {status}
-            </span>
-          )}
-        </p>
+            {/* The prize pool, as the packet's price tag */}
+            <div className="mt-8 flex flex-col items-center gap-3">
+              <p className="-rotate-2 inline-flex items-baseline gap-3 bg-pumpkin px-6 py-3 font-extrabold leading-none text-cream tabular-nums shadow-[6px_6px_0_var(--bark)] text-4xl sm:text-6xl">
+                {Math.round(total + basePool).toLocaleString("en-US")}
+                <span className="font-mono text-base font-bold uppercase tracking-[0.14em] sm:text-xl">
+                  sats
+                </span>
+              </p>
+              <p className="mt-2 font-mono text-sm font-bold uppercase tracking-[0.16em] text-bark">
+                in prizes
+                {status && (
+                  <span className="block sm:inline">
+                    <span className="hidden sm:inline"> · </span>
+                    {status}
+                  </span>
+                )}
+              </p>
+            </div>
 
-        <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center items-center">
-          {submitLeads ? (
-            <>
-              <Link href="/form" className={primaryBtn}>
-                Submit your project
+            <div className="mt-10 flex flex-col items-center justify-center gap-5 sm:flex-row sm:gap-8">
+              <Link
+                href={live ? "/form" : "#prizes"}
+                className="inline-block px-10 py-5 btn-sticker bg-pumpkin text-white font-bold border-4 border-pumpkin hover:bg-pumpkin-dark text-lg font-mono"
+              >
+                {live ? "Submit your project" : "See the prizes"}
               </Link>
-              <a href="#prizes" className={secondaryBtn}>
-                See the prizes
+              <a
+                href={live ? "#prizes" : "#participate"}
+                className="font-mono text-lg font-bold text-bark underline decoration-2 underline-offset-4 hover:text-pumpkin-dark"
+              >
+                {live ? "See the prizes" : "How it works"}
               </a>
-            </>
-          ) : (
-            <>
-              <a href="#prizes" className={primaryBtn}>
-                See the prizes
-              </a>
-              <a href="#participate" className={secondaryBtn}>
-                How it works
-              </a>
-            </>
-          )}
+            </div>
+          </div>
         </div>
 
         {/* The dates, stuck on like a label at the bottom edge */}
