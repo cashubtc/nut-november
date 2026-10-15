@@ -25,9 +25,6 @@ export default function Prizes() {
         </div>
         {/* Main Content */}
         <div className="flex-1 md:pl-12 lg:pl-16">
-          <p className="mb-10 font-mono text-bark/70 text-sm sm:text-base">
-            Five packets. Five winners. Grab a corner and peel ↗
-          </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-10 gap-y-14 mb-16">
             {prizeCards.map((card) => (
               <div key={card.key} className="mx-auto w-full max-w-[340px]">
