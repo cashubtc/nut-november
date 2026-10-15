@@ -67,22 +67,6 @@ export default function FAQ() {
           >
             Questions
           </h2>
-          <p className="mt-6 max-w-[32ch] text-lg leading-relaxed text-bark-dark/85">
-            Something else on your mind? Ask in the{" "}
-            <a href="https://t.me/CashuBTC" target="_blank" rel="noopener noreferrer" className={link}>
-              Cashu Telegram
-            </a>{" "}
-            or on{" "}
-            <a
-              href="https://primal.net/p/nprofile1qqs0y3tvskgs9gpgxxu5ahgz3fmms3rzmxt504qceqtz4a6pdgfwlkghwl6j8"
-              target="_blank"
-              rel="noopener noreferrer"
-              className={link}
-            >
-              Nostr
-            </a>
-            .
-          </p>
         </div>
 
         <ul className="border-b-2 border-bark">
