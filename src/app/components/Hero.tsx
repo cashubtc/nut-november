@@ -7,7 +7,6 @@ import {
   RefObject,
   useId,
   useRef,
-  useState,
 } from "react";
 import CircularText from "./CircularText";
 import NutParticles from "./NutParticles";
@@ -33,8 +32,10 @@ export default function Hero() {
   const { total, basePool } = useDonations();
   const phase = usePhase();
   const outlineId = `hero-outline-${useId().replace(/[^\w-]/g, "")}`;
-  // Pointer position drives the foil's shine, like tilting the prize cards
-  const [light, setLight] = useState({ x: 0, y: 0 });
+  // Pointer position drives the foil's shine. Written straight to the
+  // wordmark once per frame, without re-rendering (Safari stuttered).
+  const foilRef = useRef<HTMLDivElement>(null);
+  const lightFrame = useRef<number | null>(null);
 
   const status =
     phase?.kind === "upcoming"
@@ -49,7 +50,18 @@ export default function Hero() {
   const onPointerMove = (e: ReactPointerEvent<HTMLElement>) => {
     if (e.pointerType !== "mouse") return;
     const r = e.currentTarget.getBoundingClientRect();
-    setLight({ x: (e.clientX - r.left) / r.width - 0.5, y: (e.clientY - r.top) / r.height - 0.5 });
+    const x = (e.clientX - r.left) / r.width - 0.5;
+    const y = (e.clientY - r.top) / r.height - 0.5;
+    if (lightFrame.current !== null) cancelAnimationFrame(lightFrame.current);
+    lightFrame.current = requestAnimationFrame(() => {
+      lightFrame.current = null;
+      const el = foilRef.current;
+      if (!el) return;
+      el.style.setProperty("--mx", `${50 + x * 60}%`);
+      el.style.setProperty("--my", `${40 + y * 60}%`);
+      el.style.setProperty("--hx", `${x * 6}%`);
+      el.style.setProperty("--hy", `${y * 6}%`);
+    });
   };
 
   return (
@@ -57,14 +69,6 @@ export default function Hero() {
       ref={heroRef}
       onPointerMove={onPointerMove}
       className="relative flex min-h-[92vh] items-center justify-center overflow-hidden hero-autumn px-5 pt-20 pb-16 sm:p-12 md:p-16"
-      style={
-        {
-          "--mx": `${50 + light.x * 60}%`,
-          "--my": `${40 + light.y * 60}%`,
-          "--hx": `${light.x * 6}%`,
-          "--hy": `${light.y * 6}%`,
-        } as CSSProperties
-      }
     >
       {/* The master seed packet. Its hard shadow follows the zigzag silhouette. */}
       <div className="relative z-20 w-full max-w-6xl [filter:drop-shadow(10px_10px_0_var(--bark))]">
@@ -73,7 +77,7 @@ export default function Hero() {
             {/* Foil wordmark: the letters are cut out of the packet paper
                 (same layering as the prize cards). The isolate group keeps
                 the blends inside the wordmark. */}
-            <div className="relative isolate mx-auto w-fit">
+            <div ref={foilRef} className="relative isolate mx-auto w-fit">
               <div className="prize-holo absolute inset-0" data-finish="gold" aria-hidden>
                 <span className="prize-holo-bands" />
                 <span className="prize-holo-foil" />
@@ -101,7 +105,7 @@ export default function Hero() {
               </svg>
               <div
                 aria-hidden
-                className={`absolute inset-0 text-bark ${wordmarkSize}`}
+                className={`absolute inset-0 text-bark [transform:translateZ(0)] ${wordmarkSize}`}
                 style={{ ...display, filter: `url(#${outlineId})` }}
               >
                 <Wordmark />
