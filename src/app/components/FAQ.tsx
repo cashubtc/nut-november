@@ -58,23 +58,23 @@ export default function FAQ() {
   const baseId = useId();
 
   return (
-    <section id="faq" className="bg-cream px-6 pb-24">
-      <div className="mx-auto grid max-w-6xl gap-10 border-t-4 border-bark pt-20 lg:grid-cols-[1fr_2fr] lg:gap-16">
+    <section id="faq" className="bg-cream px-6 pt-8 pb-24">
+      <div className="mx-auto grid max-w-6xl gap-10 lg:grid-cols-[1fr_2fr] lg:gap-16">
         <div>
           <h2
             className="text-5xl sm:text-6xl leading-[0.95] text-bark"
             style={{ fontFamily: "var(--font-sauce-tm)" }}
           >
-            Questions
+            <span className="mr-[0.07em]">Q</span>uestions
           </h2>
         </div>
 
-        <ul className="border-b-2 border-bark">
+        <ul className="border-b border-bark/40">
           {faqs.map((faq, i) => {
             const open = openIndex === i;
             const panelId = `${baseId}-${i}`;
             return (
-              <li key={faq.question} className="border-t-2 border-bark">
+              <li key={faq.question} className="border-t border-bark/40">
                 <h3>
                   <button
                     type="button"
