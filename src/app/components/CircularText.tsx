@@ -28,7 +28,7 @@ export default function CircularText() {
             style={{ fontFamily: "var(--font-mono)", letterSpacing: "2px" }}
             startOffset="0%"
           >
-            100% NUTTY • 100% CERTIFIED ORGANIC •{" "}
+            100% NUTTY 🌰 100% CERTIFIED ORGANIC 🌰{" "}
           </textPath>
         </text>
       </svg>

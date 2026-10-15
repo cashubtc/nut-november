@@ -1,15 +1,21 @@
 "use client";
 import Link from "next/link";
 import { useDonations } from "../context/DonationsContext";
-import { formatSats } from "../lib/hackathon";
+import { formatSats, usePhase } from "../lib/hackathon";
 import PrizeCard from "./prize-card/PrizeCard";
 import { prizeCards } from "./prize-card/prizes";
 
 export default function Prizes() {
-  const { prizes, total, basePool } = useDonations();
+  const { prizes, total } = useDonations();
+  const phase = usePhase();
+  // The form only opens on Nov 1; until then the useful next step is the pool.
+  const cta =
+    phase?.kind === "live"
+      ? { href: "/form", label: "Submit your project" }
+      : { href: "/donate", label: "Grow the prize pool" };
 
   return (
-    <section id="prizes" className="bg-cream-deep px-6 py-24">
+    <section id="prizes" className="overflow-x-clip bg-cream-deep px-6 py-24">
       <div className="mx-auto max-w-6xl">
         <div>
           <h2
@@ -19,11 +25,8 @@ export default function Prizes() {
             The prizes
           </h2>
           <p className="mt-5 max-w-[52ch] text-lg sm:text-xl text-bark-dark/90">
-            Five prizes, paid in sats, from a{" "}
-            <strong className="font-semibold tabular-nums">
-              {formatSats(total + basePool)}
-            </strong>{" "}
-            pool that grows with every donation.
+            Five prizes, paid in sats from a pool built entirely by donations. It&apos;s at{" "}
+            <strong className="font-semibold tabular-nums">{formatSats(total)}</strong> so far.
           </p>
         </div>
 
@@ -37,10 +40,10 @@ export default function Prizes() {
 
         <div className="mt-16 text-center">
           <Link
-            href="/form"
+            href={cta.href}
             className="inline-block px-10 py-5 btn-sticker bg-white text-pumpkin font-bold border-4 border-pumpkin hover:bg-pumpkin-wash text-lg font-mono"
           >
-            Submit your project
+            {cta.label}
           </Link>
         </div>
       </div>

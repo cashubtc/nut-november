@@ -427,7 +427,7 @@ function Word({ text, className }: { text: string; className: string }) {
 function Field({ label, value }: { label: string; value: string }) {
   return (
     <div className="min-w-0">
-      <p className="font-mono font-bold uppercase tracking-[0.16em] text-bark text-[2.3cqw]">
+      <p className="font-mono font-bold uppercase tracking-[0.14em] text-bark text-[3.2cqw]">
         {label}
       </p>
       <p
@@ -454,9 +454,12 @@ function NuttyStamp() {
         </defs>
         <text
           fill="currentColor"
-          style={{ fontFamily: "var(--font-geist-mono)", fontSize: "10.5px", fontWeight: 700, letterSpacing: "1.2px" }}
+          style={{ fontFamily: "var(--font-geist-mono)", fontSize: "9.5px", fontWeight: 700 }}
         >
-          <textPath href={`#${ringId}`}>100% NUTTY • CERTIFIED ORGANIC •</textPath>
+          {/* Spaced to fill the ring exactly (2πr = 213.6) so the words never overlap */}
+          <textPath href={`#${ringId}`} textLength="212" lengthAdjust="spacing">
+            {"100% NUTTY\u00a0\u00a0CERTIFIED ORGANIC\u00a0\u00a0"}
+          </textPath>
         </text>
       </svg>
     </div>

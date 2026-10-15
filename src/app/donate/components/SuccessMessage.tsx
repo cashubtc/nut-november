@@ -1,60 +1,41 @@
+import Link from "next/link";
+import CircularText from "../../components/CircularText";
+import { primaryButton, secondaryButton } from "../../components/PacketPage";
+import { useDonations } from "../../context/DonationsContext";
+import { formatSats } from "../../lib/hackathon";
+
 interface SuccessMessageProps {
+  amount: number;
   onReset: () => void;
 }
 
-export default function SuccessMessage({ onReset }: SuccessMessageProps) {
+export default function SuccessMessage({ amount, onReset }: SuccessMessageProps) {
+  const { total } = useDonations();
+
   return (
-    <div className="flex flex-col items-center gap-8">
-      {/* Checkmark */}
-      <div className="w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 bg-pumpkin rounded-full flex items-center justify-center">
-        <svg
-          className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 text-white"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={4}
-            d="M5 13l4 4L19 7"
-          />
-        </svg>
+    <div role="status" className="flex flex-col items-center gap-8 text-center">
+      <div className="rotate-6 rounded-full border-4 border-cream bg-bark p-1 shadow-[6px_6px_0_var(--pumpkin)]">
+        <CircularText />
       </div>
 
-      {/* Success Message */}
-      <div className="text-center space-y-4">
-        <h2
-          className="text-[32px] sm:text-[48px] md:text-[64px] font-bold text-pumpkin"
-          style={{
-            fontFamily: "var(--font-sauce-tm)",
-            letterSpacing: "0.05em",
-          }}
-        >
-          PAYMENT SUCCESSFUL!
-        </h2>
-        <p
-          className="text-xl sm:text-2xl md:text-3xl text-gray-600"
-          style={{ fontFamily: "var(--font-sans)" }}
-        >
-          Thank you for your generous donation!
+      <div className="space-y-3">
+        <p className="text-2xl font-semibold text-bark-dark text-balance">
+          {amount > 0 ? `${formatSats(amount)} just landed in the pool.` : "Your sats just landed in the pool."}
         </p>
-        <p
-          className="text-lg sm:text-xl text-gray-500"
-          style={{ fontFamily: "var(--font-sans)" }}
-        >
-          Your contribution helps make Nut November amazing 🥜
+        <p className="text-lg text-bark/85">
+          It&apos;s now <strong className="font-semibold tabular-nums">{formatSats(total)}</strong>, split
+          across all five prizes. 🥜
         </p>
       </div>
 
-      {/* Action Button */}
-      <button
-        onClick={onReset}
-        className="inline-block px-10 py-5 btn-sticker bg-pumpkin text-white font-bold border-4 border-pumpkin hover:bg-pumpkin-dark text-lg font-mono transition-all"
-      >
-        Donate Again
-      </button>
+      <div className="flex flex-col items-center gap-4 sm:flex-row">
+        <Link href="/#prizes" className={primaryButton}>
+          See the prizes
+        </Link>
+        <button type="button" onClick={onReset} className={secondaryButton}>
+          Donate again
+        </button>
+      </div>
     </div>
   );
 }
-

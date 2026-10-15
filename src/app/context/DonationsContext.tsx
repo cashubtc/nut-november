@@ -10,19 +10,14 @@ import {
 import { SimplePool } from "nostr-tools";
 import { nutnovemberPubkey } from "@/pubkey";
 
-const preZapDonations = [42171, 5000, 5000, 5000, 1, 8, 10, 3, 21, 100];
+// Only zaps paid after this count toward Nut November 2026, so last year's
+// donations stay out of the pool.
+const DONATIONS_SINCE = Math.floor(Date.UTC(2026, 0, 1) / 1000);
 
-const basePrizes = {
-  golden: 150000,
-  hardest: 80000,
-  nuttiest: 60000,
-  design: 50000,
-  fresh: 40000,
-};
+// The pool is only what people donate, split evenly across the prizes.
+const PRIZE_KEYS = ["golden", "hardest", "nuttiest", "design", "fresh"] as const;
 
-const basePool = Object.values(basePrizes).reduce((sum, v) => sum + v, 0);
-
-export type PrizeKey = keyof typeof basePrizes;
+export type PrizeKey = (typeof PRIZE_KEYS)[number];
 
 interface DonationsContextType {
   donations: number[];
@@ -30,8 +25,7 @@ interface DonationsContextType {
   total: number;
   sortedDonations: number[];
   isLoading: boolean;
-  basePool: number;
-  prizes: Record<keyof typeof basePrizes, number>;
+  prizes: Record<PrizeKey, number>;
 }
 
 const DonationsContext = createContext<DonationsContextType | undefined>(
@@ -58,6 +52,7 @@ export function DonationsProvider({ children }: { children: ReactNode }) {
       {
         "#p": [nutnovemberPubkey],
         kinds: [9735],
+        since: DONATIONS_SINCE,
       },
       {
         onevent: (event) => {
@@ -98,22 +93,11 @@ export function DonationsProvider({ children }: { children: ReactNode }) {
     };
   }, []);
 
-  // Combine preZapDonations with subscription donations
-  const allDonations = [...preZapDonations, ...donations];
+  const allDonations = donations;
   const total = allDonations.reduce((sum, amount) => sum + amount, 0);
   const sortedDonations = [...allDonations].sort((a, b) => b - a);
-  const prizeShare = Math.floor(total / Object.keys(basePrizes).length);
-
-  const prizes: Record<keyof typeof basePrizes, number> = {
-    golden: 0,
-    hardest: 0,
-    nuttiest: 0,
-    design: 0,
-    fresh: 0,
-  };
-  Object.entries(basePrizes).forEach(([key, value]) => {
-    prizes[key as keyof typeof basePrizes] = value + prizeShare;
-  });
+  const prizeShare = Math.floor(total / PRIZE_KEYS.length);
+  const prizes = Object.fromEntries(PRIZE_KEYS.map((k) => [k, prizeShare])) as Record<PrizeKey, number>;
 
   return (
     <DonationsContext.Provider
@@ -123,7 +107,6 @@ export function DonationsProvider({ children }: { children: ReactNode }) {
         total,
         sortedDonations,
         isLoading,
-        basePool,
         prizes,
       }}
     >

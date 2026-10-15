@@ -29,7 +29,7 @@ function Wordmark() {
 
 export default function Hero() {
   const heroRef = useRef<HTMLElement>(null);
-  const { total, basePool } = useDonations();
+  const { total } = useDonations();
   const phase = usePhase();
   const outlineId = `hero-outline-${useId().replace(/[^\w-]/g, "")}`;
   // Pointer position drives the foil's shine. Written straight to the
@@ -119,7 +119,7 @@ export default function Hero() {
             {/* The prize pool, as the packet's price tag */}
             <div className="mt-8 flex flex-col items-center gap-3">
               <p className="-rotate-2 inline-flex items-baseline gap-3 bg-pumpkin px-6 py-3 font-extrabold leading-none text-cream tabular-nums shadow-[6px_6px_0_var(--bark)] text-4xl sm:text-6xl">
-                {Math.round(total + basePool).toLocaleString("en-US")}
+                {Math.round(total).toLocaleString("en-US")}
                 <span className="font-mono text-base font-bold uppercase tracking-[0.14em] sm:text-xl">
                   sats
                 </span>

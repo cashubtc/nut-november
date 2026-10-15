@@ -3,12 +3,10 @@ import { Event, SimplePool } from "nostr-tools";
 import { nutnovemberPubkey } from "@/pubkey";
 
 export function useReceiptSubscription(receiptId: string | null) {
-  const [isPaid, setIsPaid] = useState<boolean>(false);
+  // The receipt we've seen paid; a new receiptId is unpaid until proven.
+  const [paidId, setPaidId] = useState<string | null>(null);
 
   useEffect(() => {
-    // Reset isPaid when receiptId changes or becomes null
-    setIsPaid(false);
-
     if (!receiptId) {
       return;
     }
@@ -21,7 +19,6 @@ export function useReceiptSubscription(receiptId: string | null) {
       "wss://relay.primal.net",
     ];
 
-    console.log(receiptId);
     const sub = pool.subscribeMany(
       relays,
       {
@@ -37,10 +34,8 @@ export function useReceiptSubscription(receiptId: string | null) {
             try {
               const receipt = receiptTag[1];
               const parsed = JSON.parse(receipt);
-              console.log(parsed);
               if (parsed.id === receiptId && isMounted) {
-                console.log("Receipt found");
-                setIsPaid(true);
+                setPaidId(receiptId);
               }
             } catch (error) {
               console.error("Error parsing receipt:", error);
@@ -58,5 +53,5 @@ export function useReceiptSubscription(receiptId: string | null) {
     };
   }, [receiptId]);
 
-  return isPaid;
+  return receiptId !== null && paidId === receiptId;
 }

@@ -6,7 +6,7 @@ import { useDonations } from "../context/DonationsContext";
 import { formatSats } from "../lib/hackathon";
 
 export default function Sponsors() {
-  const { total, basePool, allDonations, isLoading } = useDonations();
+  const { total, allDonations, isLoading } = useDonations();
 
   return (
     <section id="sponsors" className="harvest px-6 py-24 text-cream">
@@ -19,19 +19,21 @@ export default function Sponsors() {
             Grow the prize pool
           </h2>
           <p className="mt-6 max-w-[46ch] text-lg leading-relaxed text-cream">
-            Donate ecash or bitcoin and it&apos;s split evenly across all five prizes.
+            Send sats over Lightning and they&apos;re split evenly across all five prizes.
           </p>
 
           <p
             className="mt-10 text-5xl font-extrabold leading-none tabular-nums sm:text-6xl"
             aria-live="polite"
           >
-            {formatSats(total + basePool)}
+            {formatSats(total)}
           </p>
           <p className="mt-3 font-mono text-sm font-bold uppercase tracking-[0.14em] text-cream">
             {isLoading
               ? "Counting zaps…"
-              : `From ${allDonations.length} donations so far`}
+              : allDonations.length === 0
+                ? "No donations yet. Be the first."
+                : `From ${allDonations.length} ${allDonations.length === 1 ? "donation" : "donations"} so far`}
           </p>
 
           <div className="mt-10 flex flex-col gap-4 sm:flex-row">

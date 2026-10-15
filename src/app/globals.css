@@ -33,6 +33,9 @@ html {
 }
 
 body {
+  /* The peel flap and foil layers reach past their cards; never let them
+     widen the page. */
+  overflow-x: clip;
   background: var(--cream);
   color: var(--bark-dark);
   font-family: var(--font-poppins), system-ui, sans-serif;
@@ -195,27 +198,30 @@ a {
   mix-blend-mode: soft-light;
 }
 
-/* GOLDEN: gold leaf with glitter */
+/* GOLDEN: polished champagne gold. Broad, soft reflections that drift with
+   the tilt, and a top-lit falloff so the letters read as solid metal. */
 .prize-holo[data-finish="gold"] .prize-holo-bands {
   background: repeating-linear-gradient(
-    115deg,
-    #7a4a00 0%,
-    #c98a12 3%,
-    #f7d36a 5%,
-    #fff6c4 6%,
-    #e8b02a 8%,
-    #a86a00 11%,
-    #7a4a00 13%
+    110deg,
+    #9c6a1e 0%,
+    #c9973f 6%,
+    #ecd29a 11%,
+    #fbf0d4 13.5%,
+    #e6c27c 16%,
+    #b88330 22%,
+    #9c6a1e 28%
   );
-  animation: prize-holo-sway 7s ease-in-out infinite alternate;
+  animation: prize-holo-sway 12s ease-in-out infinite alternate;
 }
 .prize-holo[data-finish="gold"] .prize-holo-foil {
-  background:
-    radial-gradient(circle, rgba(255, 255, 255, 0.9) 0 0.3cqw, transparent 0.55cqw) 0 0 / 7.3cqw 6.1cqw,
-    radial-gradient(circle, rgba(255, 250, 220, 0.7) 0 0.22cqw, transparent 0.45cqw) 2.9cqw 3.7cqw / 5.3cqw 8.9cqw,
-    radial-gradient(circle, rgba(255, 255, 255, 0.6) 0 0.18cqw, transparent 0.4cqw) 4.1cqw 1.3cqw / 9.7cqw 4.7cqw;
-  mix-blend-mode: overlay;
-  animation: prize-holo-twinkle 1.6s steps(2) infinite;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 248, 230, 0.55) 0%,
+    rgba(255, 248, 230, 0) 42%,
+    rgba(90, 50, 10, 0) 62%,
+    rgba(90, 50, 10, 0.35) 100%
+  );
+  mix-blend-mode: soft-light;
 }
 
 /* HARDEST: brushed chrome */
@@ -310,10 +316,6 @@ a {
 @keyframes prize-holo-rise {
   from { transform: translateY(0); }
   to { transform: translateY(-16.66%); }
-}
-
-@keyframes prize-holo-twinkle {
-  50% { opacity: 0.45; }
 }
 
 @keyframes prize-holo-dots {

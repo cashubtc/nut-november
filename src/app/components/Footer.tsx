@@ -41,7 +41,7 @@ export default function Footer() {
                   className="text-2xl md:text-3xl uppercase transition-colors hover:text-pumpkin-wash/70"
                   style={{ fontFamily: "var(--font-sauce-tm)", letterSpacing: "0.1em" }}
                 >
-                  Opencash
+                  OpenCash
                 </a>
               </li>
               <li>
@@ -52,7 +52,7 @@ export default function Footer() {
                   className="text-2xl md:text-3xl uppercase transition-colors hover:text-pumpkin-wash/70"
                   style={{ fontFamily: "var(--font-sauce-tm)", letterSpacing: "0.1em" }}
                 >
-                  Github
+                  GitHub
                 </a>
               </li>
             </ul>
