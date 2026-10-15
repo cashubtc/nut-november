@@ -10,7 +10,9 @@ import {
 import { SimplePool } from "nostr-tools";
 import { nutnovemberPubkey } from "@/pubkey";
 
-const preZapDonations = [42171, 5000, 5000, 5000, 1, 8, 10, 3, 21, 100];
+// Only zaps paid after this count toward Nut November 2026, so last year's
+// donations stay out of the pool.
+const DONATIONS_SINCE = Math.floor(Date.UTC(2026, 0, 1) / 1000);
 
 const basePrizes = {
   golden: 150000,
@@ -58,6 +60,7 @@ export function DonationsProvider({ children }: { children: ReactNode }) {
       {
         "#p": [nutnovemberPubkey],
         kinds: [9735],
+        since: DONATIONS_SINCE,
       },
       {
         onevent: (event) => {
@@ -98,8 +101,7 @@ export function DonationsProvider({ children }: { children: ReactNode }) {
     };
   }, []);
 
-  // Combine preZapDonations with subscription donations
-  const allDonations = [...preZapDonations, ...donations];
+  const allDonations = donations;
   const total = allDonations.reduce((sum, amount) => sum + amount, 0);
   const sortedDonations = [...allDonations].sort((a, b) => b - a);
   const prizeShare = Math.floor(total / Object.keys(basePrizes).length);
