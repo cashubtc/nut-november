@@ -13,6 +13,7 @@ import {
 import { peelAt, Point, toClipPath } from "./peelGeometry";
 import { playSnap, PeelVoice, startPeel } from "./peelSound";
 import type { PrizeCardData } from "./prizes";
+import Acorn from "../Acorn";
 
 // Seed-packet silhouette: a pinked (zig-zag) top edge where the packet was
 // cut, and rounded bottom corners. Drawn on a 500×640 box, which matches the
@@ -218,7 +219,10 @@ export default function PrizeCard({
   const peel = size.w && corner ? peelAt(size.w, size.h, corner) : null;
   const keptClip = peel ? toClipPath(peel.kept) : undefined;
 
-  const amountLabel = `₿${amount.toLocaleString("en-US")}`;
+  const amountDigits = Math.round(amount).toLocaleString("en-US");
+  const amountLabel = `${amountDigits} sats`;
+  // Shrink the tag for bigger numbers so a 7–8 digit pool still fits the card.
+  const tagSize = Math.min(11, 62 / (amountDigits.length * 0.62));
 
   return (
     <div
@@ -301,13 +305,16 @@ export default function PrizeCard({
             {/* Chunky outline around the knockout word, like the hero type */}
             <Word text={prize.word} className="prize-word-outline" />
 
-            {/* The prize money, as a big price tag like the hero's edition badge */}
+            {/* The prize money, as a big price tag */}
             <div className="absolute inset-x-0 top-[35%] flex justify-center">
               <p
-                className="-rotate-2 bg-pumpkin px-[4cqw] py-[1.2cqw] font-extrabold leading-none text-cream text-[12.5cqw] shadow-[1.4cqw_1.4cqw_0_var(--bark)] tabular-nums"
-                style={{ fontFamily: "var(--font-poppins)" }}
+                className="-rotate-2 flex items-baseline gap-[1.6cqw] bg-pumpkin px-[4cqw] py-[1.4cqw] font-extrabold leading-none text-cream shadow-[1.4cqw_1.4cqw_0_var(--bark)] tabular-nums"
+                style={{ fontFamily: "var(--font-poppins)", fontSize: `${tagSize}cqw` }}
               >
-                {amountLabel}
+                {amountDigits}
+                <span className="font-mono font-bold uppercase tracking-[0.12em] text-[4cqw]">
+                  sats
+                </span>
               </p>
             </div>
 
@@ -399,7 +406,7 @@ function Word({ text, className }: { text: string; className: string }) {
 function Field({ label, value }: { label: string; value: string }) {
   return (
     <div className="min-w-0">
-      <p className="font-mono font-bold uppercase tracking-[0.16em] text-pumpkin text-[2.3cqw]">
+      <p className="font-mono font-bold uppercase tracking-[0.16em] text-bark text-[2.3cqw]">
         {label}
       </p>
       <p
@@ -417,8 +424,8 @@ function NuttyStamp() {
   const ringId = useId();
   return (
     <div className="relative w-[17cqw] shrink-0 aspect-square rotate-6 rounded-full border-[0.6cqw] border-cream-deep bg-bark outline outline-[0.4cqw] outline-bark">
-      <span className="absolute inset-0 flex items-center justify-center text-[4.6cqw]">
-        🌰
+      <span className="absolute inset-0 flex items-center justify-center">
+        <Acorn className="w-[38%]" />
       </span>
       <svg viewBox="0 0 100 100" className="prize-stamp-ring absolute inset-0">
         <defs>

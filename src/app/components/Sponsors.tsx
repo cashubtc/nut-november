@@ -2,71 +2,72 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useDonations } from "../context/DonationsContext";
+import { formatSats } from "../lib/hackathon";
 
 export default function Sponsors() {
+  const { total, basePool, allDonations, isLoading } = useDonations();
+
   return (
-    <section
-      id="sponsors"
-      className="py-20 px-6 bg-cream border-t border-bark"
-    >
-      <div className="max-w-7xl mx-auto flex flex-col md:flex-row">
-        {/* Mobile Title - shows on top for mobile only */}
-        <h2 className="text-base font-semibold text-bark/70 font-mono tracking-[0.2em] mb-6 md:hidden">
-          SPONSORS
-        </h2>
-        {/* Vertical Label - hidden on mobile, shown on desktop */}
-        <div className="hidden md:flex flex-shrink-0 w-16 sm:w-20 md:w-24 items-center justify-center">
-          <h2 className="text-sm sm:text-base md:text-lg font-semibold text-bark/70 font-mono tracking-[0.2em] whitespace-nowrap transform -rotate-90 origin-center">
-            SPONSORS
+    <section id="sponsors" className="harvest px-6 py-24 text-cream">
+      <div className="mx-auto grid max-w-6xl gap-14 lg:grid-cols-[1.4fr_1fr] lg:items-end">
+        <div>
+          <h2
+            className="text-5xl sm:text-6xl leading-[0.95]"
+            style={{ fontFamily: "var(--font-sauce-tm)" }}
+          >
+            Grow the prize pool
           </h2>
-        </div>
-        {/* Main Content */}
-        <div className="flex-1 md:pl-12 lg:pl-16">
-          <div>
-            <p className="text-xl sm:text-2xl text-gray-800 leading-relaxed mb-8">
-              Thank you to the sponsors who have supported this hackathon.
-            </p>
+          <p className="mt-6 max-w-[46ch] text-lg leading-relaxed text-cream">
+            Donate ecash or bitcoin and it&apos;s split evenly across all five prizes.
+          </p>
 
-            {/* Sponsors */}
-            <div className="mb-12">
-              <a
-                href="https://opencash.dev/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-block hover:opacity-80 transition-opacity"
-              >
-                <Image
-                  src="/open-cash-logo.png"
-                  alt="OpenCash"
-                  width={200}
-                  height={100}
-                  className="h-auto max-w-full"
-                />
-              </a>
-            </div>
+          <p
+            className="mt-10 text-5xl font-extrabold leading-none tabular-nums sm:text-6xl"
+            aria-live="polite"
+          >
+            {formatSats(total + basePool)}
+          </p>
+          <p className="mt-3 font-mono text-sm font-bold uppercase tracking-[0.14em] text-cream">
+            {isLoading
+              ? "Counting zaps…"
+              : `In the pool · ${allDonations.length} donations so far`}
+          </p>
 
-            {/* Donation Section */}
-            <div className="mb-8">
-              <p className="text-xl sm:text-2xl text-gray-800 leading-relaxed mb-6">
-                Help increase the prize pool by donating ecash or bitcoin.
-              </p>
-
-              <div className="mt-8 flex flex-col sm:flex-row gap-4">
-                <Link
-                  href="/donate"
-                  className="inline-block px-10 py-5 btn-sticker bg-pumpkin text-white font-bold border-4 border-pumpkin hover:bg-pumpkin-dark text-lg font-mono transition-colors text-center"
-                >
-                  Donate to the Prize Pool
-                </Link>
-                <Link
-                  href="/donations"
-                  className="inline-block px-10 py-5 btn-sticker bg-white text-pumpkin font-bold border-4 border-pumpkin hover:bg-pumpkin-wash text-lg font-mono transition-colors text-center"
-                >
-                  View Donations
-                </Link>
-              </div>
-            </div>
+          <div className="mt-10 flex flex-col gap-4 sm:flex-row">
+            <Link
+              href="/donate"
+              className="inline-block border-4 border-bark bg-cream px-10 py-5 text-center font-mono text-lg font-bold text-bark btn-sticker hover:bg-white"
+            >
+              Donate sats
+            </Link>
+            <Link
+              href="/donations"
+              className="inline-block border-4 border-cream px-10 py-5 text-center font-mono text-lg font-bold text-cream transition-colors hover:bg-cream/10"
+            >
+              See all donations
+            </Link>
           </div>
+        </div>
+
+        <div className="lg:justify-self-end">
+          <p className="font-mono text-sm font-bold uppercase tracking-[0.14em] text-cream">
+            Sponsored by
+          </p>
+          <a
+            href="https://opencash.dev/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-4 inline-block rotate-2 border-4 border-bark bg-cream p-6 card-sticker transition-transform hover:rotate-0"
+          >
+            <Image
+              src="/open-cash-logo.png"
+              alt="OpenCash"
+              width={200}
+              height={100}
+              className="h-auto max-w-full"
+            />
+          </a>
         </div>
       </div>
     </section>

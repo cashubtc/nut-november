@@ -44,6 +44,8 @@ export function DonationsProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     let isMounted = true;
+    // The same zap receipt arrives once per relay; count each event once.
+    const seen = new Set<string>();
     const pool = new SimplePool();
     const relays = [
       "wss://relay.damus.io",
@@ -59,7 +61,8 @@ export function DonationsProvider({ children }: { children: ReactNode }) {
       },
       {
         onevent: (event) => {
-          if (!isMounted) return;
+          if (!isMounted || seen.has(event.id)) return;
+          seen.add(event.id);
 
           const receiptTag = event.tags.find((tag) => tag[0] === "description");
           if (receiptTag) {

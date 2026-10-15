@@ -1,60 +1,113 @@
+"use client";
+
+import Link from "next/link";
+import { ReactNode } from "react";
+import { usePhase } from "../lib/hackathon";
+
+const shareText = "Cashu builders are going nuts this November. https://nutnovember.org/ #NutNovember";
+const shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`;
+
+const link = "font-semibold text-pumpkin underline decoration-2 hover:text-pumpkin-dark";
+
+const steps: { title: string; body: ReactNode }[] = [
+  {
+    title: "Pick a project",
+    body: "Find a Cashu project on GitHub to contribute to, or start your own. No idea is too nutty.",
+  },
+  {
+    title: "Build it",
+    body: "Make a new tool, improve an existing one, or fix the bug that's been driving you nuts.",
+  },
+  {
+    title: "Share your progress",
+    body: (
+      <>
+        Post updates on Nostr or X with #NutNovember so the community can follow along.{" "}
+        <a href={shareUrl} target="_blank" rel="noopener noreferrer" className={link}>
+          Post on X
+        </a>
+      </>
+    ),
+  },
+  {
+    title: "Submit by Nov 30",
+    body: (
+      <>
+        Send your project in before the end of November 30.{" "}
+        <Link href="/form" className={link}>
+          Open the submission form
+        </Link>
+      </>
+    ),
+  },
+];
+
+const DAYS = Array.from({ length: 30 }, (_, i) => i + 1);
+
 export default function HowToParticipate() {
-  const steps = [
-    {
-      number: "1",
-      title: "Fork or Contribute",
-      description: "Find a Cashu project on GitHub or start your own. No idea is too nutty."
-    },
-    {
-      number: "2",
-      title: "Build Something",
-      description: "Create a new tool, improve an existing one, or fix that bug that's been driving you nuts."
-    },
-    {
-      number: "3",
-      title: "Share Your Progress",
-      description: "Post updates on Nostr or X with #NutNovember. Let the community see your nuts."
-    },
-    {
-      number: "4",
-      title: "Submit by Nov 30",
-      description: "Deadline's November 30th."
-    }
-  ];
+  const phase = usePhase();
+  // Day of November it is now, while the hackathon is running.
+  const today = phase?.kind === "live" ? phase.day : null;
+  const over = phase?.kind === "over";
 
   return (
-    <section id="participate" className="py-20 px-6 bg-cream border-t border-bark">
-      <div className="max-w-7xl mx-auto flex flex-col md:flex-row">
-        {/* Mobile Title - shows on top for mobile only */}
-        <h2 className="text-base font-semibold text-bark/70 font-mono tracking-[0.2em] mb-6 md:hidden">
-          PARTICIPATE
+    <section id="participate" className="bg-cream px-6 py-24">
+      <div className="mx-auto max-w-6xl">
+        <h2
+          className="text-5xl sm:text-6xl leading-[0.95] text-bark"
+          style={{ fontFamily: "var(--font-sauce-tm)" }}
+        >
+          How it works
         </h2>
-        {/* Vertical Label - hidden on mobile, shown on desktop */}
-        <div className="hidden md:flex flex-shrink-0 w-16 sm:w-20 md:w-24 items-center justify-center">
-          <h2 className="text-sm sm:text-base md:text-lg font-semibold text-bark/70 font-mono tracking-[0.2em] whitespace-nowrap transform -rotate-90 origin-center">
-            PARTICIPATE
-          </h2>
-        </div>
-        {/* Main Content */}
-        <div className="flex-1 md:pl-12 lg:pl-16">
-          <div className="space-y-8">
-            {steps.map((step, index) => (
-              <div key={index} className="flex gap-6 items-start">
-                <div className="flex-shrink-0 w-16 h-16 bg-pumpkin text-cream-deep border-4 border-pumpkin flex items-center justify-center text-2xl font-bold font-mono">
-                  {step.number}
-                </div>
-                <div className="flex-1">
-                  <h3 className="text-2xl font-bold text-pumpkin mb-2 font-mono">
-                    {step.title}
-                  </h3>
-                  <p className="text-xl sm:text-2xl text-gray-800 leading-relaxed">{step.description}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+
+        {/* November, day by day */}
+        <figure className="mt-12">
+          <ol
+            className="grid grid-cols-10 gap-1.5 sm:gap-2 lg:grid-cols-[repeat(30,minmax(0,1fr))]"
+            aria-label="November 2026"
+          >
+            {DAYS.map((day) => {
+              const isLast = day === 30;
+              const isToday = day === today;
+              const isPast = over || (today !== null && day < today);
+              return (
+                <li
+                  key={day}
+                  aria-current={isToday ? "date" : undefined}
+                  className={[
+                    "flex aspect-square items-center justify-center rounded-[3px] border-2 font-mono text-xs font-bold tabular-nums sm:text-sm",
+                    isLast
+                      ? "border-pumpkin bg-pumpkin text-white"
+                      : isToday
+                        ? "border-bark bg-bark text-cream"
+                        : isPast
+                          ? "border-bark/25 bg-cream-deep text-bark/50"
+                          : "border-bark/25 text-bark",
+                  ].join(" ")}
+                >
+                  {day}
+                </li>
+              );
+            })}
+          </ol>
+          <figcaption className="mt-3 flex flex-col gap-1 font-mono text-sm font-bold uppercase tracking-[0.14em] text-bark sm:flex-row sm:justify-between">
+            <span>Nov 1 · Kickoff</span>
+            <span className="text-pumpkin">Nov 30 · Submissions close</span>
+          </figcaption>
+        </figure>
+
+        <ol className="mt-16 grid gap-x-10 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
+          {steps.map((step, i) => (
+            <li key={step.title} className="border-t-4 border-bark pt-5">
+              <p className="font-mono text-sm font-bold text-pumpkin tabular-nums">
+                {String(i + 1).padStart(2, "0")}
+              </p>
+              <h3 className="mt-2 text-xl font-semibold text-bark-dark">{step.title}</h3>
+              <p className="mt-2 leading-relaxed text-bark-dark/85">{step.body}</p>
+            </li>
+          ))}
+        </ol>
       </div>
     </section>
   );
 }
-

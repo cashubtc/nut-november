@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import Matter from "matter-js";
+import { drawNut, NUT_KINDS, NutKind } from "./nutShapes";
 
 interface NutParticlesProps {
   heroSectionRef: React.RefObject<HTMLElement>;
@@ -18,12 +19,11 @@ export default function NutParticles({ heroSectionRef }: NutParticlesProps) {
   const leftWallRef = useRef<Matter.Body | null>(null);
   const rightWallRef = useRef<Matter.Body | null>(null);
 
-  // Array of different nut emojis
-  const nutEmojis = ["🌰", "🥜", "🍂", "🎃", "🍁", "🔩"];
-
   useEffect(() => {
     if (hasStartedRef.current || !heroSectionRef.current) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     hasStartedRef.current = true;
+    const kinds = new WeakMap<Matter.Body, NutKind>();
 
     const heroSection = heroSectionRef.current;
     const getHeroBounds = () => {
@@ -43,7 +43,7 @@ export default function NutParticles({ heroSectionRef }: NutParticlesProps) {
     engineRef.current = engine;
     engine.world.gravity.y = 0.8;
 
-    // Create canvas for emoji rendering
+    // Canvas the nuts are drawn on
     const canvas = document.createElement("canvas");
     canvas.width = bounds.width;
     canvas.height = bounds.height;
@@ -100,28 +100,14 @@ export default function NutParticles({ heroSectionRef }: NutParticlesProps) {
 
     Matter.World.add(engine.world, [ground, leftWall, rightWall]);
 
-    // Function to render emojis
-    const renderEmojis = () => {
-      if (!ctx) return;
-      
-      // Clear canvas
+    // Draw every falling nut at its body's position and rotation
+    const renderNuts = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      
-      // Draw each nut emoji
       nutsRef.current.forEach((nut) => {
-        const size = (nut.circleRadius || 25) * 2.2; // Larger multiplier for bigger emojis
-        const emoji = (nut as any).emoji || "🌰"; // Get stored emoji or default
-        
         ctx.save();
         ctx.translate(nut.position.x, nut.position.y);
         ctx.rotate(nut.angle);
-        
-        // Draw nut emoji
-        ctx.font = `${size}px Arial`;
-        ctx.textAlign = "center";
-        ctx.textBaseline = "middle";
-        ctx.fillText(emoji, 0, 0);
-        
+        drawNut(ctx, kinds.get(nut) ?? "acorn", (nut.circleRadius || 25) * 1.05);
         ctx.restore();
       });
     };
@@ -180,18 +166,16 @@ export default function NutParticles({ heroSectionRef }: NutParticlesProps) {
         },
       });
 
-      // Assign a random nut emoji to this nut
-      const randomEmoji = nutEmojis[Math.floor(Math.random() * nutEmojis.length)];
-      (nut as any).emoji = randomEmoji;
+      kinds.set(nut, NUT_KINDS[Math.floor(Math.random() * NUT_KINDS.length)]);
 
       Matter.World.add(engine.world, nut);
       nutsRef.current.push(nut);
     };
 
-    // Animation loop to render emojis
+    let frame = 0;
     const animationLoop = () => {
-      renderEmojis();
-      requestAnimationFrame(animationLoop);
+      renderNuts();
+      frame = requestAnimationFrame(animationLoop);
     };
     animationLoop();
 
@@ -248,6 +232,7 @@ export default function NutParticles({ heroSectionRef }: NutParticlesProps) {
 
     // Cleanup
     return () => {
+      cancelAnimationFrame(frame);
       clearTimeout(spawnDelay);
       window.removeEventListener("resize", handleResize);
       window.removeEventListener("scroll", handleScroll);

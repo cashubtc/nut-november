@@ -1,12 +1,10 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-
-  /* Nut November 2026 — fall palette */
-  --pumpkin: #C8551A;
-  --pumpkin-dark: #A3421A;
+  /* Nut November 2026 — fall palette.
+     Pumpkin is tuned to pass 4.5:1 against white and cream for button text. */
+  --pumpkin: #B94A16;
+  --pumpkin-dark: #96390F;
   --pumpkin-wash: #FDEBDD;
   --bark: #5C2E12;
   --bark-dark: #43200C;
@@ -15,9 +13,7 @@
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-poppins);
   --font-mono: var(--font-geist-mono);
   --font-sauce-tm: var(--font-sauce-tm);
 
@@ -30,55 +26,39 @@
   --color-cream-deep: var(--cream-deep);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 html {
   scroll-behavior: smooth;
+  scrollbar-color: var(--bark) var(--cream-deep);
+  accent-color: var(--pumpkin);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--cream);
+  color: var(--bark-dark);
+  font-family: var(--font-poppins), system-ui, sans-serif;
 }
 
-/* Hero Section Animations */
-@keyframes fade-in {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+::selection {
+  background: var(--pumpkin);
+  color: var(--cream);
 }
 
-@keyframes scale-in {
-  from {
-    opacity: 0;
-    transform: scale(0.8);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
+:focus-visible {
+  outline: 3px solid var(--bark);
+  outline-offset: 3px;
 }
 
-@keyframes slide-up {
-  from {
-    opacity: 0;
-    transform: translateY(20px) scale(0.98);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
+a {
+  text-underline-offset: 0.2em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
   }
 }
 
+/* Hero entrance: one soft reveal for the wordmark */
 @keyframes elegant-reveal {
   0% {
     opacity: 0;
@@ -96,121 +76,17 @@ body {
   }
 }
 
-@keyframes draw-in {
-  from {
-    stroke-dasharray: 1000;
-    stroke-dashoffset: 1000;
-  }
-  to {
-    stroke-dasharray: 1000;
-    stroke-dashoffset: 0;
-  }
-}
-
-@keyframes pulse-glow {
-  0%,
-  100% {
-    opacity: 0.1;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 0.2;
-    transform: scale(1.05);
-  }
-}
-
-.animate-fade-in {
-  animation: fade-in 1s ease-out forwards;
-}
-
-.animate-fade-in-delay {
-  animation: fade-in 1s ease-out 0.3s forwards;
-  opacity: 0;
-}
-
-.animate-scale-in {
-  animation: scale-in 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-  opacity: 0;
-}
-
-.animate-scale-in-delay {
-  animation: scale-in 1s ease-out 0.5s forwards;
-  opacity: 0;
-}
-
 .animate-slide-up {
-  animation: elegant-reveal 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  animation: elegant-reveal 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   opacity: 0;
 }
 
 .animate-slide-up-delay {
-  animation: elegant-reveal 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.3s
-    forwards;
+  animation: elegant-reveal 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.3s forwards;
   opacity: 0;
 }
 
-.animate-draw-in {
-  animation: draw-in 1.5s ease-out 0.8s forwards;
-  stroke-dasharray: 1000;
-  stroke-dashoffset: 1000;
-}
-
-.animate-draw-in-delay {
-  animation: draw-in 1.5s ease-out 1.2s forwards;
-  stroke-dasharray: 1000;
-  stroke-dashoffset: 1000;
-}
-
-.animate-pulse-glow {
-  animation: pulse-glow 4s ease-in-out infinite;
-}
-
-@keyframes sticker-pop {
-  0% {
-    opacity: 0;
-    transform: scale(0) rotate(-180deg);
-  }
-  60% {
-    transform: scale(1.1) rotate(5deg);
-  }
-  80% {
-    transform: scale(0.95) rotate(-2deg);
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1) rotate(0deg);
-  }
-}
-
-@keyframes sticker-bounce {
-  0% {
-    opacity: 0;
-    transform: translateY(30px) scale(0.8);
-  }
-  50% {
-    transform: translateY(-10px) scale(1.05);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
-.animate-sticker-pop {
-  animation: sticker-pop 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-  opacity: 0;
-}
-
-.animate-sticker-bounce {
-  animation: sticker-bounce 1s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-  opacity: 0;
-}
-
-.nut-illustration {
-  filter: none;
-}
-
-/* Circular Text Rotation Animation */
+/* Circular text rotation (hero sticker, packet stamps) */
 @keyframes rotate-circle {
   to {
     transform: rotate(1turn);
@@ -221,63 +97,15 @@ body {
   animation: rotate-circle 10s linear infinite;
 }
 
-.rotate-circle-reverse {
-  animation: rotate-circle 5s linear infinite reverse;
-}
-
-/* Hero Background Textures */
-.hero-texture-combined {
-  background-color: var(--pumpkin);
-  background-image: 
-    radial-gradient(circle at 2px 2px, rgba(0,0,0,0.12) 1px, transparent 0);
-  background-size: 28px 28px;
-  position: relative;
-}
-
-.hero-texture-combined::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.12'/%3E%3C/svg%3E");
-  opacity: 0.6;
-  pointer-events: none;
-  z-index: 0;
-}
-
-.hero-texture-dots {
-  background-color: var(--pumpkin);
-  background-image: 
-    radial-gradient(circle at 2px 2px, rgba(0,0,0,0.12) 1px, transparent 0);
-  background-size: 28px 28px;
-}
-
-.hero-texture-gradient {
-  background: 
-    radial-gradient(circle at 30% 30%, rgba(255,255,255,0.1) 0%, transparent 50%),
-    radial-gradient(circle at 70% 70%, rgba(0,0,0,0.05) 0%, transparent 50%);
-}
-
-.hero-texture-mesh {
-  background-image: 
-    radial-gradient(at 0% 0%, rgba(255,255,255,0.15) 0px, transparent 60%),
-    radial-gradient(at 100% 0%, rgba(0,0,0,0.08) 0px, transparent 60%),
-    radial-gradient(at 100% 100%, rgba(0,0,0,0.1) 0px, transparent 60%),
-    radial-gradient(at 0% 100%, rgba(255,255,255,0.12) 0px, transparent 60%);
-  background-color: var(--pumpkin);
-}
-
-.hero-texture-lines {
-  background-image: 
-    repeating-linear-gradient(
-      45deg,
-      transparent,
-      transparent 10px,
-      rgba(0,0,0,0.02) 10px,
-      rgba(0,0,0,0.02) 11px
-    );
+@media (prefers-reduced-motion: reduce) {
+  .animate-slide-up,
+  .animate-slide-up-delay {
+    animation: none;
+    opacity: 1;
+  }
+  .rotate-circle {
+    animation: none;
+  }
 }
 
 /* 2026 refresh — hard "sticker" shadows and a warmer hero */
@@ -316,6 +144,14 @@ body {
     transform: none;
     transition: none;
   }
+}
+
+/* Donation band: solid dark pumpkin (cream text stays above 4.5:1 everywhere)
+   with the hero's dot texture */
+.harvest {
+  background-color: var(--pumpkin-dark);
+  background-image: radial-gradient(circle at 2px 2px, rgba(67, 32, 12, 0.35) 1px, transparent 0);
+  background-size: 28px 28px;
 }
 
 /* Prize cards — a foil finish behind each knockout sticker.
