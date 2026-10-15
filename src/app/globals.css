@@ -198,20 +198,8 @@ a {
   mix-blend-mode: soft-light;
 }
 
-/* Every finish is a smooth material: broad, soft reflections that drift with
-   the tilt, plus the same top-lit falloff so the letters read as solid. */
-.prize-holo .prize-holo-foil {
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.5) 0%,
-    rgba(255, 255, 255, 0) 42%,
-    rgba(0, 0, 0, 0) 62%,
-    rgba(0, 0, 0, 0.22) 100%
-  );
-  mix-blend-mode: soft-light;
-}
-
-/* GOLDEN: polished champagne gold */
+/* GOLDEN: polished champagne gold. Broad, soft reflections that drift with
+   the tilt, and a top-lit falloff so the letters read as solid metal. */
 .prize-holo[data-finish="gold"] .prize-holo-bands {
   background: repeating-linear-gradient(
     110deg,
@@ -225,62 +213,90 @@ a {
   );
   animation: prize-holo-sway 12s ease-in-out infinite alternate;
 }
+.prize-holo[data-finish="gold"] .prize-holo-foil {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 248, 230, 0.55) 0%,
+    rgba(255, 248, 230, 0) 42%,
+    rgba(90, 50, 10, 0) 62%,
+    rgba(90, 50, 10, 0.35) 100%
+  );
+  mix-blend-mode: soft-light;
+}
 
-/* HARDEST: polished silver */
+/* HARDEST: brushed chrome */
 .prize-holo[data-finish="chrome"] .prize-holo-bands {
   background: repeating-linear-gradient(
-    110deg,
-    #6b7480 0%,
-    #a3abb5 7%,
-    #dfe3e8 12%,
-    #fafbfc 14%,
-    #c9cfd6 17%,
-    #8a939e 23%,
-    #6b7480 28%
+    172deg,
+    #fbfcfd 0%,
+    #b4bfca 3%,
+    #4f5d6b 6%,
+    #9aa7b4 8%,
+    #ffffff 10%,
+    #6f7d8b 13%,
+    #fbfcfd 16%
   );
-  animation: prize-holo-sway 12s ease-in-out infinite alternate;
+  animation: prize-holo-sway 9s ease-in-out infinite alternate;
+}
+.prize-holo[data-finish="chrome"] .prize-holo-foil {
+  background: repeating-linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.18) 0 1px,
+    rgba(0, 0, 0, 0.05) 1px 2px,
+    transparent 2px 4px
+  );
+  mix-blend-mode: overlay;
 }
 
-/* NUTTY: iridescent pearl that slowly turns */
+/* NUTTY: spinning psychedelic sunburst */
 .prize-holo[data-finish="swirl"] .prize-holo-bands {
-  background: conic-gradient(
+  background: repeating-conic-gradient(
     from 0deg,
-    #f4a8c8,
-    #f9d79a,
-    #b6ecc4,
-    #9fd6f5,
-    #c5b2f2,
-    #f4a8c8
+    #ff3d7f 0deg 12deg,
+    #ffc300 12deg 24deg,
+    #4dffa1 24deg 36deg,
+    #2fd8ff 36deg 48deg,
+    #8f4dff 48deg 60deg
   );
-  animation: prize-holo-turn 30s linear infinite;
+  filter: saturate(1.2);
+  animation: prize-holo-turn 10s linear infinite;
+}
+.prize-holo[data-finish="swirl"] .prize-holo-foil {
+  background: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.55), transparent 60%);
+  mix-blend-mode: soft-light;
 }
 
-/* DESIGN: rose to violet to blue, like a lit glass panel */
+/* DESIGN: pop-art halftone, like the coconut art */
 .prize-holo[data-finish="halftone"] .prize-holo-bands {
-  background: linear-gradient(
-    115deg,
-    #3b5bdb 0%,
-    #8a4fe0 30%,
-    #e0559c 52%,
-    #ff9a6b 70%,
-    #8a4fe0 86%,
-    #3b5bdb 100%
-  );
-  animation: prize-holo-sway 14s ease-in-out infinite alternate;
+  background: linear-gradient(115deg, #2f5bff 0%, #ff4fa3 35%, #ffd23f 60%, #00c8ff 85%, #2f5bff 100%);
+  animation: prize-holo-sway 8s ease-in-out infinite alternate;
+}
+.prize-holo[data-finish="halftone"] .prize-holo-foil {
+  background:
+    radial-gradient(circle, #1c2bd9 0 32%, transparent 36%) 0 0 / 2.6cqw 2.6cqw,
+    radial-gradient(circle, #ff1f8f 0 26%, transparent 30%) 1.3cqw 1.3cqw / 2.6cqw 2.6cqw;
+  mix-blend-mode: multiply;
+  opacity: 0.75;
+  animation: prize-holo-dots 6s linear infinite;
 }
 
-/* FRESH: mint glass */
+/* FRESH: minty aurora with rising bubbles */
 .prize-holo[data-finish="aurora"] .prize-holo-bands {
   background: repeating-linear-gradient(
-    150deg,
-    #1f9e8f 0%,
-    #4fd1b0 8%,
-    #b8f0d2 13%,
-    #eafcf3 15%,
-    #8fe3c8 19%,
-    #1f9e8f 28%
+    160deg,
+    #129e8f 0%,
+    #3fe0a0 4%,
+    #d9f76a 8%,
+    #7cf6ff 12%,
+    #129e8f 16%
   );
-  animation: prize-holo-sway 13s ease-in-out infinite alternate;
+  animation: prize-holo-rise 12s ease-in-out infinite alternate;
+}
+.prize-holo[data-finish="aurora"] .prize-holo-foil {
+  background:
+    radial-gradient(circle, transparent 0 0.9cqw, rgba(255, 255, 255, 0.85) 1cqw 1.25cqw, transparent 1.35cqw) 0 0 / 11cqw 13cqw,
+    radial-gradient(circle, transparent 0 0.5cqw, rgba(255, 255, 255, 0.75) 0.6cqw 0.8cqw, transparent 0.9cqw) 5cqw 6cqw / 9cqw 10cqw;
+  animation: prize-holo-bubbles 5s linear infinite;
 }
 
 .prize-holo[data-paused] *,
@@ -295,6 +311,19 @@ a {
 @keyframes prize-holo-sway {
   from { transform: translate(-6%, -4%); }
   to { transform: translate(6%, 4%); }
+}
+
+@keyframes prize-holo-rise {
+  from { transform: translateY(0); }
+  to { transform: translateY(-16.66%); }
+}
+
+@keyframes prize-holo-dots {
+  to { background-position: 2.6cqw 0, 3.9cqw 1.3cqw; }
+}
+
+@keyframes prize-holo-bubbles {
+  to { background-position: 0 -13cqw, 5cqw -4cqw; }
 }
 
 /* Packet paper with the hero's dot texture. It has to be white for screen to

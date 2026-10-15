@@ -10,7 +10,7 @@ interface SuccessMessageProps {
 }
 
 export default function SuccessMessage({ amount, onReset }: SuccessMessageProps) {
-  const { total, basePool } = useDonations();
+  const { total } = useDonations();
 
   return (
     <div role="status" className="flex flex-col items-center gap-8 text-center">
@@ -23,7 +23,7 @@ export default function SuccessMessage({ amount, onReset }: SuccessMessageProps)
           {amount > 0 ? `${formatSats(amount)} just landed in the pool.` : "Your sats just landed in the pool."}
         </p>
         <p className="text-lg text-bark/85">
-          It&apos;s now <strong className="font-semibold tabular-nums">{formatSats(total + basePool)}</strong>, split
+          It&apos;s now <strong className="font-semibold tabular-nums">{formatSats(total)}</strong>, split
           across all five prizes. 🥜
         </p>
       </div>

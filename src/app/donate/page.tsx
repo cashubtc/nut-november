@@ -21,7 +21,7 @@ const PRESETS = [21, 1000, 21000];
 const RELAYS = ["wss://relay.damus.io", "wss://relay.snort.social", "wss://relay.primal.net"];
 
 function Page() {
-  const { total, basePool } = useDonations();
+  const { total } = useDonations();
   const [amount, setAmount] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -94,7 +94,7 @@ function Page() {
     >
       <div className="flex flex-col items-center gap-3">
         <PriceTag>
-          {Math.round(total + basePool).toLocaleString("en-US")}
+          {Math.round(total).toLocaleString("en-US")}
           <span className="font-mono text-base font-bold uppercase tracking-[0.14em] sm:text-xl">sats</span>
         </PriceTag>
         <p className="mt-2 font-mono text-sm font-bold uppercase tracking-[0.16em] text-bark">in the pool now</p>

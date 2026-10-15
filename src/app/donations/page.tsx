@@ -14,14 +14,14 @@ function produce(sats: number) {
 }
 
 export default function Page() {
-  const { allDonations, total, sortedDonations, isLoading, basePool } = useDonations();
+  const { allDonations, total, sortedDonations, isLoading } = useDonations();
   const count = allDonations.length;
 
   return (
     <PacketPage title="The harvest" intro="Every zap to the prize pool, biggest first.">
       <div className="flex flex-col items-center gap-3 text-center">
         <PriceTag>
-          {Math.round(total + basePool).toLocaleString("en-US")}
+          {Math.round(total).toLocaleString("en-US")}
           <span className="font-mono text-base font-bold uppercase tracking-[0.14em] sm:text-xl">sats</span>
         </PriceTag>
         <p className="mt-3 max-w-[44ch] text-lg text-bark-dark text-balance" aria-live="polite">
@@ -29,9 +29,7 @@ export default function Page() {
             "Counting zaps…"
           ) : (
             <>
-              <strong className="font-semibold tabular-nums">{formatSats(total)}</strong> from {count}{" "}
-              {count === 1 ? "donation" : "donations"}, on top of the{" "}
-              <strong className="font-semibold tabular-nums">{formatSats(basePool)}</strong> base pool.
+              From {count} {count === 1 ? "donation" : "donations"} so far.
             </>
           )}
         </p>

@@ -6,7 +6,7 @@ import PrizeCard from "./prize-card/PrizeCard";
 import { prizeCards } from "./prize-card/prizes";
 
 export default function Prizes() {
-  const { prizes, total, basePool } = useDonations();
+  const { prizes, total } = useDonations();
   const phase = usePhase();
   // The form only opens on Nov 1; until then the useful next step is the pool.
   const cta =
@@ -25,11 +25,8 @@ export default function Prizes() {
             The prizes
           </h2>
           <p className="mt-5 max-w-[52ch] text-lg sm:text-xl text-bark-dark/90">
-            Five prizes, paid in sats, from a{" "}
-            <strong className="font-semibold tabular-nums">
-              {formatSats(total + basePool)}
-            </strong>{" "}
-            pool that grows with every donation.
+            Five prizes, paid in sats from a pool built entirely by donations. It&apos;s at{" "}
+            <strong className="font-semibold tabular-nums">{formatSats(total)}</strong> so far.
           </p>
         </div>
 
