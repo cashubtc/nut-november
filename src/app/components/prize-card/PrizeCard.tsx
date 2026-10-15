@@ -283,6 +283,20 @@ export default function PrizeCard({
             <span className="prize-holo-glare" />
           </div>
 
+          {/* A nut under the sticker, drawn only where it has been peeled away */}
+          {peel && (
+            <div
+              aria-hidden
+              className="absolute inset-0"
+              style={{ clipPath: toClipPath(peel.lifted) }}
+            >
+              {/* Centred in the corner the peel uncovers first */}
+              <span className="absolute left-[72%] top-[24%] -translate-x-1/2 -translate-y-1/2 text-[30cqw] leading-none [filter:drop-shadow(0_1.5cqw_2cqw_rgba(67,32,12,0.35))]">
+                {prize.emoji}
+              </span>
+            </div>
+          )}
+
           {/* 2. The sticker: cream paper with black type, screen-blended over the
                  art. Screen keeps light paper light and lets black show the art
                  untouched, so the art only comes through the lettering (and,
