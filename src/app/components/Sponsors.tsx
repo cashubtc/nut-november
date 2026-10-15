@@ -31,7 +31,7 @@ export default function Sponsors() {
           <p className="mt-3 font-mono text-sm font-bold uppercase tracking-[0.14em] text-cream">
             {isLoading
               ? "Counting zaps…"
-              : `In the pool · ${allDonations.length} donations so far`}
+              : `From ${allDonations.length} donations so far`}
           </p>
 
           <div className="mt-10 flex flex-col gap-4 sm:flex-row">

@@ -332,7 +332,7 @@ export default function PrizeCard({
             </div>
 
             <div className="absolute left-[7%] right-[7%] bottom-[5%] flex items-end justify-between gap-[3cqw] border-t-[0.6cqw] border-bark pt-[3cqw]">
-              <Field label="Variety" value={prize.track} />
+              <Field label="Track" value={prize.track} />
               <NuttyStamp />
             </div>
 

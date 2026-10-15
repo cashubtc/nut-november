@@ -122,13 +122,12 @@ export default function Hero() {
               </p>
               <p className="mt-2 font-mono text-sm font-bold uppercase tracking-[0.16em] text-bark">
                 in prizes
-                {status && (
-                  <span className="block sm:inline">
-                    <span className="hidden sm:inline"> · </span>
-                    {status}
-                  </span>
-                )}
               </p>
+              {status && (
+                <p className="font-mono text-sm font-bold uppercase tracking-[0.16em] text-pumpkin-dark">
+                  {status}
+                </p>
+              )}
             </div>
 
             <div className="mt-10 flex flex-col items-center justify-center gap-5 sm:flex-row sm:gap-8">
