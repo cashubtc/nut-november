@@ -9,19 +9,14 @@ export const DATES_LABEL = "Nov 1–30, 2026";
 
 export type Phase =
   | { kind: "upcoming"; days: number }
-  | { kind: "live"; day: number; daysLeft: number }
+  | { kind: "live"; daysLeft: number }
   | { kind: "over" };
 
 const DAY = 86_400_000;
 
 export function phaseAt(now: number): Phase {
   if (now < STARTS_AT) return { kind: "upcoming", days: Math.ceil((STARTS_AT - now) / DAY) };
-  if (now < ENDS_AT)
-    return {
-      kind: "live",
-      day: Math.floor((now - STARTS_AT) / DAY) + 1,
-      daysLeft: Math.ceil((ENDS_AT - now) / DAY),
-    };
+  if (now < ENDS_AT) return { kind: "live", daysLeft: Math.ceil((ENDS_AT - now) / DAY) };
   return { kind: "over" };
 }
 

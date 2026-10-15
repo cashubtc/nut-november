@@ -11,14 +11,14 @@ export default function Prizes() {
   return (
     <section id="prizes" className="bg-cream-deep px-6 py-24">
       <div className="mx-auto max-w-6xl">
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+        <div>
           <h2
             className="text-5xl sm:text-6xl leading-[0.95] text-bark"
             style={{ fontFamily: "var(--font-sauce-tm)" }}
           >
             The prizes
           </h2>
-          <p className="max-w-[34ch] text-lg text-bark-dark/90 sm:text-right">
+          <p className="mt-5 max-w-[52ch] text-lg sm:text-xl text-bark-dark/90">
             Five prizes, paid in sats, from a{" "}
             <strong className="font-semibold tabular-nums">
               {formatSats(total + basePool)}

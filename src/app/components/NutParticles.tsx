@@ -2,11 +2,13 @@
 
 import { useEffect, useRef } from "react";
 import Matter from "matter-js";
-import { drawNut, NUT_KINDS, NutKind } from "./nutShapes";
 
 interface NutParticlesProps {
   heroSectionRef: React.RefObject<HTMLElement>;
 }
+
+// Nut and fall emojis that tumble into the hero
+const NUT_EMOJIS = ["🌰", "🥜", "🍂", "🎃", "🍁", "🔩"];
 
 export default function NutParticles({ heroSectionRef }: NutParticlesProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -23,7 +25,7 @@ export default function NutParticles({ heroSectionRef }: NutParticlesProps) {
     if (hasStartedRef.current || !heroSectionRef.current) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     hasStartedRef.current = true;
-    const kinds = new WeakMap<Matter.Body, NutKind>();
+    const emojis = new WeakMap<Matter.Body, string>();
 
     const heroSection = heroSectionRef.current;
     const getHeroBounds = () => {
@@ -107,7 +109,10 @@ export default function NutParticles({ heroSectionRef }: NutParticlesProps) {
         ctx.save();
         ctx.translate(nut.position.x, nut.position.y);
         ctx.rotate(nut.angle);
-        drawNut(ctx, kinds.get(nut) ?? "acorn", (nut.circleRadius || 25) * 1.05);
+        ctx.font = `${(nut.circleRadius || 25) * 2.2}px Arial`;
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText(emojis.get(nut) ?? "🌰", 0, 0);
         ctx.restore();
       });
     };
@@ -166,7 +171,7 @@ export default function NutParticles({ heroSectionRef }: NutParticlesProps) {
         },
       });
 
-      kinds.set(nut, NUT_KINDS[Math.floor(Math.random() * NUT_KINDS.length)]);
+      emojis.set(nut, NUT_EMOJIS[Math.floor(Math.random() * NUT_EMOJIS.length)]);
 
       Matter.World.add(engine.world, nut);
       nutsRef.current.push(nut);

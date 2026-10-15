@@ -13,7 +13,6 @@ import {
 import { peelAt, Point, toClipPath } from "./peelGeometry";
 import { playSnap, PeelVoice, startPeel } from "./peelSound";
 import type { PrizeCardData } from "./prizes";
-import Acorn from "../Acorn";
 
 // Seed-packet silhouette: a pinked (zig-zag) top edge where the packet was
 // cut, and rounded bottom corners. Drawn on a 500×640 box, which matches the
@@ -424,8 +423,8 @@ function NuttyStamp() {
   const ringId = useId();
   return (
     <div className="relative w-[17cqw] shrink-0 aspect-square rotate-6 rounded-full border-[0.6cqw] border-cream-deep bg-bark outline outline-[0.4cqw] outline-bark">
-      <span className="absolute inset-0 flex items-center justify-center">
-        <Acorn className="w-[38%]" />
+      <span className="absolute inset-0 flex items-center justify-center text-[4.6cqw]">
+        🌰
       </span>
       <svg viewBox="0 0 100 100" className="prize-stamp-ring absolute inset-0">
         <defs>
