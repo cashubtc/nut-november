@@ -2,10 +2,12 @@
 
 import { useSyncExternalStore } from "react";
 
-// Nut November 2026 runs for the whole of November (UTC).
+// Nut November 2026 runs Nov 1–27 (UTC).
 export const STARTS_AT = Date.UTC(2026, 10, 1);
-export const ENDS_AT = Date.UTC(2026, 11, 1); // submissions close at the end of Nov 30
-export const DATES_LABEL = "Nov 1–30, 2026";
+export const ENDS_AT = Date.UTC(2026, 10, 28); // submissions close at the end of Nov 27
+/** Shown wherever the deadline is spelled out. */
+export const DEADLINE_LABEL = "Nov 27, 23:59 UTC";
+export const DATES_LABEL = "Nov 1–27, 2026";
 
 export type Phase =
   | { kind: "upcoming"; days: number }
@@ -40,5 +42,6 @@ export function usePhase(): Phase | null {
 
 /** "437,335 sats" — prize money is always shown in sats. */
 export function formatSats(n: number) {
-  return `${Math.round(n).toLocaleString("en-US")} sats`;
+  const r = Math.round(n);
+  return `${r.toLocaleString("en-US")} ${r === 1 ? "sat" : "sats"}`;
 }

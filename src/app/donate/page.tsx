@@ -2,147 +2,186 @@
 
 import { nutnovemberPubkey } from "@/pubkey";
 import { finalizeEvent, generateSecretKey, nip19, nip57 } from "nostr-tools";
-import { useRef, useState } from "react";
-import BackToHome from "../components/BackToHome";
+import Link from "next/link";
+import { FormEvent, useState } from "react";
+import PacketPage, {
+  PriceTag,
+  field,
+  fieldError,
+  fieldHint,
+  fieldLabel,
+  primaryButton,
+} from "../components/PacketPage";
+import { useDonations } from "../context/DonationsContext";
 import SuccessMessage from "./components/SuccessMessage";
 import InvoiceDisplay from "./components/InvoiceDisplay";
 import { useReceiptSubscription } from "./hooks/useReceiptSubscription";
 
+const PRESETS = [21, 1000, 21000];
+const RELAYS = ["wss://relay.damus.io", "wss://relay.snort.social", "wss://relay.primal.net"];
+
 function Page() {
-  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const { total, basePool } = useDonations();
+  const [amount, setAmount] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [invoice, setInvoice] = useState<string | null>(null);
   const [receiptId, setReceiptId] = useState<string | null>(null);
-
-  const amountRef = useRef<HTMLInputElement>(null);
   const isPaid = useReceiptSubscription(receiptId);
 
-  async function handleSubmit() {
-    setIsSubmitting(true);
-    setInvoice(null);
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    if (isSubmitting) return;
 
-    const amount = amountRef.current?.value;
-    if (!amount) {
+    const sats = Number(amount);
+    if (!Number.isInteger(sats) || sats < 1) {
+      setError("Enter a whole number of sats, 1 or more.");
       return;
     }
 
-    const sk = generateSecretKey();
+    setError(null);
+    setIsSubmitting(true);
 
     const zap = nip57.makeZapRequest({
       pubkey: nutnovemberPubkey,
-      amount: Number(amount) * 1000,
-      relays: [
-        "wss://relay.damus.io",
-        "wss://relay.snort.social",
-        "wss://relay.primal.net",
-      ],
+      amount: sats * 1000,
+      relays: RELAYS,
     });
-    const signed = finalizeEvent(zap, sk);
-    setReceiptId(signed.id);
+    const signed = finalizeEvent(zap, generateSecretKey());
     const npub = nip19.npubEncode(nutnovemberPubkey);
 
     try {
-      const req = await fetch(
-        `https://npubx.cash/.well-known/lnurlp/${npub}?amount=${
-          Number(amount) * 1000
-        }&nostr=${encodeURIComponent(JSON.stringify(signed))}`
+      const res = await fetch(
+        `https://npubx.cash/.well-known/lnurlp/${npub}?amount=${sats * 1000}&nostr=${encodeURIComponent(
+          JSON.stringify(signed)
+        )}`
       );
-
-      const data = (await req.json()) as { pr: string };
-
+      const data = (await res.json()) as { pr?: string; reason?: string };
+      if (!res.ok || !data.pr) throw new Error(data.reason ?? `HTTP ${res.status}`);
+      setReceiptId(signed.id);
       setInvoice(data.pr);
-    } catch (error) {
-      console.error("Error fetching invoice:", error);
+    } catch (err) {
+      console.error("Error fetching invoice:", err);
+      setError("We couldn't create an invoice. Check your connection and try again.");
     } finally {
       setIsSubmitting(false);
     }
   }
 
-  function handleCopyInvoice() {
-    if (invoice) {
-      navigator.clipboard.writeText(invoice);
-    }
-  }
-
   function handleBack() {
     setInvoice(null);
-    setIsSubmitting(false);
-    if (amountRef.current) {
-      amountRef.current.value = "";
-    }
+    setReceiptId(null);
   }
 
   function handleReset() {
     setInvoice(null);
-    setIsSubmitting(false);
     setReceiptId(null);
-    if (amountRef.current) {
-      amountRef.current.value = "";
-    }
+    setAmount("");
+  }
+
+  if (isPaid) {
+    return (
+      <PacketPage title="Thank you!">
+        <SuccessMessage amount={Number(amount)} onReset={handleReset} />
+      </PacketPage>
+    );
   }
 
   return (
-    <section className="relative flex min-h-screen items-center justify-center overflow-hidden bg-pumpkin p-6 sm:p-8 md:p-12 lg:p-16">
-      <div className="relative z-20 max-w-6xl w-full flex flex-col items-center">
-        <BackToHome />
-        <div className="bg-cream border-4 border-bark card-sticker p-8 sm:p-12 md:p-16 lg:p-20 w-full">
-          <div className="text-center mb-8">
-            <h1
-              className="text-[40px] sm:text-[60px] md:text-[80px] lg:text-[100px] font-bold leading-[0.85] tracking-wider text-pumpkin mb-4"
-              style={{
-                fontFamily: "var(--font-sauce-tm)",
-                letterSpacing: "0.05em",
-              }}
-            >
-              DONATE TO THE PRIZE POOL
-            </h1>
-            <p
-              className="text-xl sm:text-2xl md:text-3xl text-gray-500 mb-8 uppercase"
-              style={{ fontFamily: "var(--font-sans)" }}
-            >
-              Share your nuts with the community
-            </p>
-          </div>
+    <PacketPage
+      title="Grow the prize pool"
+      intro="Every sat you send is split evenly across the five prizes."
+    >
+      <div className="flex flex-col items-center gap-3">
+        <PriceTag>
+          {Math.round(total + basePool).toLocaleString("en-US")}
+          <span className="font-mono text-base font-bold uppercase tracking-[0.14em] sm:text-xl">sats</span>
+        </PriceTag>
+        <p className="mt-2 font-mono text-sm font-bold uppercase tracking-[0.16em] text-bark">in the pool now</p>
+      </div>
 
-          {isPaid ? (
-            <SuccessMessage onReset={handleReset} />
-          ) : invoice ? (
-            <InvoiceDisplay
-              invoice={invoice}
-              onCopyInvoice={handleCopyInvoice}
-              onBack={handleBack}
-            />
-          ) : (
-            <>
-              <div className="flex flex-col gap-2">
-                <label
-                  htmlFor="amount"
-                  className="text-lg font-bold text-pumpkin font-mono"
-                >
-                  Amount
-                </label>
+      <div className="mx-auto mt-12 max-w-md">
+        {invoice ? (
+          <InvoiceDisplay invoice={invoice} amount={Number(amount)} onBack={handleBack} />
+        ) : (
+          <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-6">
+            <fieldset>
+              <legend className={fieldLabel}>Pick an amount</legend>
+              <div className="mt-3 grid grid-cols-3 gap-3">
+                {PRESETS.map((p) => {
+                  const on = amount === String(p);
+                  return (
+                    <button
+                      key={p}
+                      type="button"
+                      aria-pressed={on}
+                      onClick={() => {
+                        setAmount(String(p));
+                        setError(null);
+                      }}
+                      className={`border-4 border-bark px-2 py-3 font-mono text-base font-bold tabular-nums transition-colors sm:text-lg ${
+                        on ? "bg-bark text-cream" : "bg-cream text-bark hover:bg-white"
+                      }`}
+                    >
+                      {p.toLocaleString("en-US")}
+                    </button>
+                  );
+                })}
+              </div>
+            </fieldset>
+
+            <div className="flex flex-col gap-2">
+              <label htmlFor="amount" className={fieldLabel}>
+                Or type your own
+              </label>
+              <div className="relative">
                 <input
-                  type="number"
-                  ref={amountRef}
                   id="amount"
                   name="amount"
-                  className="border-4 border-pumpkin bg-white p-4 text-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-pumpkin focus:ring-offset-2 font-mono"
-                  required
+                  type="number"
+                  inputMode="numeric"
+                  min={1}
+                  step={1}
+                  value={amount}
+                  onChange={(e) => {
+                    setAmount(e.target.value);
+                    setError(null);
+                  }}
+                  aria-invalid={error ? true : undefined}
+                  aria-describedby={error ? "amount-error" : "amount-hint"}
+                  className={`${field} pr-20 font-mono tabular-nums`}
                 />
+                <span
+                  aria-hidden
+                  className="pointer-events-none absolute inset-y-0 right-5 flex items-center font-mono text-lg font-bold text-bark"
+                >
+                  sats
+                </span>
               </div>
+              {error ? (
+                <p id="amount-error" role="alert" className={fieldError}>
+                  {error}
+                </p>
+              ) : (
+                <p id="amount-hint" className={fieldHint}>
+                  You&apos;ll get a Lightning invoice to pay from any wallet.
+                </p>
+              )}
+            </div>
 
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                onClick={() => handleSubmit()}
-                className="inline-block px-10 py-5 btn-sticker bg-pumpkin text-white font-bold border-4 border-pumpkin hover:bg-pumpkin-dark disabled:opacity-50 disabled:cursor-not-allowed text-lg font-mono mt-4 self-center"
-              >
-                {isSubmitting ? "Submitting..." : "Submit"}
-              </button>
-            </>
-          )}
-        </div>
+            <button type="submit" disabled={isSubmitting} className={`${primaryButton} mt-2 self-center`}>
+              {isSubmitting ? "Creating invoice…" : "Get invoice"}
+            </button>
+          </form>
+        )}
       </div>
-    </section>
+
+      <p className="mt-12 text-center">
+        <Link href="/donations" className="font-semibold text-bark underline decoration-2 underline-offset-4 hover:text-pumpkin-dark">
+          See every donation so far
+        </Link>
+      </p>
+    </PacketPage>
   );
 }
 

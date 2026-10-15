@@ -19,7 +19,7 @@ export default function Sponsors() {
             Grow the prize pool
           </h2>
           <p className="mt-6 max-w-[46ch] text-lg leading-relaxed text-cream">
-            Donate ecash or bitcoin and it&apos;s split evenly across all five prizes.
+            Send sats over Lightning and they&apos;re split evenly across all five prizes.
           </p>
 
           <p

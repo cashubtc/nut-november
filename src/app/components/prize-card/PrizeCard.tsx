@@ -427,7 +427,7 @@ function Word({ text, className }: { text: string; className: string }) {
 function Field({ label, value }: { label: string; value: string }) {
   return (
     <div className="min-w-0">
-      <p className="font-mono font-bold uppercase tracking-[0.16em] text-bark text-[2.3cqw]">
+      <p className="font-mono font-bold uppercase tracking-[0.14em] text-bark text-[3.2cqw]">
         {label}
       </p>
       <p
@@ -456,7 +456,7 @@ function NuttyStamp() {
           fill="currentColor"
           style={{ fontFamily: "var(--font-geist-mono)", fontSize: "10.5px", fontWeight: 700, letterSpacing: "1.2px" }}
         >
-          <textPath href={`#${ringId}`}>100% NUTTY • CERTIFIED ORGANIC •</textPath>
+          <textPath href={`#${ringId}`}>100% NUTTY 🌰 CERTIFIED ORGANIC 🌰</textPath>
         </text>
       </svg>
     </div>

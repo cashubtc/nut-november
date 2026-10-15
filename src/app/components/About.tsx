@@ -9,12 +9,12 @@ export default function About() {
             className="text-5xl sm:text-6xl leading-[0.95] text-bark text-balance"
             style={display}
           >
-            Thirty days to build on Cashu
+            Four weeks to build on Cashu
           </h2>
           <div className="mt-8 max-w-[62ch] space-y-5 text-lg sm:text-xl leading-relaxed text-bark-dark/90">
             <p>
               Nut November is a community hackathon for Cashu, the open-source
-              ecash protocol for Bitcoin. For the whole of November, developers,
+              ecash protocol for Bitcoin. From November 1 to 27, developers,
               designers and writers build wallets, mints, tools and guides, and
               the best work wins sats.
             </p>

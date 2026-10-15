@@ -5,6 +5,8 @@ import { ReactNode } from "react";
 
 const shareText = "Cashu builders are going nuts this November. https://nutnovember.org/ #NutNovember";
 const shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`;
+const nostrUrl =
+  "https://primal.net/p/nprofile1qqs0y3tvskgs9gpgxxu5ahgz3fmms3rzmxt504qceqtz4a6pdgfwlkghwl6j8";
 
 const link = "font-semibold text-pumpkin underline decoration-2 hover:text-pumpkin-dark";
 
@@ -22,17 +24,21 @@ const steps: { title: string; body: ReactNode }[] = [
     body: (
       <>
         Post updates on Nostr or X with #NutNovember so the community can follow along.{" "}
+        <a href={nostrUrl} target="_blank" rel="noopener noreferrer" className={link}>
+          Follow on Nostr
+        </a>{" "}
+        or{" "}
         <a href={shareUrl} target="_blank" rel="noopener noreferrer" className={link}>
-          Post on X
+          post on X
         </a>
       </>
     ),
   },
   {
-    title: "Submit by Nov 30",
+    title: "Submit by Nov 27",
     body: (
       <>
-        Send your project in before the end of November 30.{" "}
+        Send your project in by November 27 at 23:59 UTC.{" "}
         <Link href="/form" className={link}>
           Open the submission form
         </Link>

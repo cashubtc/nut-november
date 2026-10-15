@@ -33,6 +33,9 @@ html {
 }
 
 body {
+  /* The peel flap and foil layers reach past their cards; never let them
+     widen the page. */
+  overflow-x: clip;
   background: var(--cream);
   color: var(--bark-dark);
   font-family: var(--font-poppins), system-ui, sans-serif;

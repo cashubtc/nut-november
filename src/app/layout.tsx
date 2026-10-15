@@ -36,7 +36,7 @@ export const metadata: Metadata = {
         url: "https://nutnovember.org/opengraph-2026.jpg",
         width: 2400,
         height: 1260,
-        alt: "Nut November 2026, a month-long hackathon for Cashu builders, November 1 to 30",
+        alt: "Nut November 2026, a month-long hackathon for Cashu builders, November 1 to 27",
       },
     ],
     locale: "en_US",
@@ -60,6 +60,12 @@ export default function RootLayout({
       <body
         className={`${geistMono.variable} ${sauceTM.variable} ${poppins.variable} antialiased`}
       >
+        <a
+          href="#main"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:bg-bark focus:px-5 focus:py-3 focus:font-mono focus:font-bold focus:text-cream"
+        >
+          Skip to content
+        </a>
         <DonationsProvider>
           {children}
         </DonationsProvider>

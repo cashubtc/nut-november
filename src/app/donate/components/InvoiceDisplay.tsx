@@ -1,78 +1,74 @@
 import { useEffect, useRef, useState } from "react";
 import QRCodeSVG from "react-qr-code";
+import { primaryButton, secondaryButton } from "../../components/PacketPage";
+import { formatSats } from "../../lib/hackathon";
 
 interface InvoiceDisplayProps {
   invoice: string;
-  onCopyInvoice: () => void;
+  amount: number;
   onBack: () => void;
 }
 
-export default function InvoiceDisplay({
-  invoice,
-  onCopyInvoice,
-  onBack,
-}: InvoiceDisplayProps) {
-  const [copied, setCopied] = useState(false);
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+export default function InvoiceDisplay({ invoice, amount, onBack }: InvoiceDisplayProps) {
+  const [copied, setCopied] = useState<"yes" | "failed" | null>(null);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  useEffect(() => {
-    return () => {
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-      }
-    };
+  useEffect(() => () => {
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
   }, []);
 
-  const handleCopy = () => {
-    onCopyInvoice();
-    setCopied(true);
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(invoice);
+      setCopied("yes");
+    } catch {
+      setCopied("failed");
     }
-    timeoutRef.current = setTimeout(() => {
-      setCopied(false);
-    }, 2000);
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    timeoutRef.current = setTimeout(() => setCopied(null), 2500);
   };
 
   return (
-    <div className="flex flex-col items-center gap-6">
-      {/* Waiting for payment indicator */}
-      <p
-        className="text-lg sm:text-xl text-gray-600 font-mono animate-pulse"
-        style={{ fontFamily: "var(--font-sans)" }}
-      >
-        Waiting for payment...
+    <div className="flex flex-col items-center gap-6 text-center">
+      <p className="text-lg font-medium text-bark">
+        Scan with any Lightning wallet to send{" "}
+        <strong className="font-semibold tabular-nums">{formatSats(amount)}</strong>.
       </p>
 
-      <div className="bg-white p-6 border-4 border-pumpkin">
+      <div className="w-full max-w-[300px] border-4 border-bark bg-white p-4">
         <QRCodeSVG
           value={invoice}
           size={256}
+          fgColor="#43200C"
           style={{ height: "auto", maxWidth: "100%", width: "100%" }}
-          viewBox={`0 0 256 256`}
+          viewBox="0 0 256 256"
         />
       </div>
-      <div className="bg-green-100 border-4 border-green-500 p-4 text-green-800 font-mono text-sm break-all max-w-full">
-        {invoice}
-      </div>
-      <div className="flex gap-4 flex-wrap justify-center">
-        <button
-          onClick={handleCopy}
-          className={`inline-block px-8 py-4 text-white font-bold border-4 text-lg font-mono transition-all ${
-            copied
-              ? "bg-green-500 border-green-500 hover:bg-green-600"
-              : "bg-pumpkin border-pumpkin hover:bg-pumpkin-dark"
-          }`}
-        >
-          {copied ? "Copied!" : "Copy Invoice"}
-        </button>
-        <button
-          onClick={onBack}
-          className="inline-block px-8 py-4 btn-sticker bg-gray-500 text-white font-bold border-4 border-gray-500 hover:bg-gray-600 text-lg font-mono"
-        >
-          Back
+
+      <p role="status" className="flex items-center gap-2 font-mono text-base font-bold text-bark">
+        <span aria-hidden className="inline-block animate-pulse motion-reduce:animate-none">🌰</span>
+        Waiting for payment…
+      </p>
+
+      <div className="flex w-full flex-col items-center gap-4 sm:flex-row sm:justify-center">
+        <a href={`lightning:${invoice}`} className={primaryButton}>
+          Open in wallet
+        </a>
+        <button type="button" onClick={handleCopy} className={secondaryButton}>
+          {copied === "yes" ? "Copied!" : copied === "failed" ? "Copy failed" : "Copy invoice"}
         </button>
       </div>
+      <span aria-live="polite" className="sr-only">
+        {copied === "yes" ? "Invoice copied" : copied === "failed" ? "Couldn't copy the invoice" : ""}
+      </span>
+
+      <button
+        type="button"
+        onClick={onBack}
+        className="font-mono text-base font-bold text-bark underline decoration-2 underline-offset-4 hover:text-pumpkin-dark"
+      >
+        Change the amount
+      </button>
     </div>
   );
 }
