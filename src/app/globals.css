@@ -324,11 +324,6 @@ a {
   to { background-position: 0 -13cqw, 5cqw -4cqw; }
 }
 
-/* The site's hard "sticker" shadow, following the packet silhouette */
-.prize-card {
-  filter: drop-shadow(8px 8px 0 var(--bark));
-}
-
 /* Packet paper with the hero's dot texture. It has to be white for screen to
    hide the art completely; .prize-paper-tint warms it to cream afterwards. */
 .prize-sticker {

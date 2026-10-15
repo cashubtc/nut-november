@@ -51,7 +51,10 @@ export default function PrizeCard({
   const outlineId = `word-outline-${useId().replace(/[^\w-]/g, "")}`;
   const [size, setSize] = useState({ w: 0, h: 0 });
   const [corner, setCorner] = useState<Point | null>(null);
-  const [tilt, setTilt] = useState({ x: 0, y: 0, active: false });
+  // Tilt is written straight to the DOM once per frame: re-rendering React on
+  // every mouse move made Safari stutter.
+  const cardRef = useRef<HTMLDivElement>(null);
+  const tiltFrame = useRef<number | null>(null);
   const [visible, setVisible] = useState(false);
 
   const cornerRef = useRef<Point | null>(null);
@@ -63,7 +66,6 @@ export default function PrizeCard({
   } | null>(null);
   const anim = useRef<number | null>(null);
   const hold = useRef<number | null>(null);
-  const [peeling, setPeeling] = useState(false);
 
   const rest = useCallback(
     (w: number): Point => ({ x: w - w * 0.075, y: w * 0.075 }),
@@ -107,6 +109,23 @@ export default function PrizeCard({
     },
     []
   );
+
+  const applyTilt = (x: number, y: number, transition: string) => {
+    const card = cardRef.current;
+    const scene = sceneRef.current;
+    if (!card || !scene) return;
+    card.style.transition = transition;
+    card.style.transform = `rotateX(${x}deg) rotateY(${y}deg)`;
+    scene.style.setProperty("--mx", `${50 + y * 3}%`);
+    scene.style.setProperty("--my", `${50 - x * 3}%`);
+    scene.style.setProperty("--hx", `${y * 1.5}%`);
+    scene.style.setProperty("--hy", `${-x * 1.5}%`);
+  };
+
+  const cancelTiltFrame = () => {
+    if (tiltFrame.current !== null) cancelAnimationFrame(tiltFrame.current);
+    tiltFrame.current = null;
+  };
 
   const local = (e: ReactPointerEvent): Point => {
     const r = sceneRef.current!.getBoundingClientRect();
@@ -175,7 +194,8 @@ export default function PrizeCard({
     e.preventDefault();
     stopAnim();
     e.currentTarget.setPointerCapture(e.pointerId);
-    setTilt({ x: 0, y: 0, active: false });
+    cancelTiltFrame();
+    applyTilt(0, 0, "none");
     const p = local(e);
     const c = cornerRef.current ?? rest(size.w);
     drag.current = {
@@ -184,7 +204,6 @@ export default function PrizeCard({
       travelled: 0,
       voice: startPeel(),
     };
-    setPeeling(true);
   };
 
   const onHandleMove = (e: ReactPointerEvent<HTMLButtonElement>) => {
@@ -202,7 +221,7 @@ export default function PrizeCard({
     const d = drag.current;
     if (!d) return;
     drag.current = null;
-    setPeeling(false);
+    applyTilt(0, 0, "transform 600ms cubic-bezier(.2,.8,.2,1)");
     d.voice?.stop();
     if (d.travelled < 4) autoPeel();
     else springBack();
@@ -213,7 +232,16 @@ export default function PrizeCard({
     const r = e.currentTarget.getBoundingClientRect();
     const nx = (e.clientX - r.left) / r.width - 0.5;
     const ny = (e.clientY - r.top) / r.height - 0.5;
-    setTilt({ x: -ny * 2 * MAX_TILT, y: nx * 2 * MAX_TILT, active: true });
+    cancelTiltFrame();
+    tiltFrame.current = requestAnimationFrame(() => {
+      tiltFrame.current = null;
+      applyTilt(-ny * 2 * MAX_TILT, nx * 2 * MAX_TILT, "transform 120ms cubic-bezier(.2,.8,.2,1)");
+    });
+  };
+
+  const onSceneLeave = () => {
+    cancelTiltFrame();
+    if (!drag.current) applyTilt(0, 0, "transform 600ms cubic-bezier(.2,.8,.2,1)");
   };
 
   const peel = size.w && corner ? peelAt(size.w, size.h, corner) : null;
@@ -229,26 +257,18 @@ export default function PrizeCard({
       ref={sceneRef}
       className="prize-card-scene relative w-full aspect-[50/64] [perspective:1100px] select-none"
       onPointerMove={onSceneMove}
-      onPointerLeave={() => setTilt({ x: 0, y: 0, active: false })}
-      style={
-        {
-          "--mx": `${50 + tilt.y * 3}%`,
-          "--my": `${50 - tilt.x * 3}%`,
-          "--hx": `${tilt.y * 1.5}%`,
-          "--hy": `${-tilt.x * 1.5}%`,
-          containerType: "inline-size",
-        } as CSSProperties
-      }
+      onPointerLeave={onSceneLeave}
+      style={{ containerType: "inline-size" }}
     >
-      <div
-        className="prize-card relative h-full w-full"
-        style={{
-          transform: `rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`,
-          transition: peeling
-            ? "none"
-            : `transform ${tilt.active ? 120 : 600}ms cubic-bezier(.2,.8,.2,1)`,
-        }}
-      >
+      <div ref={cardRef} className="prize-card relative h-full w-full">
+        {/* Hard sticker shadow: a bark copy of the silhouette, offset behind.
+            A plain shape instead of filter: drop-shadow, which Safari redraws
+            on every frame while the card tilts. */}
+        <div
+          aria-hidden
+          className="absolute inset-0 translate-x-[8px] translate-y-[8px] bg-bark"
+          style={shapeMask}
+        />
         {/* Everything that lives inside the card silhouette */}
         <div className="absolute inset-0 overflow-hidden" style={shapeMask}>
           {/* 1. The art: a foil finish unique to each prize (see globals.css). It
@@ -302,7 +322,7 @@ export default function PrizeCard({
                 <feComposite in2="ring" operator="in" />
               </filter>
             </svg>
-            <div className="absolute inset-0" style={{ filter: `url(#${outlineId})` }}>
+            <div className="absolute inset-0 [transform:translateZ(0)]" style={{ filter: `url(#${outlineId})` }}>
               <Word text={prize.word} className="text-bark" />
             </div>
 
