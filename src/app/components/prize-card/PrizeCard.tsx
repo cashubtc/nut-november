@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import {
   CSSProperties,
   PointerEvent as ReactPointerEvent,
@@ -48,6 +47,8 @@ export default function PrizeCard({
   amount: number;
 }) {
   const sceneRef = useRef<HTMLDivElement>(null);
+  // React ids contain characters that break CSS url(#…) references
+  const outlineId = `word-outline-${useId().replace(/[^\w-]/g, "")}`;
   const [size, setSize] = useState({ w: 0, h: 0 });
   const [corner, setCorner] = useState<Point | null>(null);
   const [tilt, setTilt] = useState({ x: 0, y: 0, active: false });
@@ -260,18 +261,6 @@ export default function PrizeCard({
             <span className="prize-holo-bands" />
             <span className="prize-holo-foil" />
             <span className="prize-holo-glare" />
-            {prize.art && (
-              <div className="absolute left-[10%] top-[26%] w-[80%] aspect-square">
-                <Image
-                  src={prize.art}
-                  alt=""
-                  fill
-                  sizes="(min-width: 1024px) 320px, 80vw"
-                  className="object-contain"
-                  draggable={false}
-                />
-              </div>
-            )}
           </div>
 
           {/* 2. The sticker: cream paper with black type, screen-blended over the
@@ -301,8 +290,21 @@ export default function PrizeCard({
             style={{ clipPath: keptClip }}
             aria-hidden
           >
-            {/* Chunky outline around the knockout word, like the hero type */}
-            <Word text={prize.word} className="prize-word-outline" />
+            {/* One chunky outline around the whole word. The filter grows the
+                letters' combined silhouette and keeps only the ring outside it,
+                so overlapping letters merge instead of showing inner outlines. */}
+            <svg width="0" height="0" className="absolute" aria-hidden>
+              <filter id={outlineId} x="-5%" y="-20%" width="110%" height="140%">
+                <feMorphology in="SourceAlpha" operator="dilate" radius={Math.max(1.5, size.w * 0.007)} result="fat" />
+                <feMorphology in="SourceAlpha" operator="erode" radius="0.6" result="thin" />
+                <feComposite in="fat" in2="thin" operator="out" result="ring" />
+                <feFlood floodColor="#5C2E12" />
+                <feComposite in2="ring" operator="in" />
+              </filter>
+            </svg>
+            <div className="absolute inset-0" style={{ filter: `url(#${outlineId})` }}>
+              <Word text={prize.word} className="text-bark" />
+            </div>
 
             {/* The prize money, as a big price tag */}
             <div className="absolute inset-x-0 top-[35%] flex justify-center">
