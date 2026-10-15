@@ -7,8 +7,6 @@ export interface PrizeCardData {
   title: string;
   blurb: string;
   track: string;
-  /** Optional illustration drawn over the foil. */
-  art?: string;
   /** Foil finish behind the knockout word; styled in globals.css. */
   finish: "gold" | "chrome" | "swirl" | "halftone" | "aurora";
 }

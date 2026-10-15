@@ -334,11 +334,6 @@ a {
   mix-blend-mode: multiply;
 }
 
-.prize-word-outline {
-  color: transparent;
-  -webkit-text-stroke: 0.7cqw var(--bark);
-}
-
 .prize-card-sheen {
   background: radial-gradient(
     circle at var(--mx, 50%) var(--my, 50%),
