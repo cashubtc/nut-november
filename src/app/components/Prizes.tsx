@@ -1,48 +1,47 @@
 "use client";
 import Link from "next/link";
 import { useDonations } from "../context/DonationsContext";
+import { formatSats } from "../lib/hackathon";
 import PrizeCard from "./prize-card/PrizeCard";
 import { prizeCards } from "./prize-card/prizes";
 
 export default function Prizes() {
-  const { prizes } = useDonations();
+  const { prizes, total, basePool } = useDonations();
 
   return (
-    <section
-      id="prizes"
-      className="py-20 px-6 bg-cream border-t border-bark"
-    >
-      <div className="max-w-7xl mx-auto flex flex-col md:flex-row">
-        {/* Mobile Title - shows on top for mobile only */}
-        <h2 className="text-base font-semibold text-bark/70 font-mono tracking-[0.2em] mb-6 md:hidden">
-          PRIZES
-        </h2>
-        {/* Vertical Label - hidden on mobile, shown on desktop */}
-        <div className="hidden md:flex flex-shrink-0 w-16 sm:w-20 md:w-24 items-center justify-center">
-          <h2 className="text-sm sm:text-base md:text-lg font-semibold text-bark/70 font-mono tracking-[0.2em] whitespace-nowrap transform -rotate-90 origin-center">
-            PRIZES
+    <section id="prizes" className="bg-cream-deep px-6 py-24">
+      <div className="mx-auto max-w-6xl">
+        <div>
+          <h2
+            className="text-5xl sm:text-6xl leading-[0.95] text-bark"
+            style={{ fontFamily: "var(--font-sauce-tm)" }}
+          >
+            The prizes
           </h2>
-        </div>
-        {/* Main Content */}
-        <div className="flex-1 md:pl-12 lg:pl-16">
-          <p className="mb-10 font-mono text-bark/70 text-sm sm:text-base">
-            Five packets. Five winners. Grab a corner and peel ↗
+          <p className="mt-5 max-w-[52ch] text-lg sm:text-xl text-bark-dark/90">
+            Five prizes, paid in sats, from a{" "}
+            <strong className="font-semibold tabular-nums">
+              {formatSats(total + basePool)}
+            </strong>{" "}
+            pool that grows with every donation.
           </p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-10 gap-y-14 mb-16">
-            {prizeCards.map((card) => (
-              <div key={card.key} className="mx-auto w-full max-w-[340px]">
-                <PrizeCard prize={card} amount={prizes[card.key]} />
-              </div>
-            ))}
-          </div>
-          <div className="text-center">
-            <Link
-              href="/form"
-              className="inline-block px-10 py-5 btn-sticker bg-white text-pumpkin font-bold border-4 border-pumpkin hover:bg-pumpkin-wash text-lg font-mono"
-            >
-              Submit Your Project
-            </Link>
-          </div>
+        </div>
+
+        <ul className="mt-14 flex flex-wrap justify-center gap-x-10 gap-y-14">
+          {prizeCards.map((card) => (
+            <li key={card.key} className="w-full max-w-[340px]">
+              <PrizeCard prize={card} amount={prizes[card.key]} />
+            </li>
+          ))}
+        </ul>
+
+        <div className="mt-16 text-center">
+          <Link
+            href="/form"
+            className="inline-block px-10 py-5 btn-sticker bg-white text-pumpkin font-bold border-4 border-pumpkin hover:bg-pumpkin-wash text-lg font-mono"
+          >
+            Submit your project
+          </Link>
         </div>
       </div>
     </section>
