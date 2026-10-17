@@ -14,15 +14,28 @@ import { nutnovemberPubkey } from "@/pubkey";
 // donations stay out of the pool.
 const DONATIONS_SINCE = Math.floor(Date.UTC(2026, 0, 1) / 1000);
 
-// The pool is only what people donate, split evenly across the prizes.
 const PRIZE_KEYS = ["golden", "hardest", "nuttiest", "design", "fresh"] as const;
 
 export type PrizeKey = (typeof PRIZE_KEYS)[number];
 
+// OpenCash's 400,000 sat commitment seeds each prize. Donations then add to
+// it, split evenly across the prizes.
+const SPONSOR_PRIZES: Record<PrizeKey, number> = {
+  golden: 150_000,
+  hardest: 100_000,
+  nuttiest: 50_000,
+  design: 50_000,
+  fresh: 50_000,
+};
+const SPONSOR_TOTAL = Object.values(SPONSOR_PRIZES).reduce((sum, amount) => sum + amount, 0);
+
 interface DonationsContextType {
   donations: number[];
   allDonations: number[];
+  /** The whole pool: the sponsor commitment plus donations. */
   total: number;
+  /** Donations alone. */
+  donationTotal: number;
   sortedDonations: number[];
   isLoading: boolean;
   prizes: Record<PrizeKey, number>;
@@ -94,10 +107,13 @@ export function DonationsProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const allDonations = donations;
-  const total = allDonations.reduce((sum, amount) => sum + amount, 0);
+  const donationTotal = allDonations.reduce((sum, amount) => sum + amount, 0);
+  const total = SPONSOR_TOTAL + donationTotal;
   const sortedDonations = [...allDonations].sort((a, b) => b - a);
-  const prizeShare = Math.floor(total / PRIZE_KEYS.length);
-  const prizes = Object.fromEntries(PRIZE_KEYS.map((k) => [k, prizeShare])) as Record<PrizeKey, number>;
+  const donationShare = Math.floor(donationTotal / PRIZE_KEYS.length);
+  const prizes = Object.fromEntries(
+    PRIZE_KEYS.map((k) => [k, SPONSOR_PRIZES[k] + donationShare])
+  ) as Record<PrizeKey, number>;
 
   return (
     <DonationsContext.Provider
@@ -105,6 +121,7 @@ export function DonationsProvider({ children }: { children: ReactNode }) {
         donations,
         allDonations,
         total,
+        donationTotal,
         sortedDonations,
         isLoading,
         prizes,

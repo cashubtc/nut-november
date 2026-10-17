@@ -19,7 +19,7 @@ export default function Sponsors() {
             Grow the prize pool
           </h2>
           <p className="mt-6 max-w-[46ch] text-lg leading-relaxed text-cream">
-            Send sats over Lightning and they&apos;re split evenly across all five prizes.
+            OpenCash seeded the pool with 400,000 sats. Send sats over Lightning and they&apos;re split evenly across all five prizes on top.
           </p>
 
           <p
@@ -32,8 +32,8 @@ export default function Sponsors() {
             {isLoading
               ? "Counting zaps…"
               : allDonations.length === 0
-                ? "No donations yet. Be the first."
-                : `From ${allDonations.length} ${allDonations.length === 1 ? "donation" : "donations"} so far`}
+                ? "From OpenCash. No donations yet, be the first."
+                : `From OpenCash and ${allDonations.length} ${allDonations.length === 1 ? "donation" : "donations"} so far`}
           </p>
 
           <div className="mt-10 flex flex-col gap-4 sm:flex-row">

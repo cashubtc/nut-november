@@ -25,7 +25,7 @@ export default function Prizes() {
             The prizes
           </h2>
           <p className="mt-5 max-w-[52ch] text-lg sm:text-xl text-bark-dark/90">
-            Five prizes, paid in sats from a pool built entirely by donations. It&apos;s at{" "}
+            Five prizes, paid in sats. OpenCash put up the first 400,000, and every donation grows the pool. It&apos;s at{" "}
             <strong className="font-semibold tabular-nums">{formatSats(total)}</strong> so far.
           </p>
         </div>
