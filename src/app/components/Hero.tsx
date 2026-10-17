@@ -4,19 +4,17 @@ import Link from "next/link";
 import {
   CSSProperties,
   PointerEvent as ReactPointerEvent,
-  RefObject,
   useId,
   useRef,
 } from "react";
 import CircularText from "./CircularText";
-import NutParticles from "./NutParticles";
 import { PacketShadow, PoolAmount, primaryButton, textLink } from "./PacketPage";
 import { useDonations } from "../context/DonationsContext";
 import { DATES_LABEL, usePhase } from "../lib/hackathon";
 
 const display: CSSProperties = { fontFamily: "var(--font-sauce-tm)", letterSpacing: "0.05em" };
 const wordmarkSize =
-  "text-[76px] sm:text-[96px] md:text-[120px] lg:text-[150px] xl:text-[170px] leading-[0.85]";
+  "text-[76px] sm:text-[96px] md:text-[120px] lg:text-[150px] xl:text-[170px] leading-[0.72]";
 
 function Wordmark() {
   return (
@@ -29,7 +27,6 @@ function Wordmark() {
 }
 
 export default function Hero() {
-  const heroRef = useRef<HTMLElement>(null);
   const { total } = useDonations();
   const phase = usePhase();
   const outlineId = `hero-outline-${useId().replace(/[^\w-]/g, "")}`;
@@ -67,7 +64,6 @@ export default function Hero() {
 
   return (
     <section
-      ref={heroRef}
       onPointerMove={onPointerMove}
       className="relative flex min-h-[92vh] items-center justify-center overflow-hidden hero-autumn px-5 pt-20 pb-16 sm:p-12 md:p-16"
     >
@@ -149,8 +145,6 @@ export default function Hero() {
           </div>
         </div>
       </div>
-
-      <NutParticles heroSectionRef={heroRef as RefObject<HTMLElement>} />
     </section>
   );
 }
