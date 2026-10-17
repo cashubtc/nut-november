@@ -45,7 +45,7 @@ export default function InvoiceDisplay({ invoice, amount, onBack }: InvoiceDispl
         />
       </div>
 
-      <p role="status" className="flex items-center gap-2 font-mono text-base font-bold text-bark">
+      <p role="status" className="flex items-center gap-2 text-lg font-semibold text-bark">
         <span aria-hidden className="inline-block animate-pulse motion-reduce:animate-none">🌰</span>
         Waiting for payment…
       </p>
@@ -65,7 +65,7 @@ export default function InvoiceDisplay({ invoice, amount, onBack }: InvoiceDispl
       <button
         type="button"
         onClick={onBack}
-        className="font-mono text-base font-bold text-bark underline decoration-2 underline-offset-4 hover:text-pumpkin-dark"
+        className="text-base font-bold text-pumpkin-dark hover:text-bark"
       >
         Change the amount
       </button>

@@ -14,7 +14,7 @@ export default function SuccessMessage({ amount, onReset }: SuccessMessageProps)
 
   return (
     <div role="status" className="flex flex-col items-center gap-8 text-center">
-      <div className="rotate-6 rounded-full border-4 border-cream bg-bark p-1 shadow-[6px_6px_0_var(--pumpkin)]">
+      <div className="sticker-lift rounded-full border-4 border-cream bg-bark p-1">
         <CircularText />
       </div>
 

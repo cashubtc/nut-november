@@ -84,6 +84,36 @@ export function peelAt(w: number, h: number, p: Point): Peel | null {
   return { kept, lifted, mirror, shading };
 }
 
+/**
+ * Where to put something in the uncovered patch: the polygon's centroid, the
+ * radius of the largest circle around it that stays inside, and the area.
+ */
+export function revealSpot(poly: Polygon): { x: number; y: number; radius: number; area: number } | null {
+  let a2 = 0;
+  let cx = 0;
+  let cy = 0;
+  for (let i = 0; i < poly.length; i++) {
+    const p = poly[i];
+    const q = poly[(i + 1) % poly.length];
+    const cross = p.x * q.y - q.x * p.y;
+    a2 += cross;
+    cx += (p.x + q.x) * cross;
+    cy += (p.y + q.y) * cross;
+  }
+  if (Math.abs(a2) < 1) return null;
+  const c = { x: cx / (3 * a2), y: cy / (3 * a2) };
+
+  let radius = Infinity;
+  for (let i = 0; i < poly.length; i++) {
+    const p = poly[i];
+    const q = poly[(i + 1) % poly.length];
+    const e = { x: q.x - p.x, y: q.y - p.y };
+    const t = Math.max(0, Math.min(1, dot({ x: c.x - p.x, y: c.y - p.y }, e) / (dot(e, e) || 1)));
+    radius = Math.min(radius, Math.hypot(c.x - (p.x + e.x * t), c.y - (p.y + e.y * t)));
+  }
+  return { ...c, radius, area: Math.abs(a2) / 2 };
+}
+
 export const toClipPath = (poly: Polygon) =>
   poly.length
     ? `polygon(${poly.map((q) => `${q.x.toFixed(1)}px ${q.y.toFixed(1)}px`).join(", ")})`

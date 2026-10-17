@@ -25,7 +25,7 @@ export default function About() {
           </div>
         </div>
 
-        <aside className="-rotate-1 border-2 border-bark bg-pumpkin-wash p-7 sm:p-8">
+        <aside className="border-2 border-bark bg-pumpkin-wash p-7 sm:p-8">
           <h3 className="text-xl font-semibold text-bark-dark">New to Cashu?</h3>
           <p className="mt-3 leading-relaxed text-bark-dark/90">
             Cashu is a Chaumian ecash protocol for Bitcoin. Mints issue ecash
@@ -38,7 +38,7 @@ export default function About() {
                 href="https://docs.cashu.space/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-pumpkin-dark underline decoration-2 hover:text-bark"
+                className="font-semibold text-pumpkin-dark hover:text-bark"
               >
                 Read the Cashu docs
               </a>
@@ -48,7 +48,7 @@ export default function About() {
                 href="https://cashu.space/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-pumpkin-dark underline decoration-2 hover:text-bark"
+                className="font-semibold text-pumpkin-dark hover:text-bark"
               >
                 Visit cashu.space
               </a>

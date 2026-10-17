@@ -13,7 +13,7 @@
 }
 
 @theme inline {
-  --font-sans: var(--font-poppins);
+  --font-sans: var(--font-archivo);
   --font-mono: var(--font-geist-mono);
   --font-sauce-tm: var(--font-sauce-tm);
 
@@ -38,7 +38,7 @@ body {
   overflow-x: clip;
   background: var(--cream);
   color: var(--bark-dark);
-  font-family: var(--font-poppins), system-ui, sans-serif;
+  font-family: var(--font-archivo), system-ui, sans-serif;
 }
 
 ::selection {
@@ -49,10 +49,6 @@ body {
 :focus-visible {
   outline: 3px solid var(--bark);
   outline-offset: 3px;
-}
-
-a {
-  text-underline-offset: 0.2em;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -111,24 +107,12 @@ a {
   }
 }
 
-/* 2026 refresh — hard "sticker" shadows and a warmer hero */
-.card-sticker {
-  box-shadow: 8px 8px 0 var(--bark);
-}
-
-.btn-sticker {
-  box-shadow: 5px 5px 0 var(--bark);
-  transition: transform 0.12s ease, box-shadow 0.12s ease, background-color 0.15s ease;
-}
-
-.btn-sticker:hover {
-  transform: translate(2px, 2px);
-  box-shadow: 3px 3px 0 var(--bark);
-}
-
-.btn-sticker:active {
-  transform: translate(5px, 5px);
-  box-shadow: 0 0 0 var(--bark);
+/* Everything is ink printed on the packet; the only depth is real paper on a
+   table. Round stickers stuck on top lift a little off the packet. */
+.sticker-lift {
+  box-shadow:
+    0 2px 3px rgba(67, 32, 12, 0.3),
+    0 14px 26px -10px rgba(67, 32, 12, 0.55);
 }
 
 .hero-autumn {
@@ -138,15 +122,6 @@ a {
     radial-gradient(ellipse at 15% 10%, rgba(255, 196, 120, 0.45) 0%, transparent 55%),
     radial-gradient(ellipse at 90% 95%, rgba(92, 46, 18, 0.55) 0%, transparent 60%);
   background-size: 28px 28px, 100% 100%, 100% 100%;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .btn-sticker,
-  .btn-sticker:hover,
-  .btn-sticker:active {
-    transform: none;
-    transition: none;
-  }
 }
 
 /* Seed-packet zigzag top edge (the hero's master packet) */
@@ -353,8 +328,23 @@ a {
   animation: rotate-circle 18s linear infinite;
 }
 
+/* What's under a peeled sticker: hops and wobbles while it's uncovered */
+.prize-reveal {
+  display: block;
+  filter: drop-shadow(0 0.08em 0.06em rgba(67, 32, 12, 0.45));
+  animation: prize-reveal-hop 1.3s ease-in-out infinite;
+}
+
+@keyframes prize-reveal-hop {
+  0%, 100% { transform: translateY(0) rotate(-7deg) scale(1); }
+  25% { transform: translateY(-8%) rotate(5deg) scale(1.1); }
+  50% { transform: translateY(0) rotate(8deg) scale(1); }
+  75% { transform: translateY(-6%) rotate(-4deg) scale(1.08); }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .prize-stamp-ring,
+  .prize-reveal,
   .prize-holo *,
   .prize-holo {
     animation: none !important;

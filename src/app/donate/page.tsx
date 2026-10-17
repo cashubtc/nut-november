@@ -5,7 +5,7 @@ import { finalizeEvent, generateSecretKey, nip19, nip57 } from "nostr-tools";
 import Link from "next/link";
 import { FormEvent, useState } from "react";
 import PacketPage, {
-  PriceTag,
+  PoolAmount,
   field,
   fieldError,
   fieldHint,
@@ -92,13 +92,7 @@ function Page() {
       title="Grow the prize pool"
       intro="Every sat you send is split evenly across the five prizes."
     >
-      <div className="flex flex-col items-center gap-3">
-        <PriceTag>
-          {Math.round(total).toLocaleString("en-US")}
-          <span className="font-mono text-base font-bold uppercase tracking-[0.14em] sm:text-xl">sats</span>
-        </PriceTag>
-        <p className="mt-2 font-mono text-sm font-bold uppercase tracking-[0.16em] text-bark">in the pool now</p>
-      </div>
+      <PoolAmount sats={total}>sats in the pool now</PoolAmount>
 
       <div className="mx-auto mt-12 max-w-md">
         {invoice ? (
@@ -119,7 +113,7 @@ function Page() {
                         setAmount(String(p));
                         setError(null);
                       }}
-                      className={`border-4 border-bark px-2 py-3 font-mono text-base font-bold tabular-nums transition-colors sm:text-lg ${
+                      className={`border-2 border-bark px-2 py-3 text-base font-bold tabular-nums transition-colors sm:text-lg ${
                         on ? "bg-bark text-cream" : "bg-cream text-bark hover:bg-white"
                       }`}
                     >
@@ -149,11 +143,11 @@ function Page() {
                   }}
                   aria-invalid={error ? true : undefined}
                   aria-describedby={error ? "amount-error" : "amount-hint"}
-                  className={`${field} pr-20 font-mono tabular-nums`}
+                  className={`${field} pr-20 tabular-nums`}
                 />
                 <span
                   aria-hidden
-                  className="pointer-events-none absolute inset-y-0 right-5 flex items-center font-mono text-lg font-bold text-bark"
+                  className="pointer-events-none absolute inset-y-0 right-5 flex items-center text-lg font-bold text-bark"
                 >
                   sats
                 </span>
@@ -177,7 +171,7 @@ function Page() {
       </div>
 
       <p className="mt-12 text-center">
-        <Link href="/donations" className="font-semibold text-bark underline decoration-2 underline-offset-4 hover:text-pumpkin-dark">
+        <Link href="/donations" className="font-semibold text-pumpkin-dark hover:text-bark">
           See every donation so far
         </Link>
       </p>

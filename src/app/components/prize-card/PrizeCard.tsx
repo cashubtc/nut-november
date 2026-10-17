@@ -9,7 +9,7 @@ import {
   useRef,
   useState,
 } from "react";
-import { peelAt, Point, toClipPath } from "./peelGeometry";
+import { peelAt, Point, revealSpot, toClipPath } from "./peelGeometry";
 import { playSnap, PeelVoice, startPeel } from "./peelSound";
 import type { PrizeCardData } from "./prizes";
 
@@ -246,11 +246,16 @@ export default function PrizeCard({
 
   const peel = size.w && corner ? peelAt(size.w, size.h, corner) : null;
   const keptClip = peel ? toClipPath(peel.kept) : undefined;
+  // What's under the sticker sits in the middle of the uncovered patch, and
+  // fades and grows in as the patch opens up (the resting curl shows none).
+  const spot = peel ? revealSpot(peel.lifted) : null;
+  const reveal =
+    spot && size.w ? Math.min(1, Math.max(0, (spot.area / (size.w * size.h) - 0.03) / 0.06)) : 0;
 
   const amountDigits = Math.round(amount).toLocaleString("en-US");
   const amountLabel = `${amountDigits} sats`;
-  // Shrink the tag for bigger numbers so a 7–8 digit pool still fits the card.
-  const tagSize = Math.min(11, 62 / (amountDigits.length * 0.62));
+  // Shrink the amount for bigger numbers so a 7–8 digit pool still fits the band.
+  const tagSize = Math.min(11, 62 / (amountDigits.length * 0.7));
 
   return (
     <div
@@ -260,15 +265,17 @@ export default function PrizeCard({
       onPointerLeave={onSceneLeave}
       style={{ containerType: "inline-size" }}
     >
+      {/* The packet's shadow on the table: blurred copies of the silhouette
+          (contact and soft). They stay put while the card tilts above them,
+          and aren't filter: drop-shadow, which Safari redraws every frame. */}
+      <div aria-hidden className="pointer-events-none absolute inset-0 translate-y-4 opacity-45 blur-[18px]">
+        <div className="h-full w-full bg-bark-dark" style={shapeMask} />
+      </div>
+      <div aria-hidden className="pointer-events-none absolute inset-0 translate-y-[3px] opacity-35 blur-[2px]">
+        <div className="h-full w-full bg-bark-dark" style={shapeMask} />
+      </div>
+
       <div ref={cardRef} className="prize-card relative h-full w-full">
-        {/* Hard sticker shadow: a bark copy of the silhouette, offset behind.
-            A plain shape instead of filter: drop-shadow, which Safari redraws
-            on every frame while the card tilts. */}
-        <div
-          aria-hidden
-          className="absolute inset-0 translate-x-[8px] translate-y-[8px] bg-bark"
-          style={shapeMask}
-        />
         {/* Everything that lives inside the card silhouette */}
         <div className="absolute inset-0 overflow-hidden" style={shapeMask}>
           {/* 1. The art: a foil finish unique to each prize (see globals.css). It
@@ -326,26 +333,21 @@ export default function PrizeCard({
               <Word text={prize.word} className="text-bark" />
             </div>
 
-            {/* The prize money, as a big price tag */}
-            <div className="absolute inset-x-0 top-[35%] flex justify-center">
-              <p
-                className="-rotate-2 flex items-baseline gap-[1.6cqw] bg-pumpkin px-[4cqw] py-[1.4cqw] font-extrabold leading-none text-cream shadow-[1.4cqw_1.4cqw_0_var(--bark)] tabular-nums"
-                style={{ fontFamily: "var(--font-poppins)", fontSize: `${tagSize}cqw` }}
+            {/* The prize money, printed on a band across the packet */}
+            <p className="absolute inset-x-0 top-[34%] flex items-baseline justify-center gap-[2cqw] bg-pumpkin py-[2.6cqw] leading-none text-cream">
+              <span
+                className="font-extrabold font-stretch-expanded tracking-[-0.01em] tabular-nums"
+                style={{ fontSize: `${tagSize}cqw` }}
               >
                 {amountDigits}
-                <span className="font-mono font-bold uppercase tracking-[0.12em] text-[4cqw]">
-                  sats
-                </span>
-              </p>
-            </div>
+              </span>
+              <span className="font-bold font-stretch-condensed uppercase tracking-[0.04em] text-[5cqw]">
+                sats
+              </span>
+            </p>
 
             <div className="absolute left-[7%] right-[7%] top-[56%]">
-              <p
-                className="font-bold leading-tight text-[7cqw]"
-                style={{ fontFamily: "var(--font-poppins)" }}
-              >
-                {prize.title}
-              </p>
+              <p className="font-bold leading-tight text-[7cqw]">{prize.title}</p>
               <p className="mt-[2cqw] text-[4.6cqw] leading-snug text-bark/85">
                 {prize.blurb}
               </p>
@@ -366,6 +368,25 @@ export default function PrizeCard({
               <path d={SHAPE_PATH} stroke="var(--bark)" strokeWidth="12" strokeLinejoin="round" />
             </svg>
           </div>
+
+          {/* 4. The prize's own nut (or sprout, or palette) hiding under the
+                 sticker, clipped to the uncovered patch */}
+          {peel && spot && reveal > 0 && (
+            <div className="absolute inset-0" style={{ clipPath: toClipPath(peel.lifted) }} aria-hidden>
+              <span
+                className="absolute leading-none"
+                style={{
+                  left: spot.x,
+                  top: spot.y,
+                  fontSize: Math.min(spot.radius * 1.5, size.w * 0.3),
+                  opacity: reveal,
+                  transform: `translate(-50%, -50%) scale(${0.5 + reveal * 0.5})`,
+                }}
+              >
+                <span className="prize-reveal">{prize.reveal}</span>
+              </span>
+            </div>
+          )}
 
           {/* Tilt sheen across the whole card */}
           <div className="prize-card-sheen pointer-events-none absolute inset-0" />
@@ -427,15 +448,10 @@ function Word({ text, className }: { text: string; className: string }) {
 function Field({ label, value }: { label: string; value: string }) {
   return (
     <div className="min-w-0">
-      <p className="font-mono font-bold uppercase tracking-[0.14em] text-bark text-[3.2cqw]">
+      <p className="font-bold font-stretch-condensed uppercase tracking-[0.04em] text-bark text-[3.6cqw]">
         {label}
       </p>
-      <p
-        className="mt-[0.6cqw] font-semibold truncate text-[3.8cqw]"
-        style={{ fontFamily: "var(--font-poppins)" }}
-      >
-        {value}
-      </p>
+      <p className="mt-[0.4cqw] font-semibold truncate text-[4.2cqw]">{value}</p>
     </div>
   );
 }
@@ -454,7 +470,7 @@ function NuttyStamp() {
         </defs>
         <text
           fill="currentColor"
-          style={{ fontFamily: "var(--font-geist-mono)", fontSize: "9.5px", fontWeight: 700 }}
+          style={{ fontFamily: "var(--font-archivo)", fontStretch: "75%", fontSize: "10.5px", fontWeight: 700 }}
         >
           {/* Spaced to fill the ring exactly (2πr = 213.6) so the words never overlap */}
           <textPath href={`#${ringId}`} textLength="212" lengthAdjust="spacing">

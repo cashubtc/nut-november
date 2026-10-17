@@ -23,29 +23,29 @@ export default function Sponsors() {
           </p>
 
           <p
-            className="mt-10 text-5xl font-extrabold leading-none tabular-nums sm:text-6xl"
+            className="mt-10 text-5xl leading-none font-extrabold font-stretch-expanded tracking-[-0.01em] tabular-nums sm:text-6xl"
             aria-live="polite"
           >
             {formatSats(total)}
           </p>
-          <p className="mt-3 font-mono text-sm font-bold uppercase tracking-[0.14em] text-cream">
+          <p className="mt-3 text-lg text-cream">
             {isLoading
               ? "Counting zaps…"
               : allDonations.length === 0
                 ? "From OpenCash. No donations yet, be the first."
-                : `From OpenCash and ${allDonations.length} ${allDonations.length === 1 ? "donation" : "donations"} so far`}
+                : `From OpenCash and ${allDonations.length} ${allDonations.length === 1 ? "donation" : "donations"} so far.`}
           </p>
 
           <div className="mt-10 flex flex-col gap-4 sm:flex-row">
             <Link
               href="/donate"
-              className="inline-block border-4 border-bark bg-cream px-10 py-5 text-center font-mono text-lg font-bold text-bark btn-sticker hover:bg-white"
+              className="inline-block bg-cream px-8 py-4 text-center text-lg font-bold text-bark transition-colors duration-150 hover:bg-white"
             >
               Donate sats
             </Link>
             <Link
               href="/donations"
-              className="inline-block border-4 border-cream px-10 py-5 text-center font-mono text-lg font-bold text-cream transition-colors hover:bg-cream/10"
+              className="inline-block border-2 border-cream px-8 py-[14px] text-center text-lg font-bold text-cream transition-colors duration-150 hover:bg-cream hover:text-bark"
             >
               See all donations
             </Link>
@@ -53,14 +53,14 @@ export default function Sponsors() {
         </div>
 
         <div className="lg:justify-self-end">
-          <p className="font-mono text-sm font-bold uppercase tracking-[0.14em] text-cream">
+          <p className="text-lg font-bold font-stretch-condensed uppercase tracking-[0.04em] text-cream">
             Sponsored by
           </p>
           <a
             href="https://opencash.dev/"
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-4 inline-block rotate-2 border-4 border-bark bg-cream p-6 card-sticker transition-transform hover:rotate-0"
+            className="mt-3 inline-block bg-cream p-6 transition-colors duration-150 hover:bg-white"
           >
             <Image
               src="/open-cash-logo.png"
