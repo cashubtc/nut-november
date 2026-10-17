@@ -9,7 +9,7 @@ import {
   useRef,
   useState,
 } from "react";
-import { peelAt, Point, toClipPath } from "./peelGeometry";
+import { peelAt, Point, revealSpot, toClipPath } from "./peelGeometry";
 import { playSnap, PeelVoice, startPeel } from "./peelSound";
 import type { PrizeCardData } from "./prizes";
 
@@ -246,6 +246,10 @@ export default function PrizeCard({
 
   const peel = size.w && corner ? peelAt(size.w, size.h, corner) : null;
   const keptClip = peel ? toClipPath(peel.kept) : undefined;
+  // The nut sits in the middle of whatever the peel has uncovered, and grows
+  // with it. Hidden while the uncovered sliver is too small to hold it.
+  const spot = peel ? revealSpot(peel.lifted) : null;
+  const nutSize = spot ? Math.min(spot.r * 1.5, size.w * 0.45) : 0;
 
   const amountDigits = Math.round(amount).toLocaleString("en-US");
   const amountLabel = `${amountDigits} sats`;
@@ -284,15 +288,24 @@ export default function PrizeCard({
           </div>
 
           {/* A nut under the sticker, drawn only where it has been peeled away */}
-          {peel && (
+          {peel && spot && nutSize > 24 && (
             <div
               aria-hidden
               className="absolute inset-0"
               style={{ clipPath: toClipPath(peel.lifted) }}
             >
-              {/* Centred in the corner the peel uncovers first */}
-              <span className="absolute left-[72%] top-[24%] -translate-x-1/2 -translate-y-1/2 text-[30cqw] leading-none [filter:drop-shadow(0_1.5cqw_2cqw_rgba(67,32,12,0.35))]">
-                {prize.emoji}
+              <span
+                className="absolute leading-none"
+                style={{
+                  left: spot.x,
+                  top: spot.y,
+                  fontSize: nutSize,
+                  transform: "translate(-50%, -50%)",
+                }}
+              >
+                <span className="prize-nut-float inline-block [filter:drop-shadow(0_0.08em_0.1em_rgba(67,32,12,0.35))]">
+                  {prize.emoji}
+                </span>
               </span>
             </div>
           )}

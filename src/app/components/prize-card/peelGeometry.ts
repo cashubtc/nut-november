@@ -88,3 +88,37 @@ export const toClipPath = (poly: Polygon) =>
   poly.length
     ? `polygon(${poly.map((q) => `${q.x.toFixed(1)}px ${q.y.toFixed(1)}px`).join(", ")})`
     : "polygon(0 0, 0 0, 0 0)";
+
+/**
+ * Where to put something inside the uncovered area, and how big it can be:
+ * the centre and radius of a circle that sits comfortably inside it. Exact
+ * (the incircle) for a triangle, which is what a corner peel uncovers; the
+ * centroid with 2·area / perimeter for anything else.
+ */
+export function revealSpot(poly: Point[]): { x: number; y: number; r: number } | null {
+  let a2 = 0;
+  let cx = 0;
+  let cy = 0;
+  let perimeter = 0;
+  for (let i = 0; i < poly.length; i++) {
+    const p = poly[i];
+    const q = poly[(i + 1) % poly.length];
+    const cross = p.x * q.y - q.x * p.y;
+    a2 += cross;
+    cx += (p.x + q.x) * cross;
+    cy += (p.y + q.y) * cross;
+    perimeter += Math.hypot(q.x - p.x, q.y - p.y);
+  }
+  if (Math.abs(a2) < 1 || perimeter === 0) return null;
+  const r = Math.abs(a2) / perimeter;
+
+  if (poly.length === 3) {
+    // Incentre: vertices weighted by the length of the side opposite each
+    const [A, B, C] = poly;
+    const a = Math.hypot(C.x - B.x, C.y - B.y);
+    const b = Math.hypot(A.x - C.x, A.y - C.y);
+    const c = Math.hypot(B.x - A.x, B.y - A.y);
+    return { x: (a * A.x + b * B.x + c * C.x) / perimeter, y: (a * A.y + b * B.y + c * C.y) / perimeter, r };
+  }
+  return { x: cx / (3 * a2), y: cy / (3 * a2), r };
+}

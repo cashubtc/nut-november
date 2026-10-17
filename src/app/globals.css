@@ -299,6 +299,16 @@ a {
   animation: prize-holo-bubbles 5s linear infinite;
 }
 
+/* The nut revealed under a peeled sticker bobs gently */
+.prize-nut-float {
+  animation: prize-nut-float 2.8s ease-in-out infinite alternate;
+}
+
+@keyframes prize-nut-float {
+  from { transform: translateY(-4%) rotate(-5deg); }
+  to { transform: translateY(4%) rotate(5deg); }
+}
+
 .prize-holo[data-paused] *,
 .prize-holo[data-paused] {
   animation-play-state: paused;
@@ -355,6 +365,7 @@ a {
 
 @media (prefers-reduced-motion: reduce) {
   .prize-stamp-ring,
+  .prize-nut-float,
   .prize-holo *,
   .prize-holo {
     animation: none !important;

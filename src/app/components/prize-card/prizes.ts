@@ -47,7 +47,7 @@ export const prizeCards: PrizeCardData[] = [
     title: "Best Design Nut",
     blurb: "Making ecash easy, accessible and a pleasure to use.",
     track: "Design",
-    emoji: "🫘",
+    emoji: "🖌️",
     finish: "halftone",
   },
   {
