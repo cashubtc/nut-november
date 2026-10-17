@@ -124,7 +124,7 @@ function Page() {
     return (
       <PacketPage title="Your nut is in!">
         <div role="status" className="flex flex-col items-center gap-8 text-center">
-          <div className="-rotate-6 rounded-full border-4 border-cream bg-bark p-1 shadow-[6px_6px_0_var(--pumpkin)]">
+          <div className="sticker-lift rounded-full border-4 border-cream bg-bark p-1">
             <CircularText />
           </div>
           <p className="max-w-[40ch] text-xl text-bark-dark text-balance">
@@ -272,7 +272,7 @@ function Page() {
           </Field>
 
           {state?.error && (
-            <div role="alert" className="border-4 border-pumpkin-dark bg-pumpkin-wash p-5 text-bark-dark">
+            <div role="alert" className="border-2 border-pumpkin-dark bg-pumpkin-wash p-5 text-bark-dark">
               <p className="font-semibold">We couldn&apos;t send your submission.</p>
               <p className="mt-1">Your answers are still here. Try again in a moment.</p>
             </div>

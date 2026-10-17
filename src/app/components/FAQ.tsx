@@ -2,7 +2,7 @@
 
 import { ReactNode, useId, useState } from "react";
 
-const link = "font-semibold text-pumpkin underline decoration-2 hover:text-pumpkin-dark";
+const link = "font-semibold text-pumpkin hover:text-pumpkin-dark";
 
 const faqs: { question: string; answer: ReactNode }[] = [
   {
@@ -101,7 +101,7 @@ export default function FAQ() {
                   }`}
                 >
                   <div className="overflow-hidden">
-                    <p className="max-w-[60ch] pb-6 text-lg leading-relaxed text-bark-dark/85">
+                    <p className="pr-10 pb-6 text-lg leading-relaxed text-bark-dark/85">
                       {faq.answer}
                     </p>
                   </div>

@@ -1,18 +1,22 @@
 import type { Metadata } from "next";
-import { Geist_Mono, Poppins } from "next/font/google";
+import { Archivo, Geist_Mono } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
 import { DonationsProvider } from "./context/DonationsContext";
 
+// Packet type: one grotesque whose width axis does the work. Regular for
+// reading, condensed for labels, expanded for sat amounts.
+const archivo = Archivo({
+  variable: "--font-archivo",
+  subsets: ["latin"],
+  axes: ["wdth"],
+});
+
+// Only for typing URLs on the submission form, so it isn't preloaded.
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
-});
-
-const poppins = Poppins({
-  variable: "--font-poppins",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800"],
+  preload: false,
 });
 
 // Load your custom SauceTM font
@@ -58,11 +62,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistMono.variable} ${sauceTM.variable} ${poppins.variable} antialiased`}
+        className={`${archivo.variable} ${geistMono.variable} ${sauceTM.variable} antialiased`}
       >
         <a
           href="#main"
-          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:bg-bark focus:px-5 focus:py-3 focus:font-mono focus:font-bold focus:text-cream"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:bg-bark focus:px-5 focus:py-3 focus:font-bold focus:text-cream"
         >
           Skip to content
         </a>

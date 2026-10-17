@@ -9,6 +9,8 @@ export interface PrizeCardData {
   track: string;
   /** Foil finish behind the knockout word; styled in globals.css. */
   finish: "gold" | "chrome" | "swirl" | "halftone" | "aurora";
+  /** The emoji hiding under the sticker when it peels back. */
+  reveal: string;
 }
 
 export const prizeCards: PrizeCardData[] = [
@@ -19,6 +21,7 @@ export const prizeCards: PrizeCardData[] = [
     blurb: "Best overall project. The build that pushes Cashu furthest forward.",
     track: "Overall",
     finish: "gold",
+    reveal: "🏆",
   },
   {
     key: "hardest",
@@ -27,6 +30,7 @@ export const prizeCards: PrizeCardData[] = [
     blurb: "Toughest technical breakthrough, or the gnarliest bug finally fixed.",
     track: "Technical",
     finish: "chrome",
+    reveal: "🥥",
   },
   {
     key: "nuttiest",
@@ -35,6 +39,7 @@ export const prizeCards: PrizeCardData[] = [
     blurb: "The wildest experiment that turns out to work.",
     track: "Wildcard",
     finish: "swirl",
+    reveal: "🌰",
   },
   {
     key: "design",
@@ -43,6 +48,7 @@ export const prizeCards: PrizeCardData[] = [
     blurb: "Making ecash easy, accessible and a pleasure to use.",
     track: "Design",
     finish: "halftone",
+    reveal: "🎨",
   },
   {
     key: "fresh",
@@ -51,5 +57,6 @@ export const prizeCards: PrizeCardData[] = [
     blurb: "Best first-time contributor. Welcome to the shell game.",
     track: "Newcomer",
     finish: "aurora",
+    reveal: "🌱",
   },
 ];

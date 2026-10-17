@@ -22,13 +22,16 @@ export default function CircularText() {
           />
         </defs>
         <text width="400">
+          {/* Spaced to fill the ring exactly (2πr = 471) so the ends never overlap */}
           <textPath
             xlinkHref="#circle"
-            className="text-lg sm:text-base md:text-lg font-bold fill-white uppercase tracking-wider"
-            style={{ fontFamily: "var(--font-mono)", letterSpacing: "2px" }}
+            className="text-xl font-bold fill-white uppercase"
+            style={{ fontFamily: "var(--font-archivo)", fontStretch: "75%" }}
+            textLength="468"
+            lengthAdjust="spacing"
             startOffset="0%"
           >
-            100% NUTTY 🌰 100% CERTIFIED ORGANIC 🌰{" "}
+            {"100% NUTTY   100% CERTIFIED ORGANIC   "}
           </textPath>
         </text>
       </svg>

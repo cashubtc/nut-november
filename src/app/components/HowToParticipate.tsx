@@ -8,7 +8,7 @@ const shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(sha
 const nostrUrl =
   "https://primal.net/p/nprofile1qqs0y3tvskgs9gpgxxu5ahgz3fmms3rzmxt504qceqtz4a6pdgfwlkghwl6j8";
 
-const link = "font-semibold text-pumpkin underline decoration-2 hover:text-pumpkin-dark";
+const link = "font-semibold text-pumpkin hover:text-pumpkin-dark";
 
 const steps: { title: string; body: ReactNode }[] = [
   {

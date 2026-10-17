@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { useDonations } from "../context/DonationsContext";
 import { formatSats, usePhase } from "../lib/hackathon";
+import { secondaryButton } from "./PacketPage";
 import PrizeCard from "./prize-card/PrizeCard";
 import { prizeCards } from "./prize-card/prizes";
 
@@ -39,10 +40,7 @@ export default function Prizes() {
         </ul>
 
         <div className="mt-16 text-center">
-          <Link
-            href={cta.href}
-            className="inline-block px-10 py-5 btn-sticker bg-white text-pumpkin font-bold border-4 border-pumpkin hover:bg-pumpkin-wash text-lg font-mono"
-          >
+          <Link href={cta.href} className={secondaryButton}>
             {cta.label}
           </Link>
         </div>
