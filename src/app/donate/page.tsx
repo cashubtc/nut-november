@@ -2,8 +2,9 @@
 
 import { nutnovemberPubkey } from "@/pubkey";
 import { finalizeEvent, generateSecretKey, nip19, nip57 } from "nostr-tools";
+import type { WindowNostr } from "nostr-tools/nip07";
 import Link from "next/link";
-import { FormEvent, useState } from "react";
+import { FormEvent, useState, useSyncExternalStore } from "react";
 import PacketPage, {
   PoolAmount,
   field,
@@ -18,13 +19,36 @@ import InvoiceDisplay from "./components/InvoiceDisplay";
 import { useReceiptSubscription } from "./hooks/useReceiptSubscription";
 
 const PRESETS = [21, 1000, 21000];
+const MESSAGE_THRESHOLD = 1000;
+const MESSAGE_MAX_LENGTH = 280;
 const RELAYS = ["wss://relay.damus.io", "wss://relay.snort.social", "wss://relay.primal.net"];
+
+function hasNostrSigner() {
+  return typeof (window as Window & { nostr?: WindowNostr }).nostr?.signEvent === "function";
+}
+
+function subscribeToSigner(onChange: () => void) {
+  // Extensions can inject their signer after the page has hydrated.
+  const interval = window.setInterval(onChange, 1000);
+  window.addEventListener("focus", onChange);
+  return () => {
+    window.clearInterval(interval);
+    window.removeEventListener("focus", onChange);
+  };
+}
 
 function Page() {
   const { total } = useDonations();
   const [amount, setAmount] = useState("");
+  const [message, setMessage] = useState("");
+  const canAddMessage = Number.isInteger(Number(amount)) && Number(amount) > MESSAGE_THRESHOLD;
   const [error, setError] = useState<string | null>(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [preferredIdentity, setIdentity] = useState<"anonymous" | "profile">("anonymous");
+  const hasSigner = useSyncExternalStore(subscribeToSigner, hasNostrSigner, () => false);
+  const identity = hasSigner ? preferredIdentity : "anonymous";
+  const [submissionError, setSubmissionError] = useState<string | null>(null);
+  const [submission, setSubmission] = useState<"signing" | "invoice" | null>(null);
+  const isSubmitting = submission !== null;
   const [invoice, setInvoice] = useState<string | null>(null);
   const [receiptId, setReceiptId] = useState<string | null>(null);
   const isPaid = useReceiptSubscription(receiptId);
@@ -33,6 +57,7 @@ function Page() {
     e.preventDefault();
     if (isSubmitting) return;
 
+    setSubmissionError(null);
     const sats = Number(amount);
     if (!Number.isInteger(sats) || sats < 1) {
       setError("Enter a whole number of sats, 1 or more.");
@@ -40,17 +65,34 @@ function Page() {
     }
 
     setError(null);
-    setIsSubmitting(true);
-
-    const zap = nip57.makeZapRequest({
-      pubkey: nutnovemberPubkey,
-      amount: sats * 1000,
-      relays: RELAYS,
-    });
-    const signed = finalizeEvent(zap, generateSecretKey());
-    const npub = nip19.npubEncode(nutnovemberPubkey);
+    setSubmission(identity === "profile" ? "signing" : "invoice");
 
     try {
+      const zap = nip57.makeZapRequest({
+        pubkey: nutnovemberPubkey,
+        amount: sats * 1000,
+        relays: RELAYS,
+        comment: sats > MESSAGE_THRESHOLD ? message.trim() : "",
+      });
+      let signed;
+      if (identity === "profile") {
+        const signer = (window as Window & { nostr?: WindowNostr }).nostr;
+        if (!signer || typeof signer.signEvent !== "function") {
+          setSubmissionError("No Nostr signing extension found. Enable your extension and try again, or choose Anonymous.");
+          return;
+        }
+        try {
+          signed = await signer.signEvent(zap);
+        } catch {
+          setSubmissionError("Your extension didn't sign the donation request. Try again, or choose Anonymous.");
+          return;
+        }
+      } else {
+        signed = finalizeEvent(zap, generateSecretKey());
+      }
+
+      setSubmission("invoice");
+      const npub = nip19.npubEncode(nutnovemberPubkey);
       const res = await fetch(
         `https://npubx.cash/.well-known/lnurlp/${npub}?amount=${sats * 1000}&nostr=${encodeURIComponent(
           JSON.stringify(signed)
@@ -62,9 +104,9 @@ function Page() {
       setInvoice(data.pr);
     } catch (err) {
       console.error("Error fetching invoice:", err);
-      setError("We couldn't create an invoice. Check your connection and try again.");
+      setSubmissionError("We couldn't create an invoice. Check your connection and try again.");
     } finally {
-      setIsSubmitting(false);
+      setSubmission(null);
     }
   }
 
@@ -77,6 +119,7 @@ function Page() {
     setInvoice(null);
     setReceiptId(null);
     setAmount("");
+    setMessage("");
   }
 
   if (isPaid) {
@@ -99,7 +142,7 @@ function Page() {
           <InvoiceDisplay invoice={invoice} amount={Number(amount)} onBack={handleBack} />
         ) : (
           <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-6">
-            <fieldset>
+            <fieldset disabled={isSubmitting}>
               <legend className={fieldLabel}>Pick an amount</legend>
               <div className="mt-3 grid grid-cols-3 gap-3">
                 {PRESETS.map((p) => {
@@ -136,6 +179,7 @@ function Page() {
                   inputMode="numeric"
                   min={1}
                   step={1}
+                  disabled={isSubmitting}
                   value={amount}
                   onChange={(e) => {
                     setAmount(e.target.value);
@@ -163,8 +207,67 @@ function Page() {
               )}
             </div>
 
+            <fieldset disabled={isSubmitting} aria-describedby="identity-hint">
+              <legend className={fieldLabel}>Donate as</legend>
+              <div className="mt-3 flex flex-col gap-3">
+                {([
+                  ["anonymous", "Anonymous"],
+                  ["profile", "My Nostr profile"],
+                ] as const).filter(([value]) => value === "anonymous" || hasSigner).map(([value, label]) => (
+                  <label key={value} className="flex items-center gap-3 text-lg font-semibold text-bark-dark">
+                    <input
+                      type="radio"
+                      name="identity"
+                      value={value}
+                      checked={identity === value}
+                      onChange={() => {
+                        setIdentity(value);
+                        setSubmissionError(null);
+                      }}
+                      className="h-5 w-5 accent-bark"
+                    />
+                    {label}
+                  </label>
+                ))}
+              </div>
+              <p id="identity-hint" className={`${fieldHint} mt-3`}>
+                {identity === "anonymous"
+                  ? "Your Nostr profile won't be attached. The donation amount will still be public."
+                  : "Requires a Nostr signing extension. Your donation will be publicly linked to the profile you sign with."}
+              </p>
+            </fieldset>
+
+            <div className="flex flex-col gap-2">
+              <label htmlFor="message" className={fieldLabel}>
+                Message (optional)
+              </label>
+              <textarea
+                id="message"
+                name="message"
+                rows={3}
+                maxLength={MESSAGE_MAX_LENGTH}
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                disabled={!canAddMessage || isSubmitting}
+                aria-describedby="message-hint message-count"
+                className={`${field} resize-y disabled:cursor-not-allowed disabled:bg-bark/5 disabled:opacity-60`}
+              />
+              <p id="message-hint" className={fieldHint}>
+                {canAddMessage
+                  ? "Your message will be public on Nostr, even if you donate anonymously."
+                  : "Donate more than 1,000 sats to unlock a public message with your donation."}
+              </p>
+              <p id="message-count" className={`${fieldHint} text-right tabular-nums`}>
+                {message.length}/{MESSAGE_MAX_LENGTH} characters
+              </p>
+            </div>
+
+            {submissionError && (
+              <p role="alert" className={fieldError}>{submissionError}</p>
+            )}
+
             <button type="submit" disabled={isSubmitting} className={`${primaryButton} mt-2 self-center`}>
-              {isSubmitting ? "Creating invoice…" : "Get invoice"}
+              {submission === "signing" ? "Confirm in your extension…" : submission === "invoice" ? "Creating invoice…" : "Get invoice"}
             </button>
           </form>
         )}
