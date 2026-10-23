@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Event, SimplePool } from "nostr-tools";
 import { nutnovemberPubkey, ZAP_RECEIPT_PUBKEY } from "@/pubkey";
+import { ZAP_RELAYS } from "@/zap-relays";
 
 export function useReceiptSubscription(receiptId: string | null) {
   // The receipt we've seen paid; a new receiptId is unpaid until proven.
@@ -13,14 +14,8 @@ export function useReceiptSubscription(receiptId: string | null) {
 
     let isMounted = true;
     const pool = new SimplePool();
-    const relays = [
-      "wss://relay.damus.io",
-      "wss://relay.snort.social",
-      "wss://relay.primal.net",
-    ];
-
     const sub = pool.subscribeMany(
-      relays,
+      ZAP_RELAYS,
       {
         "#p": [nutnovemberPubkey],
         kinds: [9735],
@@ -55,7 +50,7 @@ export function useReceiptSubscription(receiptId: string | null) {
     return () => {
       isMounted = false;
       sub.close();
-      pool.close(relays);
+      pool.close(ZAP_RELAYS);
     };
   }, [receiptId]);
 

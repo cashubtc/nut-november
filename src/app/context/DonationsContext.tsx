@@ -4,143 +4,90 @@ import {
   createContext,
   useContext,
   useEffect,
-  useState,
+  useSyncExternalStore,
   ReactNode,
 } from "react";
 import { SimplePool } from "nostr-tools";
+import dynamic from "next/dynamic";
 import { nutnovemberPubkey, ZAP_RECEIPT_PUBKEY } from "@/pubkey";
+import { ZAP_RELAYS } from "@/zap-relays";
+import { createDonationStore, type DonationSnapshot } from "../lib/donations";
+
+export type { PrizeKey } from "../lib/donations";
 
 // Only zaps paid after this count toward Nut November 2026, so last year's
 // donations stay out of the pool.
 const DONATIONS_SINCE = Math.floor(Date.UTC(2026, 0, 1) / 1000);
 
-const PRIZE_KEYS = ["golden", "hardest", "nuttiest", "design", "fresh"] as const;
-
-export type PrizeKey = (typeof PRIZE_KEYS)[number];
-
-// OpenCash's 400,000 sat commitment seeds each prize. Donations then add to
-// it, split evenly across the prizes.
-const SPONSOR_PRIZES: Record<PrizeKey, number> = {
-  golden: 150_000,
-  hardest: 100_000,
-  nuttiest: 50_000,
-  design: 50_000,
-  fresh: 50_000,
-};
-const SPONSOR_TOTAL = Object.values(SPONSOR_PRIZES).reduce((sum, amount) => sum + amount, 0);
-
-interface DonationsContextType {
-  donations: number[];
-  allDonations: number[];
-  /** The whole pool: the sponsor commitment plus donations. */
-  total: number;
-  /** Donations alone. */
-  donationTotal: number;
-  sortedDonations: number[];
-  isLoading: boolean;
-  prizes: Record<PrizeKey, number>;
-}
-
-const DonationsContext = createContext<DonationsContextType | undefined>(
-  undefined
-);
-
-export function DonationsProvider({ children }: { children: ReactNode }) {
-  const [donations, setDonations] = useState<number[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    let isMounted = true;
-    // The same zap receipt arrives once per relay; count each event once.
-    const seen = new Set<string>();
+const donationStore = createDonationStore({
+  policy: {
+    recipient: nutnovemberPubkey,
+    receiptAuthor: ZAP_RECEIPT_PUBKEY,
+    since: DONATIONS_SINCE,
+  },
+  getStorage: () => window.localStorage,
+  connect(handlers) {
     const pool = new SimplePool();
-    const relays = [
-      "wss://relay.damus.io",
-      "wss://relay.snort.social",
-      "wss://relay.primal.net",
-    ];
-
     const sub = pool.subscribeMany(
-      relays,
+      ZAP_RELAYS,
       {
         "#p": [nutnovemberPubkey],
         kinds: [9735],
         authors: [ZAP_RECEIPT_PUBKEY],
         since: DONATIONS_SINCE,
       },
-      {
-        onevent: (event) => {
-          if (
-            !isMounted ||
-            event.pubkey !== ZAP_RECEIPT_PUBKEY ||
-            seen.has(event.id)
-          ) return;
-          seen.add(event.id);
-
-          const receiptTag = event.tags.find((tag) => tag[0] === "description");
-          if (receiptTag) {
-            try {
-              const receipt = receiptTag[1];
-              const parsed = JSON.parse(receipt);
-              const amountTag = parsed.tags.find(
-                (tag: string[]) => tag[0] === "amount"
-              );
-              if (amountTag) {
-                const amount = Number(amountTag[1]) / 1000;
-                setDonations((prev) => {
-                  return [...prev, amount];
-                });
-              }
-            } catch (error) {
-              console.error("Error parsing receipt:", error);
-            }
-          }
-        },
-        oneose: () => {
-          // Called when initial batch of events is done loading
-          if (isMounted) {
-            setIsLoading(false);
-          }
-        },
-      }
+      handlers
     );
-
     return () => {
-      isMounted = false;
-      sub.close();
+      void Promise.resolve(sub.close()).finally(() => pool.destroy());
     };
-  }, []);
+  },
+});
 
-  const allDonations = donations;
-  const donationTotal = allDonations.reduce((sum, amount) => sum + amount, 0);
-  const total = SPONSOR_TOTAL + donationTotal;
-  const sortedDonations = [...allDonations].sort((a, b) => b - a);
-  const donationShare = Math.floor(donationTotal / PRIZE_KEYS.length);
-  const prizes = Object.fromEntries(
-    PRIZE_KEYS.map((k) => [k, SPONSOR_PRIZES[k] + donationShare])
-  ) as Record<PrizeKey, number>;
+const DonationsContext = createContext<typeof donationStore | undefined>(
+  undefined
+);
 
-  return (
-    <DonationsContext.Provider
-      value={{
-        donations,
-        allDonations,
-        total,
-        donationTotal,
-        sortedDonations,
-        isLoading,
-        prizes,
-      }}
-    >
-      {children}
-    </DonationsContext.Provider>
-  );
+export function DonationsProvider({ children }: { children: ReactNode }) {
+  // Own the sync for the lifetime of the app, including client-side navigation.
+  // Additional readers share this connection through the store's subscriptions.
+  useEffect(() => donationStore.subscribe(() => {}), []);
+  return <DonationsContext.Provider value={donationStore}>{children}</DonationsContext.Provider>;
 }
 
-export function useDonations() {
-  const context = useContext(DonationsContext);
-  if (context === undefined) {
-    throw new Error("useDonations must be used within a DonationsProvider");
+function useDonations(): DonationSnapshot {
+  const store = useContext(DonationsContext);
+  if (store === undefined) {
+    throw new Error("DonationData must be used within a DonationsProvider");
   }
-  return context;
+  return useSyncExternalStore(store.subscribe, store.getSnapshot, store.getServerSnapshot);
+}
+
+function DonationDataContent({ children }: { children: (data: DonationSnapshot) => ReactNode }) {
+  return children(useDonations());
+}
+
+const DonationFallbackContext = createContext<ReactNode>(null);
+
+function DonationFallback() {
+  return useContext(DonationFallbackContext);
+}
+
+// Every live donation display uses this boundary: first render from localStorage,
+// then update from the provider's shared relay sync. Keep static page content on
+// the server and bundle this component eagerly, without an extra chunk fetch.
+const ClientDonationData = dynamic(() => Promise.resolve(DonationDataContent), {
+  ssr: false,
+  loading: DonationFallback,
+});
+
+export function DonationData({ children, fallback = null }: {
+  children: (data: DonationSnapshot) => ReactNode;
+  fallback?: ReactNode;
+}) {
+  return (
+    <DonationFallbackContext.Provider value={fallback}>
+      <ClientDonationData>{children}</ClientDonationData>
+    </DonationFallbackContext.Provider>
+  );
 }

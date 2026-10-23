@@ -1,6 +1,7 @@
 "use client";
 
 import { nutnovemberPubkey } from "@/pubkey";
+import { ZAP_RELAYS } from "@/zap-relays";
 import { finalizeEvent, generateSecretKey, nip19, nip57 } from "nostr-tools";
 import type { WindowNostr } from "nostr-tools/nip07";
 import Link from "next/link";
@@ -13,7 +14,7 @@ import PacketPage, {
   fieldLabel,
   primaryButton,
 } from "../components/PacketPage";
-import { useDonations } from "../context/DonationsContext";
+import { DonationData } from "../context/DonationsContext";
 import SuccessMessage from "./components/SuccessMessage";
 import InvoiceDisplay from "./components/InvoiceDisplay";
 import { useReceiptSubscription } from "./hooks/useReceiptSubscription";
@@ -21,7 +22,6 @@ import { useReceiptSubscription } from "./hooks/useReceiptSubscription";
 const PRESETS = [21, 1000, 21000];
 const MESSAGE_THRESHOLD = 1000;
 const MESSAGE_MAX_LENGTH = 280;
-const RELAYS = ["wss://relay.damus.io", "wss://relay.snort.social", "wss://relay.primal.net"];
 
 function hasNostrSigner() {
   return typeof (window as Window & { nostr?: WindowNostr }).nostr?.signEvent === "function";
@@ -38,7 +38,6 @@ function subscribeToSigner(onChange: () => void) {
 }
 
 function Page() {
-  const { total } = useDonations();
   const [amount, setAmount] = useState("");
   const [message, setMessage] = useState("");
   const canAddMessage = Number.isInteger(Number(amount)) && Number(amount) > MESSAGE_THRESHOLD;
@@ -71,7 +70,7 @@ function Page() {
       const zap = nip57.makeZapRequest({
         pubkey: nutnovemberPubkey,
         amount: sats * 1000,
-        relays: RELAYS,
+        relays: ZAP_RELAYS,
         comment: sats > MESSAGE_THRESHOLD ? message.trim() : "",
       });
       let signed;
@@ -135,7 +134,7 @@ function Page() {
       title="Grow the prize pool"
       intro="Every sat you send is split evenly across the five prizes."
     >
-      <PoolAmount sats={total}>sats in the pool now</PoolAmount>
+      <DonationData>{({ total }) => <PoolAmount sats={total}>sats in the pool now</PoolAmount>}</DonationData>
 
       <div className="mx-auto mt-12 max-w-md">
         {invoice ? (

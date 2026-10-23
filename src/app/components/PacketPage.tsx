@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { CSSProperties, ReactNode } from "react";
+import LoadingText from "./LoadingText";
 
 const display: CSSProperties = { fontFamily: "var(--font-sauce-tm)", letterSpacing: "0.03em" };
 
@@ -69,11 +70,11 @@ export function PacketShadow() {
 }
 
 /** The pool total, printed big on the packet (hero and subpages). */
-export function PoolAmount({ sats, children }: { sats: number; children: ReactNode }) {
+export function PoolAmount({ sats, children }: { sats?: number; children: ReactNode }) {
   return (
-    <p className="flex flex-wrap items-baseline justify-center gap-x-3 gap-y-1 text-bark">
+    <p aria-busy={sats === undefined} className="flex flex-wrap items-baseline justify-center gap-x-3 gap-y-1 text-bark">
       <span className="text-5xl leading-none font-extrabold font-stretch-expanded tracking-[-0.01em] text-pumpkin tabular-nums sm:text-6xl lg:text-7xl">
-        {Math.round(sats).toLocaleString("en-US")}
+        {sats === undefined ? <LoadingText>000,000</LoadingText> : Math.round(sats).toLocaleString("en-US")}
       </span>
       <span className="text-2xl font-bold font-stretch-condensed sm:text-3xl">{children}</span>
     </p>

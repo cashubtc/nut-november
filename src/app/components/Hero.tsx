@@ -8,8 +8,9 @@ import {
   useRef,
 } from "react";
 import CircularText from "./CircularText";
+import LoadingText from "./LoadingText";
 import { PacketShadow, PoolAmount, primaryButton, textLink } from "./PacketPage";
-import { useDonations } from "../context/DonationsContext";
+import { DonationData } from "../context/DonationsContext";
 import { DATES_LABEL, usePhase } from "../lib/hackathon";
 
 const display: CSSProperties = { fontFamily: "var(--font-sauce-tm)", letterSpacing: "0.05em" };
@@ -27,7 +28,6 @@ function Wordmark() {
 }
 
 export default function Hero() {
-  const { total } = useDonations();
   const phase = usePhase();
   const outlineId = `hero-outline-${useId().replace(/[^\w-]/g, "")}`;
   // Pointer position drives the foil's shine. Written straight to the
@@ -117,7 +117,9 @@ export default function Hero() {
 
               {/* The prize pool, printed on the packet */}
               <div className="mt-9">
-                <PoolAmount sats={total}>sats in prizes</PoolAmount>
+                <DonationData fallback={<PoolAmount>sats in prizes</PoolAmount>}>
+                  {({ total }) => <PoolAmount sats={total}>sats in prizes</PoolAmount>}
+                </DonationData>
               </div>
 
               <div className="mt-10 flex flex-col items-center justify-center gap-5 sm:flex-row sm:gap-8">
@@ -133,7 +135,9 @@ export default function Hero() {
             {/* Printed band along the packet's foot: the dates, and where we are in them */}
             <div className="flex flex-col items-center justify-between gap-x-6 gap-y-1 bg-bark px-6 py-3 text-lg font-bold font-stretch-condensed uppercase tracking-[0.04em] text-cream-deep sm:flex-row sm:px-12">
               <p>{DATES_LABEL}</p>
-              {status && <p>{status}</p>}
+              <p aria-busy={status === null}>
+                {status ?? <LoadingText>Starts in 00 days</LoadingText>}
+              </p>
             </div>
           </div>
         </div>
