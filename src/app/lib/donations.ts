@@ -3,6 +3,7 @@ import { getDonationMessagePreview } from "./donationMessages.ts";
 
 export interface Donation {
   id: string;
+  pubkey: string | null;
   amount: number;
   content: string;
   createdAt: number;
@@ -35,9 +36,11 @@ export interface DonationSnapshot {
   total: number;
   prizes: Record<PrizeKey, number>;
   isLoading: boolean;
+  /** All receipt relays have finished their initial response (or timed out). */
+  hasSynced: boolean;
 }
 
-function summarize(donations: Donation[], isLoading: boolean): DonationSnapshot {
+function summarize(donations: Donation[], isLoading: boolean, hasSynced = false): DonationSnapshot {
   const donationTotal = donations.reduce((sum, donation) => sum + donation.amount, 0);
   const donationShare = Math.floor(donationTotal / PRIZE_KEYS.length);
   return {
@@ -49,6 +52,7 @@ function summarize(donations: Donation[], isLoading: boolean): DonationSnapshot 
       PRIZE_KEYS.map((key) => [key, SPONSOR_PRIZES[key] + donationShare])
     ) as Record<PrizeKey, number>,
     isLoading,
+    hasSynced,
   };
 }
 
@@ -98,6 +102,7 @@ export function parseDonation(value: unknown, policy: DonationPolicy): Donation 
 
     return {
       id: event.id,
+      pubkey: request.tags.some(([name]) => name === "anon") ? null : request.pubkey,
       amount: millisats / 1000,
       content: getDonationMessagePreview(millisats / 1000, request.content),
       createdAt: event.created_at,
@@ -124,17 +129,18 @@ export function createDonationStore({
   let cacheLoaded = false;
   let disconnect: (() => void) | undefined;
 
-  function makeSnapshot(isLoading: boolean): DonationSnapshot {
+  function makeSnapshot(isLoading: boolean, hasSynced = snapshot.hasSynced): DonationSnapshot {
     return summarize(
       [...records.values()].map(({ donation }) => donation).sort(
         (a, b) => b.amount - a.amount || b.createdAt - a.createdAt || a.id.localeCompare(b.id)
       ),
-      isLoading
+      isLoading,
+      hasSynced
     );
   }
 
-  function update(isLoading = snapshot.isLoading) {
-    snapshot = makeSnapshot(isLoading);
+  function update(isLoading = snapshot.isLoading, hasSynced = snapshot.hasSynced) {
+    snapshot = makeSnapshot(isLoading, hasSynced);
     listeners.forEach((listener) => listener());
   }
 
@@ -169,6 +175,7 @@ export function createDonationStore({
 
   function start() {
     loadCache();
+    if (snapshot.hasSynced) update(snapshot.isLoading, false);
 
     let active = true;
     const close = connect({
@@ -178,7 +185,7 @@ export function createDonationStore({
         update(false);
       },
       oneose() {
-        if (active) update(false);
+        if (active) update(false, true);
       },
     });
     return () => {

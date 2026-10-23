@@ -1,6 +1,7 @@
 export const DONATION_MESSAGE_THRESHOLD = 1_000;
 
-// Add kind-9735 zap receipt event IDs here to hide their messages on /donations.
+// Add kind-9735 zap receipt event IDs here to hide their messages, profile names,
+// and avatars on /donations. The identity falls back to a placeholder and npub.
 // Use the receipt's ID, not the embedded zap request's ID. Amounts still count.
 export const HIDDEN_DONATION_MESSAGE_IDS = new Set<string>([]);
 

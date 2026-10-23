@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { Event, SimplePool } from "nostr-tools";
+import type { Event } from "nostr-tools";
+import { nostrPool } from "@/nostr-pool";
 import { nutnovemberPubkey, ZAP_RECEIPT_PUBKEY } from "@/pubkey";
 import { ZAP_RELAYS } from "@/zap-relays";
 
@@ -13,8 +14,7 @@ export function useReceiptSubscription(receiptId: string | null) {
     }
 
     let isMounted = true;
-    const pool = new SimplePool();
-    const sub = pool.subscribeMany(
+    const sub = nostrPool.subscribeMany(
       ZAP_RELAYS,
       {
         "#p": [nutnovemberPubkey],
@@ -49,8 +49,7 @@ export function useReceiptSubscription(receiptId: string | null) {
     // Cleanup function
     return () => {
       isMounted = false;
-      sub.close();
-      pool.close(ZAP_RELAYS);
+      void sub.close();
     };
   }, [receiptId]);
 
