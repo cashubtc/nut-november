@@ -3,6 +3,7 @@
 import { PoolAmount } from "../components/PacketPage";
 import { DonationData } from "../context/DonationsContext";
 import { formatSats } from "../lib/hackathon";
+import { HIDDEN_DONATION_MESSAGE_IDS } from "../lib/donationMessages";
 
 // Bigger zaps get bigger produce.
 function produce(sats: number) {
@@ -45,7 +46,7 @@ export default function DonationHistory() {
                     <span aria-hidden>{produce(donation.amount)}</span>
                     <span>{formatSats(donation.amount)}</span>
                   </div>
-                  {donation.content && (
+                  {donation.content && !HIDDEN_DONATION_MESSAGE_IDS.has(donation.id) && (
                     <p className="mt-2 whitespace-pre-wrap text-base leading-relaxed [overflow-wrap:anywhere]">
                       {donation.content}
                     </p>
