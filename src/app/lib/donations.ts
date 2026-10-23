@@ -1,4 +1,5 @@
 import { nip57, verifyEvent, type Event } from "nostr-tools";
+import { getDonationMessagePreview } from "./donationMessages.ts";
 
 export interface Donation {
   id: string;
@@ -98,7 +99,7 @@ export function parseDonation(value: unknown, policy: DonationPolicy): Donation 
     return {
       id: event.id,
       amount: millisats / 1000,
-      content: millisats > 1_000_000 ? Array.from(request.content.trim()).slice(0, 256).join("") : "",
+      content: getDonationMessagePreview(millisats / 1000, request.content),
       createdAt: event.created_at,
     };
   } catch {
