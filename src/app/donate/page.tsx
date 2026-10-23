@@ -1,6 +1,7 @@
 "use client";
 
 import { nutnovemberPubkey } from "@/pubkey";
+import { ZAP_RELAYS } from "@/zap-relays";
 import { finalizeEvent, generateSecretKey, nip19, nip57 } from "nostr-tools";
 import type { WindowNostr } from "nostr-tools/nip07";
 import Link from "next/link";
@@ -13,15 +14,17 @@ import PacketPage, {
   fieldLabel,
   primaryButton,
 } from "../components/PacketPage";
-import { useDonations } from "../context/DonationsContext";
+import { DonationData } from "../context/DonationsContext";
+import {
+  canIncludeDonationMessage,
+  DONATION_MESSAGE_INPUT_LIMIT,
+  DONATION_MESSAGE_THRESHOLD,
+} from "../lib/donationMessages";
 import SuccessMessage from "./components/SuccessMessage";
 import InvoiceDisplay from "./components/InvoiceDisplay";
 import { useReceiptSubscription } from "./hooks/useReceiptSubscription";
 
 const PRESETS = [21, 1000, 21000];
-const MESSAGE_THRESHOLD = 1000;
-const MESSAGE_MAX_LENGTH = 280;
-const RELAYS = ["wss://relay.damus.io", "wss://relay.snort.social", "wss://relay.primal.net"];
 
 function hasNostrSigner() {
   return typeof (window as Window & { nostr?: WindowNostr }).nostr?.signEvent === "function";
@@ -38,10 +41,9 @@ function subscribeToSigner(onChange: () => void) {
 }
 
 function Page() {
-  const { total } = useDonations();
   const [amount, setAmount] = useState("");
   const [message, setMessage] = useState("");
-  const canAddMessage = Number.isInteger(Number(amount)) && Number(amount) > MESSAGE_THRESHOLD;
+  const canAddMessage = Number.isInteger(Number(amount)) && canIncludeDonationMessage(Number(amount));
   const [error, setError] = useState<string | null>(null);
   const [preferredIdentity, setIdentity] = useState<"anonymous" | "profile">("anonymous");
   const hasSigner = useSyncExternalStore(subscribeToSigner, hasNostrSigner, () => false);
@@ -71,8 +73,8 @@ function Page() {
       const zap = nip57.makeZapRequest({
         pubkey: nutnovemberPubkey,
         amount: sats * 1000,
-        relays: RELAYS,
-        comment: sats > MESSAGE_THRESHOLD ? message.trim() : "",
+        relays: ZAP_RELAYS,
+        comment: canIncludeDonationMessage(sats) ? message.trim() : "",
       });
       let signed;
       if (identity === "profile") {
@@ -135,7 +137,7 @@ function Page() {
       title="Grow the prize pool"
       intro="Every sat you send is split evenly across the five prizes."
     >
-      <PoolAmount sats={total}>sats in the pool now</PoolAmount>
+      <DonationData>{({ total }) => <PoolAmount sats={total}>sats in the pool now</PoolAmount>}</DonationData>
 
       <div className="mx-auto mt-12 max-w-md">
         {invoice ? (
@@ -245,7 +247,7 @@ function Page() {
                 id="message"
                 name="message"
                 rows={3}
-                maxLength={MESSAGE_MAX_LENGTH}
+                maxLength={DONATION_MESSAGE_INPUT_LIMIT}
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
                 disabled={!canAddMessage || isSubmitting}
@@ -255,10 +257,10 @@ function Page() {
               <p id="message-hint" className={fieldHint}>
                 {canAddMessage
                   ? "Your message will be public on Nostr, even if you donate anonymously."
-                  : "Donate more than 1,000 sats to unlock a public message with your donation."}
+                  : `Donate more than ${DONATION_MESSAGE_THRESHOLD.toLocaleString("en-US")} sats to unlock a public message with your donation.`}
               </p>
               <p id="message-count" className={`${fieldHint} text-right tabular-nums`}>
-                {message.length}/{MESSAGE_MAX_LENGTH} characters
+                {message.length}/{DONATION_MESSAGE_INPUT_LIMIT} characters
               </p>
             </div>
 
