@@ -8,7 +8,7 @@ import {
   ReactNode,
 } from "react";
 import { SimplePool } from "nostr-tools";
-import { nutnovemberPubkey } from "@/pubkey";
+import { nutnovemberPubkey, ZAP_RECEIPT_PUBKEY } from "@/pubkey";
 
 // Only zaps paid after this count toward Nut November 2026, so last year's
 // donations stay out of the pool.
@@ -65,11 +65,16 @@ export function DonationsProvider({ children }: { children: ReactNode }) {
       {
         "#p": [nutnovemberPubkey],
         kinds: [9735],
+        authors: [ZAP_RECEIPT_PUBKEY],
         since: DONATIONS_SINCE,
       },
       {
         onevent: (event) => {
-          if (!isMounted || seen.has(event.id)) return;
+          if (
+            !isMounted ||
+            event.pubkey !== ZAP_RECEIPT_PUBKEY ||
+            seen.has(event.id)
+          ) return;
           seen.add(event.id);
 
           const receiptTag = event.tags.find((tag) => tag[0] === "description");

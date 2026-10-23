@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Event, SimplePool } from "nostr-tools";
-import { nutnovemberPubkey } from "@/pubkey";
+import { nutnovemberPubkey, ZAP_RECEIPT_PUBKEY } from "@/pubkey";
 
 export function useReceiptSubscription(receiptId: string | null) {
   // The receipt we've seen paid; a new receiptId is unpaid until proven.
@@ -23,11 +23,17 @@ export function useReceiptSubscription(receiptId: string | null) {
       relays,
       {
         "#p": [nutnovemberPubkey],
+        kinds: [9735],
+        authors: [ZAP_RECEIPT_PUBKEY],
         since: Math.floor(Date.now() / 1000) - 60,
       },
       {
         onevent: (event: Event) => {
-          if (!isMounted) return;
+          if (
+            !isMounted ||
+            event.kind !== 9735 ||
+            event.pubkey !== ZAP_RECEIPT_PUBKEY
+          ) return;
 
           const receiptTag = event.tags.find((tag) => tag[0] === "description");
           if (receiptTag) {
