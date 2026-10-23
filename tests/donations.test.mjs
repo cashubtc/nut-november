@@ -1,42 +1,37 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { finalizeEvent, getPublicKey } from 'nostr-tools';
 import { createDonationStore, parseDonation } from '../src/app/lib/donations.ts';
+import { harness, policy, receipt, senderKey } from './helpers/donations.mjs';
+import { getPublicKey } from 'nostr-tools';
 
-const providerKey = new Uint8Array(32).fill(1);
-const senderKey = new Uint8Array(32).fill(2);
-const recipient = getPublicKey(new Uint8Array(32).fill(3));
-const policy = { recipient, receiptAuthor: getPublicKey(providerKey), since: 1767225600 };
+test('identity comes from the verified zap request, with anonymous requests hidden', () => {
+  assert.equal(parseDonation(receipt(), policy).pubkey, getPublicKey(senderKey));
+  for (const tag of [['anon'], ['anon', 'encrypted request']]) {
+    assert.equal(parseDonation(receipt({ requestTags: [tag] }), policy).pubkey, null);
+  }
+});
 
-function receipt({ sats = 1001, requestedMillisats = String(sats * 1000), content = '9 days left! LFG!', createdAt = policy.since + 10, to = recipient, signer = providerKey, requestTo = to } = {}) {
-  const request = finalizeEvent({
-    kind: 9734, created_at: createdAt - 1, content,
-    tags: [['p', requestTo], ['relays', 'wss://nos.lol'], ...(requestedMillisats === null ? [] : [['amount', requestedMillisats]])],
-  }, senderKey);
-  return finalizeEvent({
-    kind: 9735, created_at: createdAt, content: '',
-    // Only the invoice amount is read; the trusted provider signs this test receipt.
-    tags: [['p', to], ['description', JSON.stringify(request)], ['bolt11', `lnbc${sats * 10}n1${'q'.repeat(100)}`]],
-  }, signer);
-}
-
-function harness({ cached = '[]', unavailable = false } = {}) {
-  let raw = cached;
-  let handlers;
-  let writes = 0;
-  let closes = 0;
-  let connections = 0;
-  const options = {
-    policy,
-    getStorage() {
-      if (unavailable) throw new Error('Storage denied');
-      return { getItem: () => raw, setItem: (_key, value) => { raw = value; writes++; } };
-    },
-    connect(value) { connections++; handlers = value; return () => { closes++; }; },
-  };
-  const store = createDonationStore(options);
-  return { store, options, get handlers() { return handlers; }, get raw() { return raw; }, get writes() { return writes; }, get closes() { return closes; }, get connections() { return connections; } };
-}
+test('initial sync completion is independent of cached data and the first live receipt', () => {
+  for (const cached of ['[]', JSON.stringify([receipt()])]) {
+    const h = harness({ cached });
+    const stop = h.store.subscribe(() => {});
+    assert.equal(h.store.getSnapshot().hasSynced, false);
+    h.handlers.onevent(receipt({ sats: 21 }));
+    assert.equal(h.store.getSnapshot().isLoading, false);
+    assert.equal(h.store.getSnapshot().hasSynced, false);
+    h.handlers.oneose();
+    assert.equal(h.store.getSnapshot().hasSynced, true);
+    const stale = h.handlers;
+    stop();
+    const stopAgain = h.store.subscribe(() => {});
+    assert.equal(h.store.getSnapshot().hasSynced, false);
+    stale.oneose();
+    assert.equal(h.store.getSnapshot().hasSynced, false);
+    h.handlers.oneose();
+    assert.equal(h.store.getSnapshot().hasSynced, true);
+    stopAgain();
+  }
+});
 
 test('messages require an invoice amount strictly above 1000 sats', () => {
   for (const sats of [21, 1000]) assert.equal(parseDonation(receipt({ sats }), policy).content, '');
