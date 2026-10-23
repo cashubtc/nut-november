@@ -1,5 +1,9 @@
 export const DONATION_MESSAGE_THRESHOLD = 1_000;
 
+// Add kind-9735 zap receipt event IDs here to hide their messages on /donations.
+// Use the receipt's ID, not the embedded zap request's ID. Amounts still count.
+export const HIDDEN_DONATION_MESSAGE_IDS = new Set<string>([]);
+
 // Input follows textarea.maxLength (UTF-16 code units); display uses Unicode
 // code points so truncation does not split surrogate pairs.
 export const DONATION_MESSAGE_INPUT_LIMIT = 280;

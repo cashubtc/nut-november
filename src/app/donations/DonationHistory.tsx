@@ -4,6 +4,7 @@ import { PoolAmount } from "../components/PacketPage";
 import { DonationData, useDonorProfiles } from "../context/DonationsContext";
 import type { DonationSnapshot } from "../lib/donations";
 import { formatSats } from "../lib/hackathon";
+import { HIDDEN_DONATION_MESSAGE_IDS } from "../lib/donationMessages";
 import DonorIdentity from "./DonorIdentity";
 
 // Bigger zaps get bigger produce.
@@ -58,7 +59,7 @@ function DonationHistoryContent({ data }: { data: DonationSnapshot }) {
                 </div>
                 <DonorIdentity pubkey={donation.pubkey} profile={donation.pubkey ? profiles.get(donation.pubkey) : undefined} />
               </div>
-              {donation.content && (
+              {donation.content && !HIDDEN_DONATION_MESSAGE_IDS.has(donation.id) && (
                 <p className="mt-2 whitespace-pre-wrap text-base leading-relaxed [overflow-wrap:anywhere]">
                   {donation.content}
                 </p>
