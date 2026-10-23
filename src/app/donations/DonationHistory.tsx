@@ -57,7 +57,12 @@ function DonationHistoryContent({ data }: { data: DonationSnapshot }) {
                   <span aria-hidden>{produce(donation.amount)}</span>
                   <span>{formatSats(donation.amount)}</span>
                 </div>
-                <DonorIdentity pubkey={donation.pubkey} profile={donation.pubkey ? profiles.get(donation.pubkey) : undefined} />
+                <DonorIdentity
+                  pubkey={donation.pubkey}
+                  profile={donation.pubkey && !HIDDEN_DONATION_MESSAGE_IDS.has(donation.id)
+                    ? profiles.get(donation.pubkey)
+                    : undefined}
+                />
               </div>
               {donation.content && !HIDDEN_DONATION_MESSAGE_IDS.has(donation.id) && (
                 <p className="mt-2 whitespace-pre-wrap text-base leading-relaxed [overflow-wrap:anywhere]">
